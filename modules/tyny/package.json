@@ -7,9 +7,9 @@
   "module": "./lib/index.js",
   "typings": "./lib/index.d.ts",
   "scripts": {
-    "build": "rm -rf ./lib && tsc",
-    "dev": "rm -rf ./lib && tsc -w",
-    "prepublishOnly": "rm -rf ./lib && tsc"
+    "build": "../../scripts/build tyny",
+    "prepack": "../../scripts/prepack tyny",
+    "postpack": "../../scripts/postpack tyny"
   },
   "repository": {
     "type": "git",

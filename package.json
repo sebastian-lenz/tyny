@@ -3,14 +3,13 @@
   "description": "",
   "version": "1.0.0",
   "license": "MIT",
+  "scripts": {
+    "build": "./scripts/build"
+  },
   "devDependencies": {
     "typescript": "^2.6.1"
   },
   "dependencies": {
-    "@types/bezier-easing": "^2.0.0",
-    "bezier-easing": "^2.0.3",
-    "native-promise-only": "^0.8.1",
-    "tslib": "^1.8.0",
     "tyny": "file:./modules/tyny",
     "tyny-events": "file:./modules/tyny-events",
     "tyny-fx": "file:./modules/tyny-fx",

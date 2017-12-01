@@ -1,0 +1,57 @@
+#!/bin/bash
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+. $DIR/config
+
+# Abort if the given module is unknown
+if [[ ! " ${MODULES[@]} " =~ " $1 " ]]; then
+  echo -e "\x1B[31mUnknown module '$1'."
+  exit 1
+fi
+
+
+# Compile the module
+$DIR/build $1
+if [ $? -ne 0 ]; then
+  exit 1
+fi
+
+
+# Load package.json
+PACKAGE_FILE=$DIR/../modules/$1/package.json
+PACKAGE_BACKUP="$PACKAGE_FILE.local"
+
+if [ ! -f $PACKAGE_FILE ]; then
+  echo -e "\n\x1B[31mpackage.json does not exist!\n"
+  exit 1
+fi
+
+PACKAGE=$(<$PACKAGE_FILE)
+
+
+# Create a copy of package.json in package.json.local
+if [ -f $PACKAGE_BACKUP ]; then
+  echo -e "\n\x1B[31mBackup of package.json already exists!\n"
+  exit 1
+fi
+
+mv $PACKAGE_FILE $PACKAGE_BACKUP
+
+
+# Replace local modules
+for MODULE in "${MODULES[@]}"; do
+  if [ $MODULE != $1 ]; then
+    VERSION=$(cat $DIR/../modules/$MODULE/package.json \
+      | grep version \
+      | head -1 \
+      | awk -F: '{ print $2 }' \
+      | sed 's/[",]//g' \
+      | tr -d '[[:space:]]')
+
+    LOCAL="file:../$MODULE"
+    REMOTE="^$VERSION"
+    PACKAGE=${PACKAGE/$LOCAL/$REMOTE}
+  fi
+done
+
+echo "$PACKAGE" > $PACKAGE_FILE

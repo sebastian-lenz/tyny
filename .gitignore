@@ -1,8 +1,8 @@
-**/.vscode
-**/node_modules
-**/lib
+/etc
+/node_modules
+/modules/**/lib
 
 .DS_Store
+.vscode
 *.code-workspace
 
-etc

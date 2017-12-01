@@ -1,0 +1,38 @@
+#!/bin/bash
+
+echo ""
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+. $DIR/config
+
+# Compiles a single module
+compile() {
+  echo "Compiling $1..."
+
+  rm -rf $DIR/../modules/$1/lib
+  $DIR/../node_modules/.bin/tsc -p $DIR/../modules/$1
+
+  if [ $? -ne 0 ]; then
+    echo -e "\n\x1B[31mCompilation of $1 failed.\n"
+    exit 1
+  fi
+}
+
+# Compile all modules if no module name is given
+if [ $# -eq 0 ]; then
+  for MODULE in "${MODULES[@]}"; do
+    compile $MODULE
+  done
+
+  echo -e "\n\x1B[92mCompilation finished.\n"
+  exit
+fi
+
+# Abort if the given module is unknown
+if [[ ! " ${MODULES[@]} " =~ " $1 " ]]; then
+  echo -e "\x1B[31mUnknown module '$1'."
+  exit 1
+fi
+
+# Compile the module
+compile $1
+echo -e "\n\x1B[92mCompilation finished.\n"

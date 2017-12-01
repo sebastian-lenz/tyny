@@ -7,13 +7,13 @@
   "module": "./lib/index.js",
   "typings": "./lib/index.d.ts",
   "scripts": {
-    "build": "rm -rf ./lib && tsc",
-    "dev": "rm -rf ./lib && tsc -w",
-    "prepublishOnly": "rm -rf ./lib && tsc"
+    "build": "../../scripts/build tyny-services",
+    "prepack": "../../scripts/prepack tyny-services",
+    "postpack": "../../scripts/postpack tyny-services"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/sebastian-lenz/tyny-utils.git"
+    "url": "https://github.com/sebastian-lenz/tyny.git"
   },
   "devDependencies": {
     "typescript": "^2.6.1"

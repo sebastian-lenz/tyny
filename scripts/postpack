@@ -1,0 +1,26 @@
+#!/bin/bash
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+. $DIR/config
+
+# Abort if the given module is unknown
+if [[ ! " ${MODULES[@]} " =~ " $1 " ]]; then
+  echo -e "\x1B[31mUnknown module '$1'."
+  exit 1
+fi
+
+
+# Copy package.json.local back to package.json
+PACKAGE_FILE=$DIR/../modules/$1/package.json
+PACKAGE_BACKUP="$PACKAGE_FILE.local"
+
+if [ ! -f $PACKAGE_BACKUP ]; then
+  echo -e "\n\x1B[31mBackup of package.json does not exist!\n"
+  exit 1
+fi
+
+if [ -f $PACKAGE_FILE ]; then
+  rm $PACKAGE_FILE
+fi
+
+mv $PACKAGE_BACKUP $PACKAGE_FILE

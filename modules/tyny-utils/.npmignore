@@ -1,3 +1,5 @@
 /.vscode
 /src
 .DS_Store
+tsconfig.json
+package.json.local

@@ -1,0 +1,25 @@
+{
+  "name": "tyny-utils",
+  "description": "Shared utility functions, types and polyfills for tyny.",
+  "version": "1.0.0",
+  "license": "MIT",
+  "main": "./lib/index.js",
+  "module": "./lib/index.js",
+  "typings": "./lib/index.d.ts",
+  "scripts": {
+    "build": "rm -rf ./lib && tsc",
+    "dev": "rm -rf ./lib && tsc -w",
+    "prepublishOnly": "rm -rf ./lib && tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sebastian-lenz/tyny-utils.git"
+  },
+  "devDependencies": {
+    "typescript": "^2.6.1"
+  },
+  "dependencies": {
+    "native-promise-only": "^0.8.1",
+    "tslib": "^1.8.0"
+  }
+}

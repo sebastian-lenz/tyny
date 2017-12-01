@@ -1,0 +1,25 @@
+{
+  "name": "tyny-events",
+  "description": "Event emitter and delegate for tyny.",
+  "version": "1.0.0",
+  "license": "MIT",
+  "main": "./lib/index.js",
+  "module": "./lib/index.js",
+  "typings": "./lib/index.d.ts",
+  "scripts": {
+    "build": "rm -rf ./lib && tsc",
+    "dev": "rm -rf ./lib && tsc -w",
+    "prepublishOnly": "rm -rf ./lib && tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sebastian-lenz/tyny-events.git"
+  },
+  "devDependencies": {
+    "typescript": "^2.6.1"
+  },
+  "dependencies": {
+    "tslib": "^1.8.0",
+    "tyny-utils": "file:../tyny-utils"
+  }
+}

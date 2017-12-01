@@ -1,0 +1,27 @@
+{
+  "name": "tyny",
+  "description": "Core view and components package of tyny.",
+  "version": "1.0.0",
+  "license": "MIT",
+  "main": "./lib/index.js",
+  "module": "./lib/index.js",
+  "typings": "./lib/index.d.ts",
+  "scripts": {
+    "build": "rm -rf ./lib && tsc",
+    "dev": "rm -rf ./lib && tsc -w",
+    "prepublishOnly": "rm -rf ./lib && tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sebastian-lenz/tyny.git"
+  },
+  "devDependencies": {
+    "typescript": "^2.6.2"
+  },
+  "dependencies": {
+    "tslib": "^1.8.0",
+    "tyny-events": "file:../tyny-events",
+    "tyny-services": "file:../tyny-services",
+    "tyny-utils": "file:../tyny-utils"
+  }
+}

@@ -1,0 +1,64 @@
+import { transitionProps } from 'tyny-utils';
+import { viewport } from 'tyny-services';
+
+import transist, { TransistOptions, TransistPropertyMap } from './transist';
+import withoutTransition from './withoutTransition';
+
+export interface TransistDimensionsOptions extends TransistOptions {
+  transistHeight?: boolean;
+  transistWidth?: boolean;
+}
+
+export default function transistDimensions(
+  element: HTMLElement,
+  callback: Function,
+  options: TransistDimensionsOptions
+): Promise<void> {
+  const { hasTransition, transition } = transitionProps();
+  if (!hasTransition) {
+    callback();
+    viewport.triggerResize();
+    return Promise.resolve();
+  }
+
+  const { transistHeight, transistWidth } = options;
+  const fromHeight = element.clientHeight;
+  const fromWidth = element.clientWidth;
+  const properties: TransistPropertyMap = {};
+  const style = <any>element.style;
+
+  withoutTransition(element, function() {
+    style.height = '';
+    style.width = '';
+    style[transition] = 'none';
+    callback();
+  });
+
+  const toHeight = element.clientHeight;
+  const toWidth = element.clientWidth;
+  let hasChanged = false;
+
+  if (transistHeight && fromHeight !== toHeight) {
+    hasChanged = true;
+    properties.height = {
+      clear: true,
+      from: `${fromHeight}px`,
+      to: `${toHeight}px`,
+    };
+  }
+
+  if (transistWidth && fromWidth !== toWidth) {
+    hasChanged = true;
+    properties.width = {
+      clear: true,
+      from: `${fromWidth}px`,
+      to: `${toWidth}px`,
+    };
+  }
+
+  if (!hasChanged) {
+    return Promise.resolve();
+  }
+
+  return transist(element, properties, options);
+}

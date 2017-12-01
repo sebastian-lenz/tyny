@@ -1,4 +1,5 @@
 import EventEmitter from './EventEmitter';
+import hasPassiveEvents from './utils/hasPassiveEvents';
 
 export interface DelegateMap {
   [event: string]: EventListener;
@@ -19,21 +20,6 @@ export interface DelegateListener {
   selector: string | undefined;
 }
 
-const supportsPassiveOption = (function() {
-  let result = false;
-  try {
-    const listener = () => null;
-    const opts = Object.defineProperty({}, 'passive', {
-      get: () => (result = true),
-    });
-
-    window.addEventListener('test', listener, opts);
-    window.removeEventListener('test', listener, opts);
-  } catch (e) {}
-
-  return result;
-})();
-
 /**
  * Base class of all views.
  */
@@ -41,21 +27,24 @@ export default class Delegate extends EventEmitter {
   /**
    * The underlying element of this delegate.
    */
-  element: Element | Document | Window | undefined;
+  readonly element: Element | Document | Window;
 
   /**
    * A list of all delegated dom events.
    */
-  private listeners: DelegateListener[] = [];
+  private _delegates: DelegateListener[] = [];
 
   /**
    * Delegate constructor.
    */
-  constructor(element?: Element | Document | Window) {
+  constructor(element: Element | Document | Window) {
     super();
     this.element = element;
   }
 
+  /**
+   * Disposes this instance.
+   */
   dispose() {
     super.dispose();
     this.undelegateAll();
@@ -64,6 +53,7 @@ export default class Delegate extends EventEmitter {
   /**
    * Make a event delegation handler for the given `eventName` and `selector`
    * and attach it to `this.el`.
+   *
    * If selector is empty, the listener will be bound to `this.el`. If not, a
    * new handler that will recursively traverse up the event target's DOM
    * hierarchy looking for a node that matches the selector. If one is found,
@@ -100,13 +90,13 @@ export default class Delegate extends EventEmitter {
       };
     }
 
-    if (options.passive === false && supportsPassiveOption) {
+    if (options.passive === false && hasPassiveEvents()) {
       element.addEventListener(eventName, handler, <any>{ passive: false });
     } else {
       element.addEventListener(eventName, handler, false);
     }
 
-    this.listeners.push({
+    this._delegates.push({
       element,
       eventName,
       handler,
@@ -118,6 +108,9 @@ export default class Delegate extends EventEmitter {
     return handler;
   }
 
+  /**
+   * Delegate a map of events.
+   */
   delegateEvents(events: DelegateMap, options?: DelegateOptions) {
     Object.keys(events).forEach(key => {
       this.delegate(key, events[key]);
@@ -133,22 +126,26 @@ export default class Delegate extends EventEmitter {
     listener?: EventListener,
     options: DelegateOptions = {}
   ): this {
-    const { listeners } = this;
+    const { _delegates } = this;
     const { selector, scope } = options;
-    const handlers = listeners.slice();
-    let i = handlers.length;
+    const handlers = _delegates.slice();
+    let index = handlers.length;
 
-    while (i--) {
-      const item = handlers[i];
+    while (index--) {
+      const handler = handlers[index];
       const match =
-        item.eventName === eventName &&
-        (listener ? item.listener === listener : true) &&
-        (scope ? item.scope === scope : true) &&
-        (selector ? item.selector === selector : true);
+        handler.eventName === eventName &&
+        (listener ? handler.listener === listener : true) &&
+        (scope ? handler.scope === scope : true) &&
+        (selector ? handler.selector === selector : true);
 
       if (match) {
-        item.element.removeEventListener(item.eventName, item.handler, false);
-        listeners.splice(i, 1);
+        _delegates.splice(index, 1);
+        handler.element.removeEventListener(
+          handler.eventName,
+          handler.handler,
+          false
+        );
       }
     }
 
@@ -159,16 +156,19 @@ export default class Delegate extends EventEmitter {
    * Remove all events created with `delegate`.
    */
   undelegateAll(): this {
-    const { listeners } = this;
-    for (let i = 0, len = listeners.length; i < len; i++) {
-      const { element, eventName, handler } = listeners[i];
+    const { _delegates } = this;
+    for (let i = 0, len = _delegates.length; i < len; i++) {
+      const { element, eventName, handler } = _delegates[i];
       element.removeEventListener(eventName, handler, false);
     }
 
-    this.listeners.length = 0;
+    this._delegates.length = 0;
     return this;
   }
 
+  /**
+   * Undelegate a map of events.
+   */
   undelegateEvents(events: DelegateMap, options?: DelegateOptions) {
     Object.keys(events).forEach(key => {
       this.undelegate(key, events[key], options);

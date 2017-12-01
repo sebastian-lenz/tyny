@@ -43,16 +43,16 @@ export default class EventEmitter {
   private _listeners: EventListenerMap | null = null;
   private _listeningTo: EventListenerMap | null = null;
 
+  /**
+   * Disposes this instance.
+   */
   dispose() {
     this.off();
     this.stopListening();
   }
 
   /**
-   * Trigger one or many events, firing all bound callbacks. Callbacks are
-   * passed the same arguments as `trigger` is, apart from the event name
-   * (unless you're listening on `"all"`, which will cause your callback to
-   * receive the true name of the event as the first argument).
+   * Trigger an event, firing all bound callbacks.
    */
   emit(event: Event): this {
     const events = this._events;
@@ -76,9 +76,10 @@ export default class EventEmitter {
   }
 
   /**
-   * Inversion-of-control versions of `on`. Tell *this* object to listen to
-   * an event in another object... keeping track of what it's listening to
-   * for easier unbinding later.
+   * Inversion-of-control versions of `on`.
+   *
+   * Tell *this* object to listen to an event in another object, keeping
+   * track of what it's listening to for easier unbinding later.
    */
   listenTo(
     emitter: EventEmitter,
@@ -130,10 +131,11 @@ export default class EventEmitter {
   }
 
   /**
-   * Remove one or many callbacks. If `context` is null, removes all
-   * callbacks with that function. If `callback` is null, removes all
-   * callbacks for the event. If `name` is null, removes all bound
-   * callbacks for all events.
+   * Remove one or many callbacks.
+   *
+   * If `context` is null, removes all callbacks with that function.
+   * If `callback` is null, removes all callbacks for the event.
+   * If `name` is null, removes all bound callbacks for all events.
    */
   off(type?: string, callback?: EventCallback, context?: any): this {
     const events = this._events;
@@ -193,8 +195,9 @@ export default class EventEmitter {
   }
 
   /**
-   * Bind an event to a `callback` function. Passing `"all"` will bind
-   * the callback to all events fired.
+   * Bind an event to a `callback` function.
+   *
+   * Passing `"all"` will bind the callback to all events fired.
    */
   on(
     type: string,
@@ -206,10 +209,10 @@ export default class EventEmitter {
   }
 
   /*
-   * Bind an event to only be triggered a single time. After the first time
-   * the callback is invoked, its listener will be removed. If multiple events
-   * are passed in using the space-separated syntax, the handler will fire
-   * once for each event, not once for a combination of all events.
+   * Bind an event to only be triggered a single time.
+   *
+   * After the first time the callback is invoked, its listener will be
+   * removed.
    */
   once(
     type: string,
@@ -228,7 +231,7 @@ export default class EventEmitter {
   }
 
   /**
-   * Tell this object to stop listening to either specific events ... or
+   * Tell this object to stop listening to either specific events or
    * to every object it's currently listening to.
    */
   stopListening(
@@ -307,7 +310,7 @@ export default class EventEmitter {
   }
 
   /**
-   * Return the od of this event emitter.
+   * Return the id of this event emitter.
    */
   private getListenId(): string {
     return this._listenId || (this._listenId = uniqueId('l'));

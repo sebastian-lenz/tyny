@@ -1,0 +1,19 @@
+{{#each structure}}
+  {{#if isActive}}
+    <ul class="nav nav-pills nav-stacked">
+      <li {{#if isCurrent}} class="active"{{/if}}>
+        <a href="{{url}}">
+          {{~ navTitle ~}}
+        </a>
+      </li>
+
+      {{#each children}}
+        <li {{#if isCurrent}} class="active"{{/if}}>
+          <a href="{{url}}">
+            {{~ navTitle ~}}
+          </a>
+        </li>
+      {{/each}}
+    </ul>
+  {{/if}}
+{{/each}}

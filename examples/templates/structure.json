@@ -1,0 +1,12 @@
+[
+  {
+    "title": "Views",
+    "url": "/views/index.html",
+    "children": [
+      { "title": "Events", "url": "/views/events.html" },
+      { "title": "Data decorator", "url": "/views/data.html" },
+      { "title": "Child components", "url": "/views/children.html" }
+    ]
+  },
+  { "title": "Animations", "url": "/fx/index.html" }
+]

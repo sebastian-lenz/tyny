@@ -1,0 +1,24 @@
+#!/bin/bash
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+. $DIR/config
+
+
+# Setup exit trap
+function finish {
+  echo -e "\nClosing all watchers...\n"
+  kill 0
+}
+
+trap finish EXIT
+
+
+# Start all watchers
+for MODULE in "${MODULES[@]}"; do
+  echo -e "\nWatching $MODULE..."
+  $DIR/../node_modules/.bin/tsc -w -p $DIR/../modules/$MODULE &
+  sleep 4
+done
+
+# Wait
+wait

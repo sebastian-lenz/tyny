@@ -1,4 +1,5 @@
 /etc
+/examples/public
 /node_modules
 /modules/**/lib
 

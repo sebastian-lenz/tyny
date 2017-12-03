@@ -1,20 +1,39 @@
 {
-  "name": "tyny-root",
+  "name": "tyny",
   "description": "",
+  "private": true,
   "version": "1.0.0",
   "license": "MIT",
   "scripts": {
-    "build": "./scripts/build"
+    "build": "./scripts/build",
+    "examples": "(cd ./examples/; rollup -c -w)",
+    "watch": "./scripts/watch"
   },
   "devDependencies": {
-    "typescript": "^2.6.1"
-  },
-  "dependencies": {
+    "autoprefixer": "^7.1.6",
+    "bootstrap-styl": "^5.0.8",
+    "chokidar": "^1.7.0",
+    "handlebars": "^4.0.11",
+    "highlight.js": "^9.12.0",
+    "metalsmith": "^2.3.0",
+    "metalsmith-layouts": "^1.8.1",
+    "metalsmith-static": "0.0.5",
+    "rollup": "^0.52.0",
+    "rollup-plugin-commonjs": "^8.2.6",
+    "rollup-plugin-livereload": "^0.6.0",
+    "rollup-plugin-node-resolve": "^3.0.0",
+    "rollup-plugin-postcss": "^0.5.5",
+    "rollup-plugin-serve": "^0.4.2",
+    "rollup-plugin-typescript": "^0.8.1",
+    "rollup-plugin-uglify": "^2.0.1",
+    "showdown": "^1.8.3",
+    "stylus": "^0.54.5",
     "tyny": "file:./modules/tyny",
     "tyny-events": "file:./modules/tyny-events",
     "tyny-fx": "file:./modules/tyny-fx",
     "tyny-services": "file:./modules/tyny-services",
     "tyny-utils": "file:./modules/tyny-utils",
-    "tyny-views": "file:./modules/tyny-views"
+    "tyny-views": "file:./modules/tyny-views",
+    "typescript": "^2.6.1"
   }
 }

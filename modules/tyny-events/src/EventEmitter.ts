@@ -66,7 +66,8 @@ export default class EventEmitter {
     ];
 
     for (let index = 0; index < handlers.length; index++) {
-      handlers[index].callback(event);
+      const { callback, context } = handlers[index];
+      callback.call(context, event);
       if (event.isPropagationStopped()) {
         break;
       }

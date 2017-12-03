@@ -20,6 +20,10 @@ export interface DelegateListener {
   selector: string | undefined;
 }
 
+export type DelegatedEvent<T extends Event = Event> = T & {
+  delegateTarget: HTMLElement;
+};
+
 /**
  * Base class of all views.
  */
@@ -113,7 +117,7 @@ export default class Delegate extends EventEmitter {
    */
   delegateEvents(events: DelegateMap, options?: DelegateOptions) {
     Object.keys(events).forEach(key => {
-      this.delegate(key, events[key]);
+      this.delegate(key, events[key], options);
     });
   }
 

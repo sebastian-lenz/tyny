@@ -1,7 +1,7 @@
 {
   "name": "tyny-events",
   "description": "Event emitter and delegate for tyny.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "license": "MIT",
   "main": "./lib/index.js",
   "module": "./lib/index.js",

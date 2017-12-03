@@ -5,9 +5,6 @@ import DispatcherEvent from './DispatcherEvent';
 
 /**
  * A service that triggers a frame event.
- *
- * @event 'frame' (delta: number): void
- *   Triggered on each animation frame.
  */
 export default class Dispatcher extends EventEmitter {
   // Timestamp of the last frame.

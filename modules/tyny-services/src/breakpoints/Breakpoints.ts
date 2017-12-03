@@ -1,15 +1,11 @@
 import { EventEmitter } from 'tyny-events';
 
-import viewport, { ViewportEvent } from '../viewport';
+import { viewport, ViewportEvent } from '../viewport';
 
 import { Breakpoint } from './index';
 import BreakpointsEvent from './BreakpointsEvent';
 import defaultBreakpoints from './defaultBreakpoints';
 
-/**
- * @event 'change' (breakpoint: Breakpoint): void
- *   Triggered after the current breakpoint has changed.
- */
 export default class Breakpoints extends EventEmitter {
   breakpoints: Breakpoint[] = defaultBreakpoints();
   current: Breakpoint;
@@ -30,7 +26,7 @@ export default class Breakpoints extends EventEmitter {
     this.getDeviceWidth = () => scope[prefix + 'Width'];
     this.getDeviceHeight = () => scope[prefix + 'Height'];
     this.listenTo(
-      viewport,
+      viewport(),
       ViewportEvent.resizeEvent,
       this.handleViewportResize,
       10
@@ -46,7 +42,7 @@ export default class Breakpoints extends EventEmitter {
 
   update() {
     const { breakpoints } = this;
-    const { width: viewportWidth } = viewport;
+    const { width: viewportWidth } = viewport();
     const deviceWidth = this.getDeviceWidth();
     const length = breakpoints.length;
 

@@ -1,6 +1,6 @@
 import { Delegate } from 'tyny-events';
 
-import dispatcher, { DispatcherEvent } from '../dispatcher';
+import { dispatcher, DispatcherEvent } from '../dispatcher';
 
 import ViewportEvent from './ViewportEvent';
 
@@ -19,11 +19,6 @@ const isCSS1Compat = (document.compatMode || '') === 'CSS1Compat';
  *
  * Both the resize and scrolling events will be synchronized with an animation frame
  * event to speed up page rendering.
- *
- * @event "scrollbars" (enabled:boolean):void
- *   Triggered after the scrollbars have been enabled or disabled.
- * @event "resize" (width:number, height:number):void
- * @event "scroll" (scrollLeft:number, scrollTop:number):void
  */
 export default class Viewport extends Delegate {
   // The underlying element of this delegate.
@@ -61,7 +56,7 @@ export default class Viewport extends Delegate {
 
     this.delegate('resize', this.handleResize);
     this.delegate('scroll', this.handleScroll);
-    this.listenTo(dispatcher, DispatcherEvent.frameEvent, this.handleFrame);
+    this.listenTo(dispatcher(), DispatcherEvent.frameEvent, this.handleFrame);
 
     this.handleResize();
     this.handleScroll();

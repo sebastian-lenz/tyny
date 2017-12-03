@@ -1,4 +1,4 @@
-import { IntervalType } from 'tyny-utils';
+import { IntervalType, memoize } from 'tyny-utils';
 
 import Visibility from './Visibility';
 
@@ -7,4 +7,6 @@ export interface VisibilityTarget {
   setInViewport(value: boolean): void;
 }
 
-export default new Visibility();
+export const visibility = memoize(function visibility() {
+  return new Visibility();
+});

@@ -1,7 +1,7 @@
 import { EventEmitter } from 'tyny-events';
 import { IntervalType } from 'tyny-utils';
 
-import viewport, { ViewportEvent } from '../viewport';
+import { viewport, ViewportEvent } from '../viewport';
 
 import { VisibilityTarget } from './index';
 import VisibilityObserver from './VisibilityObserver';
@@ -16,14 +16,14 @@ export default class Visibility extends EventEmitter implements IntervalType {
     super();
 
     this.listenTo(
-      viewport,
+      viewport(),
       ViewportEvent.resizeEvent,
       this.handleViewportEvent,
       -10
     );
 
     this.listenTo(
-      viewport,
+      viewport(),
       ViewportEvent.scrollEvent,
       this.handleViewportEvent,
       -10
@@ -57,7 +57,7 @@ export default class Visibility extends EventEmitter implements IntervalType {
 
   update(): void {
     const { bleed, observers } = this;
-    const { scrollTop, height } = viewport;
+    const { scrollTop, height } = viewport();
     const min = scrollTop - bleed;
     const max = scrollTop + height + bleed;
 

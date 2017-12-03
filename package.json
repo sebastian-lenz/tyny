@@ -6,8 +6,9 @@
   "license": "MIT",
   "scripts": {
     "build": "./scripts/build",
-    "examples": "(cd ./examples/; rollup -c -w)",
-    "watch": "./scripts/watch"
+    "build-examples": "(cd ./examples/; rollup -c)",
+    "watch": "./scripts/watch",
+    "watch-examples": "(cd ./examples/; rollup -c -w)"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.6",

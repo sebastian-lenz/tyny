@@ -1,6 +1,8 @@
 import { dasherize, memoize } from 'tyny-utils';
 import animationProps from 'tyny-utils/lib/vendors/animationProps';
 
+import insertRule from './utils/insertRule';
+
 export interface Rules {
   [name: string]: string;
 }
@@ -31,15 +33,6 @@ export default memoize(function keyframes(
     innerCss += `${key} { ${css(frames[key])} }`;
   });
 
-  const keyframes = `@${keyframePrefix}keyframes ${name} { ${innerCss} }`;
-
-  if (document.styleSheets && document.styleSheets.length) {
-    (document.styleSheets[0] as CSSStyleSheet).insertRule(keyframes, 0);
-  } else {
-    var styleSheet = document.createElement('style');
-    styleSheet.innerHTML = keyframes;
-    document.head.appendChild(styleSheet);
-  }
-
+  insertRule(`@${keyframePrefix}keyframes ${name} { ${innerCss} }`);
   return name;
 });

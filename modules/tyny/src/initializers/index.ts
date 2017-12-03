@@ -5,7 +5,7 @@ export interface InitializerMap {
 }
 
 export interface Initializer {
-  invoke(view: View, options: ViewOptions): void;
+  (view: View, options: ViewOptions): void;
 }
 
 /**
@@ -22,20 +22,13 @@ export function getInitializers(owner: any): InitializerMap {
 }
 
 /**
- * Return or create a named initializer.
+ * Sets an initializer.
  */
-export function getInitializer<T extends Initializer>(
+export function setInitializer(
   owner: any,
   name: string,
-  factory: { (): T }
-): T {
+  initializer: Initializer
+) {
   const initializers = getInitializers(owner);
-
-  if (initializers.hasOwnProperty(name)) {
-    return <T>initializers[name];
-  } else if (initializers[name]) {
-    return <T>(initializers[name] = Object.create(initializers[name]));
-  } else {
-    return (initializers[name] = factory());
-  }
+  initializers[name] = initializer;
 }

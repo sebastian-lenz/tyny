@@ -1,8 +1,8 @@
-import { getInitializer } from '../initializers';
-import Child, { ChildOptions } from '../initializers/Child';
+import { setInitializer } from '../initializers';
+import initChild, { InitChildOptions } from '../initializers/initChild';
 
-function child(name: string, options?: ChildOptions): ClassDecorator;
-function child(options?: ChildOptions): PropertyDecorator;
+function child(name: string, options?: InitChildOptions): ClassDecorator;
+function child(options?: InitChildOptions): PropertyDecorator;
 function child(...args: any[]) {
   if (args.length > 0 && typeof args[0] === 'string') {
     const property = <string>args.shift();
@@ -10,20 +10,16 @@ function child(...args: any[]) {
     const name = `ChildComponent::${property}`;
 
     return function(owner: any) {
-      getInitializer(
-        owner.prototype,
-        name,
-        () => new Child(property)
-      ).setOptions(options);
+      const initializer = initChild(property, options);
+      setInitializer(owner.prototype, name, initializer);
     };
   } else {
     const options = args.length ? args.shift() : {};
 
     return function(owner: any, property: string) {
       const name = `ChildComponent::${property}`;
-      getInitializer(owner, name, () => new Child(property)).setOptions(
-        options
-      );
+      const initializer = initChild(property, options);
+      setInitializer(owner, name, initializer);
     };
   }
 }

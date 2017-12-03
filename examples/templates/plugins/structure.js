@@ -18,7 +18,7 @@ function getBreadcrumbs(pages) {
 }
 
 function getStructure(fileName, pages = structure) {
-  const absoluteFileName = `/${fileName}`;
+  const absoluteFileName = `/${fileName}`.replace(/\.md$/, '.html');
   return pages.map(page => {
     const { url, children } = page;
     const props = {};

@@ -1,6 +1,6 @@
 import { $, PointerEvent, View, ViewOptions } from 'tyny';
 
-@$.component('.tynyViewsEventsPointers')
+@$.component('.tynyCoreEventsPointers')
 export default class EventsResize extends View {
   circles: { [id: string]: HTMLElement } = {};
 

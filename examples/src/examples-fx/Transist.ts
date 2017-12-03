@@ -1,5 +1,5 @@
 import { $, View, ViewOptions } from 'tyny';
-import { transist } from 'tyny-fx';
+import transist from 'tyny-fx/lib/transist';
 
 @$.component('.tynyFxTransist')
 export default class FxTransist extends View {

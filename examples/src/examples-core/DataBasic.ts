@@ -9,7 +9,7 @@ enum EnumData {
   Left,
 }
 
-@$.component('.tynyViewsDataBasic')
+@$.component('.tynyCoreDataBasic')
 export default class DataBasic extends View {
   [name: string]: any;
 

@@ -1,5 +1,4 @@
-import { DelegatedEvent } from 'tyny-events';
-import { $, View, ViewOptions } from 'tyny';
+import { $, DelegatedEvent, View, ViewOptions } from 'tyny';
 
 import './index.styl';
 

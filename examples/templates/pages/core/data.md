@@ -4,7 +4,7 @@
 
 {{#example source="examples-views/DataBasic.ts"}}
 <div
-  class="tynyViewsDataBasic"
+  class="tynyCoreDataBasic"
   data-any-value="100.25"
   data-bool-value="true"
   data-enum-value="Bottom"
@@ -20,7 +20,7 @@
 
 {{#example source="examples-views/DataClass.ts"}}
 <div
-  class="tynyViewsDataClass"
+  class="tynyCoreDataClass"
   data-movie="John Doe,Frank Capra,1941"
 ></div>
 {{/example}}
@@ -30,7 +30,7 @@
 
 {{#example source="examples-views/DataElement.ts"}}
 <div
-  class="tynyViewsDataElement"
+  class="tynyCoreDataElement"
   data-single-element=".singleElement"
   data-multiple-elements="li"
 >
@@ -49,7 +49,7 @@
 ## Owner
 
 {{#example source="examples-views/DataOwner.ts"}}
-<div class="tynyViewsDataOwner">
+<div class="tynyCoreDataOwner">
   <div class="childComponent"></div>
 </div>
 {{/example}}

@@ -2,7 +2,7 @@ import { $, View, ViewOptions } from 'tyny';
 
 let counter: number = 0;
 
-@$.component('.tynyViewsEventsResize')
+@$.component('.tynyCoreEventsResize')
 export default class EventsResize extends View {
   @$.data({ type: 'element', tagName: 'div' })
   display: HTMLElement;

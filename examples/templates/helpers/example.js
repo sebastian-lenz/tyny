@@ -33,7 +33,7 @@ function code(name, value) {
 }
 
 module.exports = function(options) {
-  var content = options.fn();
+  var content = options.fn(this);
   var tabs = ['Preview', 'HTML'];
   var bodies = [content, code('html', content)];
 

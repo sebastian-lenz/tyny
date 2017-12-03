@@ -10,7 +10,7 @@ export class ChildView extends View {
   }
 }
 
-@$.component('.tynyViewsDataOwner')
+@$.component('.tynyCoreDataOwner')
 export default class DataOwner extends View {
   @$.child({ selector: '.childComponent', viewClass: ChildView })
   childComponent: ChildView;

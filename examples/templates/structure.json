@@ -1,12 +1,13 @@
 [
   {
-    "title": "Views",
-    "url": "/views/index.html",
+    "title": "Core",
+    "url": "/core/index.html",
     "children": [
-      { "title": "Events", "url": "/views/events.html" },
-      { "title": "Data decorator", "url": "/views/data.html" },
-      { "title": "Child components", "url": "/views/children.html" }
+      { "title": "Events", "url": "/core/events.html" },
+      { "title": "Data decorator", "url": "/core/data.html" },
+      { "title": "Child components", "url": "/core/children.html" }
     ]
   },
-  { "title": "Animations", "url": "/fx/index.html" }
+  { "title": "Animations", "url": "/fx/index.html" },
+  { "title": "Views", "url": "/views/index.html" }
 ]

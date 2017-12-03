@@ -3,7 +3,7 @@
 ## Delegates
 
 {{#example source="examples-views/EventsDelegate.ts"}}
-<div class="tynyViewsEventsDelegate">
+<div class="tynyCoreEventsDelegate">
   <div class="display">0</div>
   <button>Plus one</button>
 </div>
@@ -13,7 +13,7 @@
 ## Resize event
 
 {{#example source="examples-views/EventsResize.ts"}}
-<div class="tynyViewsEventsResize"></div>
+<div class="tynyCoreEventsResize"></div>
 {{/example}}
 
 
@@ -21,11 +21,11 @@
 
 {{#example source="examples-views/EventsPointers.ts"}}
 <style>
-  .tynyViewsEventsPointers {
+  .tynyCoreEventsPointers {
     height: 80vh;
   }
 
-  .tynyViewsEventsPointers > .pointer {
+  .tynyCoreEventsPointers > .pointer {
     position: fixed;
     width: 20px;
     height: 20px;
@@ -35,5 +35,5 @@
     pointer-events: none;
   }
 </style>
-<div class="tynyViewsEventsPointers"></div>
+<div class="tynyCoreEventsPointers"></div>
 {{/example}}

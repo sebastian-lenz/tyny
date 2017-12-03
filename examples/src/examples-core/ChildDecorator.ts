@@ -7,7 +7,7 @@ export class ChildView extends View {
   }
 }
 
-@$.component('.tynyViewsChildDecorator')
+@$.component('.tynyCoreChildDecorator')
 export default class ChildBasic extends View {
   @$.child({ selector: '.childComponent', viewClass: ChildView })
   childComponent: ChildView;

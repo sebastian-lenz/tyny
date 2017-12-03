@@ -24,9 +24,7 @@ export default function markdown(options) {
       }
 
       const template = handlebars.compile(file.contents.toString());
-      let contents = template(file);
-      contents = converter.makeHtml(contents);
-      file.contents = new Buffer(contents);
+      file.contents = new Buffer(converter.makeHtml(template(file)));
 
       delete files[fileName];
       files[targetName] = file;

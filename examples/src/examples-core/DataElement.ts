@@ -1,6 +1,6 @@
 import { $, View, ViewOptions } from 'tyny';
 
-@$.component('.tynyViewsDataElement')
+@$.component('.tynyCoreDataElement')
 export default class DataElement extends View {
   @$.data({ type: 'element' })
   singleElement: HTMLElement;

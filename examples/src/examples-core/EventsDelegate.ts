@@ -1,6 +1,6 @@
 import { $, View, ViewOptions } from 'tyny';
 
-@$.component('.tynyViewsEventsDelegate')
+@$.component('.tynyCoreEventsDelegate')
 export default class EventsDelegate extends View {
   @$.data({ type: 'element', defaultValue: '.display' })
   display: HTMLElement;

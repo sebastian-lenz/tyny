@@ -1,6 +1,6 @@
 import { $, View, ViewOptions } from 'tyny';
 
-@$.component('.tynyViewsComponent')
+@$.component('.tynyCoreComponent')
 export default class ViewsComponent extends View {
   constructor(options: ViewOptions) {
     super(options);

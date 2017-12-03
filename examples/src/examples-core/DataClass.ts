@@ -15,7 +15,7 @@ class Movie {
   }
 }
 
-@$.component('.tynyViewsDataClass')
+@$.component('.tynyCoreDataClass')
 export default class DataClass extends View {
   @$.data({ type: 'class', ctor: Movie })
   movie: Movie;

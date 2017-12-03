@@ -23,8 +23,8 @@ const generator = metalsmith(basePath)
   )
   .use(handlebarsHelpers())
   .use(handlebarsPartials())
-  .use(markdown())
   .use(structure())
+  .use(markdown())
   .use(
     layouts({
       engine: 'handlebars',

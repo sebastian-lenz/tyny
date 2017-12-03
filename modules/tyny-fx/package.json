@@ -19,8 +19,6 @@
     "typescript": "^2.6.1"
   },
   "dependencies": {
-    "@types/bezier-easing": "^2.0.0",
-    "bezier-easing": "^2.0.3",
     "tslib": "^1.8.0",
     "tyny-services": "file:../tyny-services",
     "tyny-utils": "file:../tyny-utils"

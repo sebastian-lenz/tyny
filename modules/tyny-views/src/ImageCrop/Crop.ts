@@ -1,4 +1,5 @@
 import { DimensionsType } from 'tyny-utils/lib/types/Dimensions';
+import parseConfig, { OptionDefinition } from 'tyny/lib/utils/parseConfig';
 
 export enum CropMode {
   Cover,
@@ -16,6 +17,16 @@ export interface CropOptions {
   mode?: CropMode;
 }
 
+export function cropOptions(): OptionDefinition[] {
+  return [
+    { name: 'focusX', type: 'number' },
+    { name: 'focusY', type: 'number' },
+    { name: 'maxScale', type: 'number' },
+    { name: 'minScale', type: 'number' },
+    { name: 'mode', type: 'enum', values: CropMode },
+  ];
+}
+
 /**
  * Calculate the shift value for a dimension based upon the given focus value.
  *
@@ -30,7 +41,7 @@ export interface CropOptions {
  * @returns
  *   The calculated position shift along the dimension.
  */
-export function shift(
+function shift(
   space: number,
   size: number,
   focus: number,
@@ -55,8 +66,8 @@ const defaultOptions = {
 };
 
 export default class Crop {
-  focusY: number;
   focusX: number;
+  focusY: number;
   height: number;
   maxScale: number;
   minScale: number;
@@ -66,7 +77,7 @@ export default class Crop {
   constructor(options?: CropOptions | string) {
     let resolved: CropOptions;
     if (typeof options === 'string') {
-      resolved = JSON.parse(options);
+      resolved = parseConfig<CropOptions>(cropOptions())(options);
     } else if (options) {
       resolved = options;
     } else {

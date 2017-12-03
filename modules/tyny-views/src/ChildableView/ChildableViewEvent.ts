@@ -1,7 +1,7 @@
 import { View } from 'tyny';
 import { Event, EventOptions } from 'tyny-events';
 
-import ChildableView from './index';
+import ChildableView from './ChildableView';
 
 export interface ChildableViewEventOptions extends EventOptions {
   index: number;

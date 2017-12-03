@@ -1,7 +1,7 @@
 export default new Promise(resolve => {
-  if ('addEventListener' in document) {
+  if (document.readyState == 'loading') {
     document.addEventListener('DOMContentLoaded', resolve);
   } else {
-    (<any>window).attachEvent('onload', resolve);
+    resolve();
   }
 });

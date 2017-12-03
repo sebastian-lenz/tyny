@@ -1,7 +1,7 @@
 import { Event, EventOptions } from 'tyny-events';
 import { View } from 'tyny';
 
-import CycleableView from './index';
+import CycleableView from './CycleableView';
 
 export interface CycleableViewEventOptions extends EventOptions {
   fromView?: View;

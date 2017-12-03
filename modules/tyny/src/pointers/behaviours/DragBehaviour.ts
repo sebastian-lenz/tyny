@@ -1,6 +1,6 @@
 import Behaviour from './Behaviour';
 import PointerList from '../PointerList';
-import PointerEvent from '../PointerEvent';
+import PointerListEvent from '../PointerListEvent';
 import DragEvent from './DragEvent';
 
 export default class DragBehaviour extends Behaviour {
@@ -12,12 +12,12 @@ export default class DragBehaviour extends Behaviour {
   constructor(list: PointerList) {
     super(list);
 
-    this.listenTo(list, PointerEvent.addEvent, this.handlePointerAdd);
-    this.listenTo(list, PointerEvent.removeEvent, this.handlePointerRemove);
-    this.listenTo(list, PointerEvent.updateEvent, this.handlePointerUpdate);
+    this.listenTo(list, PointerListEvent.addEvent, this.handlePointerAdd);
+    this.listenTo(list, PointerListEvent.removeEvent, this.handlePointerRemove);
+    this.listenTo(list, PointerListEvent.updateEvent, this.handlePointerUpdate);
   }
 
-  protected emitDragEvent(type: string, listEvent: PointerEvent): boolean {
+  protected emitDragEvent(type: string, listEvent: PointerListEvent): boolean {
     const event = new DragEvent({
       listEvent,
       type,
@@ -27,7 +27,7 @@ export default class DragBehaviour extends Behaviour {
     return event.isDefaultPrevented();
   }
 
-  protected handlePointerAdd = (event: PointerEvent) => {
+  protected handlePointerAdd = (event: PointerListEvent) => {
     if (this.watchMode !== 'idle') {
       event.preventDefault();
     } else {
@@ -35,7 +35,7 @@ export default class DragBehaviour extends Behaviour {
     }
   };
 
-  protected handlePointerRemove = (event: PointerEvent) => {
+  protected handlePointerRemove = (event: PointerListEvent) => {
     const { watchMode } = this;
     this.watchMode = 'idle';
 
@@ -46,7 +46,7 @@ export default class DragBehaviour extends Behaviour {
     }
   };
 
-  protected handlePointerUpdate = (event: PointerEvent) => {
+  protected handlePointerUpdate = (event: PointerListEvent) => {
     const { watchMode } = this;
     const { pointer } = event;
 

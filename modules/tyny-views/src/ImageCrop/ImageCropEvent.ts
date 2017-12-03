@@ -1,6 +1,6 @@
 import { Event, EventOptions } from 'tyny-events';
 
-import ImageCrop from './index';
+import ImageCrop from './ImageCrop';
 
 export interface ImageCropEventOptions extends EventOptions {
   target: ImageCrop;

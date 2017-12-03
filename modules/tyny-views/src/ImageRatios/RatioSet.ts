@@ -1,6 +1,21 @@
+import parseConfigList, {
+  OptionDefinition,
+} from 'tyny/lib/utils/parseConfigList';
+
+import { CropMode, cropOptions } from '../ImageCrop/Crop';
 import Ratio, { RatioOptions } from './Ratio';
+import SourceSet from '../Image/SourceSet';
 
 export type RatioSetSource = string | Array<Ratio | RatioOptions>;
+
+function ratioSetOptions(): OptionDefinition[] {
+  return [
+    ...cropOptions(),
+    { name: 'height', type: 'number' },
+    { name: 'sourceSet', convert: (value: any) => new SourceSet(value) },
+    { name: 'width', type: 'number' },
+  ];
+}
 
 export default class RatioSet {
   ratios: Ratio[];
@@ -8,7 +23,7 @@ export default class RatioSet {
   constructor(source?: RatioSetSource) {
     let sources: Array<Ratio | RatioOptions> | undefined;
     if (typeof source === 'string') {
-      sources = <RatioOptions[]>JSON.parse(source);
+      sources = parseConfigList<RatioOptions>(ratioSetOptions())(source);
     } else if (source) {
       sources = source;
     }

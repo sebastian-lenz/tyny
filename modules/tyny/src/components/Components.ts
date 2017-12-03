@@ -5,7 +5,7 @@ import { ViewClass } from '../View';
 import ComponentNode from './ComponentNode';
 
 export interface Component {
-  allowChildComponents: boolean;
+  allowChildComponents?: boolean;
   selector: string;
   viewClass: ViewClass;
 }

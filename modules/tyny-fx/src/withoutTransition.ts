@@ -1,4 +1,4 @@
-import { transitionProps } from 'tyny-utils';
+import transitionProps from 'tyny-utils/lib/vendors/transitionProps';
 
 /**
  * Run the given callback while all transitions on the given

@@ -1,5 +1,3 @@
-import director from '../services/director';
-
 import { MomentumOptions } from '../momentum';
 import MomentumAxis from './MomentumAxis';
 import Timeline, { TimelineOptions } from './Timeline';

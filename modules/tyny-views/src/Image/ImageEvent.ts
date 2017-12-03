@@ -1,6 +1,6 @@
 import { Event, EventOptions } from 'tyny-events';
 
-import Image from './index';
+import Image from './Image';
 
 export interface ImageEventOptions extends EventOptions {
   target: Image;

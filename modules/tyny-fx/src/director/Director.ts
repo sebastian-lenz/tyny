@@ -1,13 +1,13 @@
-import { dispatcher, DispatcherEvent } from 'tyny-services';
+import { dispatcher, DispatcherEvent } from 'tyny-services/lib/dispatcher';
 
-import Timeline, { TimelineOptions } from '../../timelines/Timeline';
+import Timeline, { TimelineOptions } from '../timelines/Timeline';
 
 export default class Director {
   protected callbacks: Function[] = [];
   protected timelines: Timeline[] = [];
 
   constructor() {
-    dispatcher.on(DispatcherEvent.frameEvent, this.handleFrame, this, -10);
+    dispatcher().on(DispatcherEvent.frameEvent, this.handleFrame, this, -10);
   }
 
   getTimeline(context: any, property: string): Timeline | undefined {

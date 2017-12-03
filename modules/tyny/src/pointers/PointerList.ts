@@ -1,8 +1,9 @@
 import { EventEmitter } from 'tyny-events';
-import { Point, SimpleTransform } from 'tyny-utils';
+import Point from 'tyny-utils/lib/types/Point';
+import SimpleTransform from 'tyny-utils/lib/types/SimpleTransform';
 
 import Pointer, { PointerOptions, PointerUpdateOptions } from './Pointer';
-import PointerEvent from './PointerEvent';
+import PointerListEvent from './PointerListEvent';
 import Velocity from './Velocity';
 
 import createAdapter, { Adapter } from './adapters';
@@ -60,7 +61,7 @@ export default class PointerList extends EventEmitter {
     const { pointers, velocity } = this;
     const pointer = new Pointer(options);
     const isPrevented = this.emitPointerListEvent(
-      PointerEvent.addEvent,
+      PointerListEvent.addEvent,
       pointer,
       event
     );
@@ -170,7 +171,7 @@ export default class PointerList extends EventEmitter {
 
     if (index !== -1) {
       const pointer = pointers[index];
-      this.emitPointerListEvent(PointerEvent.removeEvent, pointer, event);
+      this.emitPointerListEvent(PointerListEvent.removeEvent, pointer, event);
       this.commit(event, pointer, () => {
         pointers.splice(index, 1);
       });
@@ -202,7 +203,7 @@ export default class PointerList extends EventEmitter {
       pointer.update(options);
 
       const isPrevented = this.emitPointerListEvent(
-        PointerEvent.updateEvent,
+        PointerListEvent.updateEvent,
         pointer,
         event
       );
@@ -223,7 +224,7 @@ export default class PointerList extends EventEmitter {
     pointer: Pointer,
     nativeEvent?: NativeEvent
   ): boolean {
-    const event = new PointerEvent({
+    const event = new PointerListEvent({
       nativeEvent,
       pointer,
       target: this,
@@ -259,6 +260,6 @@ export default class PointerList extends EventEmitter {
     }
 
     velocity.push(toVelocity(this.getTransform()));
-    this.emitPointerListEvent(PointerEvent.commitEvent, pointer, event);
+    this.emitPointerListEvent(PointerListEvent.commitEvent, pointer, event);
   }
 }

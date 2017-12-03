@@ -5,7 +5,7 @@ export interface NumberDataTypeOptions extends DefaultDataTypeOptions<number> {
   type: 'number';
 }
 
-function toNumber(value: any): number | undefined {
+export function toNumber(value: any): number | undefined {
   if (typeof value === 'string') {
     return parseFloat(value);
   } else if (typeof value === 'number') {

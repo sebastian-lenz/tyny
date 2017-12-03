@@ -1,5 +1,3 @@
-import director from '../services/director';
-
 import { TweenOptions } from '../tween';
 import Timeline, { TimelineOptions } from './Timeline';
 import TweenValue from './TweenValue';

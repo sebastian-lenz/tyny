@@ -8,9 +8,17 @@ export interface SequenceOptions<TView extends View = View> {
   transition: Transition;
 }
 
+export type SequencerCallback<
+  TOptions extends SequenceOptions = SequenceOptions
+> = (options: TOptions) => void;
+
 export default class Sequencer<
   TOptions extends SequenceOptions = SequenceOptions
-> extends EventEmitter {
+> {
+  callbackContext: any;
+  endCallback: SequencerCallback<TOptions> | undefined;
+  startCallback: SequencerCallback<TOptions> | undefined;
+
   protected sequence: Promise<any> | undefined;
   protected shelved: TOptions | undefined;
 
@@ -39,7 +47,7 @@ export default class Sequencer<
   }
 
   protected handleTransitionEnd(options: TOptions) {
-    const { shelved } = this;
+    const { callbackContext, shelved, endCallback } = this;
     this.shelved = undefined;
 
     if (shelved) {
@@ -49,10 +57,15 @@ export default class Sequencer<
       this.sequence = undefined;
     }
 
-    this.emit('transitionEnd', options);
+    if (endCallback) {
+      endCallback.call(callbackContext, options);
+    }
   }
 
   protected handleTransitionStart(options: TOptions) {
-    this.emit('transitionStart', options);
+    const { callbackContext, startCallback } = this;
+    if (startCallback) {
+      startCallback.call(callbackContext, options);
+    }
   }
 }

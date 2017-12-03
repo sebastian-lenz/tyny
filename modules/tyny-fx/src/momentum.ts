@@ -2,8 +2,9 @@ import { Animation, EasingFunction } from './index';
 import { PropertyMap } from './utils/propertyMap';
 import { ValueTypeSource } from './timelines/valueTypes/index';
 
-import easeOutExpo from './easings/easeOutExpo';
 import MomentumTimeline from './timelines/MomentumTimeline';
+
+import easeOutExpo from './easings/easeOutExpo';
 import timelineAnimation from './utils/timelineAnimation';
 import toMomentumValues, {
   FromVelocityValuesMap,

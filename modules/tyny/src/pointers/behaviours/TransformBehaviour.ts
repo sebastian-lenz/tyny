@@ -1,6 +1,6 @@
 import Behaviour from './Behaviour';
 import PointerList from '../PointerList';
-import PointerEvent from '../PointerEvent';
+import PointerListEvent from '../PointerListEvent';
 import TransformEvent from './TransformEvent';
 
 export default class TransformBehaviour extends Behaviour {
@@ -12,12 +12,15 @@ export default class TransformBehaviour extends Behaviour {
   constructor(list: PointerList) {
     super(list);
 
-    this.listenTo(list, PointerEvent.addEvent, this.handlePointerAdd);
-    this.listenTo(list, PointerEvent.removeEvent, this.handlePointerRemove);
-    this.listenTo(list, PointerEvent.updateEvent, this.handlePointerUpdate);
+    this.listenTo(list, PointerListEvent.addEvent, this.handlePointerAdd);
+    this.listenTo(list, PointerListEvent.removeEvent, this.handlePointerRemove);
+    this.listenTo(list, PointerListEvent.updateEvent, this.handlePointerUpdate);
   }
 
-  protected emitTransformEvent(type: string, listEvent: PointerEvent): boolean {
+  protected emitTransformEvent(
+    type: string,
+    listEvent: PointerListEvent
+  ): boolean {
     const event = new TransformEvent({
       listEvent,
       type,
@@ -27,7 +30,7 @@ export default class TransformBehaviour extends Behaviour {
     return event.isDefaultPrevented();
   }
 
-  protected handlePointerAdd = (event: PointerEvent) => {
+  protected handlePointerAdd = (event: PointerListEvent) => {
     const { isActive, list, maxPointers, minPointers } = this;
     const numPointers = list.pointers.length + 1;
     if (numPointers < minPointers) {
@@ -48,7 +51,7 @@ export default class TransformBehaviour extends Behaviour {
     }
   };
 
-  protected handlePointerRemove = (event: PointerEvent) => {
+  protected handlePointerRemove = (event: PointerListEvent) => {
     const { isActive, list, minPointers } = this;
     const numPointers = list.pointers.length - 1;
 
@@ -58,7 +61,7 @@ export default class TransformBehaviour extends Behaviour {
     }
   };
 
-  protected handlePointerUpdate = (event: PointerEvent) => {
+  protected handlePointerUpdate = (event: PointerListEvent) => {
     if (this.isActive) {
       this.emitTransformEvent(TransformEvent.transformEvent, event);
     }

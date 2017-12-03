@@ -1,1 +1,1 @@
-import 'tyny-polyfills';
+import 'tyny-utils/lib/polyfills';

@@ -1,4 +1,4 @@
-import { Interval } from 'tyny-utils';
+import Interval from 'tyny-utils/lib/types/Interval';
 
 import { VisibilityTarget } from './index';
 import Visibility from './Visibility';

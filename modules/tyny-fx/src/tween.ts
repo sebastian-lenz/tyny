@@ -1,10 +1,11 @@
+import easeInOutQuad from './easings/easeInOutQuad';
+
 import { Animation, EasingFunction } from './index';
 import { PropertyMap } from './utils/propertyMap';
 import { ValueTypeSource } from './timelines/valueTypes/index';
 
 import TweenTimeline from './timelines/TweenTimeline';
 
-import easeInOutQuad from './easings/easeInOutQuad';
 import toTimelineValues, { FromToValuesMap } from './utils/toTimelineValues';
 import timelineAnimation from './utils/timelineAnimation';
 

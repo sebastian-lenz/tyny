@@ -1,4 +1,4 @@
-import director from '../services/director';
+import director from '../director';
 
 import { AnimationPlayState } from '../index';
 import createAccessor, { Accessor } from './accessors';
@@ -72,7 +72,7 @@ export default abstract class Timeline<TValue = any> {
     const { onFinished } = this;
     this.playState = 'finished';
     if (onFinished) {
-      director.setFrameCallback(onFinished);
+      director().setFrameCallback(onFinished);
     }
   }
 

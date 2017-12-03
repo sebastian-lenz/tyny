@@ -12,6 +12,12 @@ export default class Ratio extends Crop {
 
   constructor(options: RatioOptions) {
     super(options);
-    this.sourceSet = new SourceSet(options.sourceSet);
+
+    const { sourceSet } = options;
+    if (sourceSet instanceof SourceSet) {
+      this.sourceSet = sourceSet;
+    } else {
+      this.sourceSet = new SourceSet(options.sourceSet);
+    }
   }
 }

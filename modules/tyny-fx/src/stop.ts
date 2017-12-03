@@ -1,5 +1,5 @@
-import director from './services/director';
+import director from './director';
 
 export default function stop(context?: any, property?: string) {
-  director.removeTimeline(context, property);
+  director().removeTimeline(context, property);
 }

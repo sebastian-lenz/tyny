@@ -1,6 +1,5 @@
-import * as bezier from 'bezier-easing';
-
 import { EasingFunction } from '../index';
+import bezier from '../utils/bezier';
 
 export default function cubicBezier(
   x1: number,

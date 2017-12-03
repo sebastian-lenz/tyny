@@ -1,4 +1,4 @@
-import { animationProps } from 'tyny-utils';
+import animationProps from 'tyny-utils/lib/vendors/animationProps';
 
 export interface AnimateOptions {
   duration: number;

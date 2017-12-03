@@ -156,15 +156,11 @@ export default class Viewport extends Delegate {
   protected handleFrame() {
     if (this.hasSizeChanged) {
       this.hasSizeChanged = false;
-      const width = this.width;
-      const height = this.height;
       this.emitViewportEvent(ViewportEvent.resizeEvent);
     }
 
     if (this.hasScrollChanged) {
       this.hasScrollChanged = false;
-      const scrollLeft = this.scrollLeft;
-      const scrollTop = this.scrollTop;
       this.emitViewportEvent(ViewportEvent.scrollEvent);
     }
   }

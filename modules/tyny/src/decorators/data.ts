@@ -1,6 +1,8 @@
 import { setInitializer } from '../initializers';
 import initData, { InitDataOptions } from '../initializers/initData';
 
+export { InitDataOptions };
+
 function data<T>(name: string, options: InitDataOptions<T>): ClassDecorator;
 function data<T>(options: InitDataOptions<T>): PropertyDecorator;
 function data() {

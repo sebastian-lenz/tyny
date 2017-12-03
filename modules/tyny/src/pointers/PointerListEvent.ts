@@ -3,13 +3,13 @@ import { Event, EventOptions } from 'tyny-events';
 import Pointer from './Pointer';
 import PointerList, { NativeEvent } from './PointerList';
 
-export interface PointerEventOptions extends EventOptions {
+export interface PointerListEventOptions extends EventOptions {
   nativeEvent: NativeEvent | undefined;
   pointer: Pointer;
   target: PointerList;
 }
 
-export default class PointerEvent extends Event {
+export default class PointerListEvent extends Event {
   readonly nativeEvent: NativeEvent | undefined;
   readonly pointer: Pointer;
   readonly target: PointerList;
@@ -19,7 +19,7 @@ export default class PointerEvent extends Event {
   static removeEvent: string = 'remove';
   static updateEvent: string = 'update';
 
-  constructor(options: PointerEventOptions) {
+  constructor(options: PointerListEventOptions) {
     super(options);
 
     this.nativeEvent = options.nativeEvent;

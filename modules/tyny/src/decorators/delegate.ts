@@ -1,7 +1,9 @@
-import { DelegateOptions } from 'tyny-events';
+import { DelegatedEvent, DelegateOptions } from 'tyny-events';
 
 import { setInitializer } from '../initializers';
 import View from '../View';
+
+export { DelegatedEvent };
 
 export default function delegate(
   eventName: string,

@@ -101,9 +101,9 @@ export default class ComponentsNode {
     }
 
     if (children) {
-      return children.reduce((memo, child) => {
-        return memo.concat(child.initializeAllViews());
-      }, result);
+      for (let index = 0; index < children.length; index++) {
+        result.push(...children[index].initializeAllViews());
+      }
     }
 
     return result;
@@ -119,7 +119,7 @@ export default class ComponentsNode {
       const target = targets[index];
       const node = this.createDescendant(target as HTMLElement);
       node.setViewClass(viewClass);
-      node.allowChildComponents = allowChildComponents;
+      node.allowChildComponents = !!allowChildComponents;
       result.push(node);
     }
 

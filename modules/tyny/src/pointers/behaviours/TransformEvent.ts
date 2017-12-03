@@ -1,13 +1,13 @@
 import { Event, EventOptions } from 'tyny-events';
 
-import PointerEvent from '../PointerEvent';
+import PointerListEvent from '../PointerListEvent';
 
 export interface TransformEventOptions extends EventOptions {
-  listEvent: PointerEvent;
+  listEvent: PointerListEvent;
 }
 
 export default class TransformEvent extends Event {
-  readonly listEvent: PointerEvent;
+  readonly listEvent: PointerListEvent;
 
   static transformEvent: string = 'transform';
   static transformEndEvent: string = 'transformEnd';

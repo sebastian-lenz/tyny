@@ -27,7 +27,7 @@ export default function dataReader<T>(
     let value: T | undefined;
 
     if (optionName && optionName in viewOptions) {
-      value = converter((<any>options)[optionName], view, viewOptions);
+      value = converter((<any>viewOptions)[optionName], view, viewOptions);
       if (value != void 0) {
         return value;
       }

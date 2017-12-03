@@ -10,18 +10,17 @@ export interface EnumDataTypeOptions extends DefaultDataTypeOptions<number> {
   values: any;
 }
 
-export default function enumDataType(
-  options: EnumDataTypeOptions
-): DataType<number | undefined> {
-  const { values } = options;
+export function toEnum(values: any) {
   const lookupTable: any = {};
-  Object.keys(values).forEach(value => {
-    if (!/^\d+$/.test(value)) {
-      lookupTable[value.toLowerCase()] = values[value];
-    }
-  });
+  if (typeof values === 'object') {
+    Object.keys(values).forEach(value => {
+      if (!/^\d+$/.test(value)) {
+        lookupTable[value.toLowerCase()] = values[value];
+      }
+    });
+  }
 
-  return dataReader(options, (value: any): number | undefined => {
+  return function(value: any): number | undefined {
     if (typeof value == 'string') {
       value = value.toLowerCase();
       return value in lookupTable ? lookupTable[value] : undefined;
@@ -32,5 +31,11 @@ export default function enumDataType(
     }
 
     return undefined;
-  });
+  };
+}
+
+export default function enumDataType(
+  options: EnumDataTypeOptions
+): DataType<number | undefined> {
+  return dataReader(options, toEnum(options.values));
 }

@@ -1,4 +1,5 @@
-import { animationProps, dasherize, memoize } from 'tyny-utils';
+import { dasherize, memoize } from 'tyny-utils';
+import animationProps from 'tyny-utils/lib/vendors/animationProps';
 
 export interface Rules {
   [name: string]: string;

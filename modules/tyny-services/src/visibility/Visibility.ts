@@ -1,5 +1,5 @@
 import { EventEmitter } from 'tyny-events';
-import { IntervalType } from 'tyny-utils';
+import { IntervalType } from 'tyny-utils/lib/types/Interval';
 
 import { viewport, ViewportEvent } from '../viewport';
 

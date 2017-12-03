@@ -1,5 +1,3 @@
-import director from '../services/director';
-
 import { SpringOptions } from '../spring';
 import Timeline, { TimelineOptions } from './Timeline';
 

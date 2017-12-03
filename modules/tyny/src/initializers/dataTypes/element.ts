@@ -14,7 +14,6 @@ export interface ElementDataTypeOptions
 export default function elementDataType(
   options: ElementDataTypeOptions
 ): DataType<HTMLElement | undefined> {
-  const { attributes, className, tagName } = options;
   const reader = dataReader(options);
 
   return function element(
@@ -33,12 +32,12 @@ export default function elementDataType(
       }
     }
 
-    if (tagName) {
+    if (options.tagName) {
       return createElement({
-        attributes,
+        attributes: options.attributes,
         appendTo: view.element,
-        className,
-        tagName,
+        className: options.className,
+        tagName: options.tagName,
       });
     }
 

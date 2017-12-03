@@ -1,4 +1,4 @@
-import { viewport } from 'tyny-services';
+import { viewport } from 'tyny-services/lib/viewport';
 
 /**
  * Describes the result of the [[diff]] function.
@@ -87,7 +87,7 @@ export function diff(
   );
 
   const min = 0;
-  const max = viewport.height;
+  const max = viewport().height;
   const isInViewport = (top: number, bottom: number): boolean =>
     bottom > min && top < max;
 

@@ -5,7 +5,7 @@ export interface StringDataTypeOptions extends DefaultDataTypeOptions<string> {
   type: 'string';
 }
 
-function toString(value: any): string {
+export function toString(value: any): string {
   return `${value}`;
 }
 

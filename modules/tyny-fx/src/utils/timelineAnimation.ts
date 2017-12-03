@@ -2,7 +2,7 @@ import { Animation } from '../index';
 import { PropertyMap } from './propertyMap';
 import Timeline, { TimelineOptions } from '../timelines/Timeline';
 
-import director from '../services/director';
+import director from '../director';
 
 export default function timelineAnimation<
   TProperty,
@@ -18,7 +18,7 @@ export default function timelineAnimation<
   },
   extraProps: (timelines: TTimeline[]) => TExtraProps
 ): Animation<any> & TExtraProps {
-  const { addTimeline } = director;
+  const { addTimeline } = director();
   let children: TTimeline[] = [];
 
   const promise = new Promise((resolve, reject) => {
@@ -32,7 +32,7 @@ export default function timelineAnimation<
 
       timeline.onFinished = handleFinished;
       timeline.onStopped = handleStopped;
-      director.addTimeline(timeline);
+      director().addTimeline(timeline);
       return timeline;
     });
 

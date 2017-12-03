@@ -1,4 +1,3 @@
-import './polyfills';
 import before from './before';
 import dasherize from './dasherize';
 import defaultToWhiteSpace from './defaultToWhiteSpace';
@@ -14,9 +13,6 @@ import trimStart from './trimStart';
 import ucfirst from './ucfirst';
 import uniqueId from './uniqueId';
 import whenDomReady from './whenDomReady';
-
-export * from './types';
-export * from './vendors';
 
 export {
   before,

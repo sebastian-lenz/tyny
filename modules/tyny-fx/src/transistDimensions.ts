@@ -1,5 +1,5 @@
-import { transitionProps } from 'tyny-utils';
-import { viewport } from 'tyny-services';
+import { viewport } from 'tyny-services/lib/viewport';
+import transitionProps from 'tyny-utils/lib/vendors/transitionProps';
 
 import transist, { TransistOptions, TransistPropertyMap } from './transist';
 import withoutTransition from './withoutTransition';
@@ -17,7 +17,7 @@ export default function transistDimensions(
   const { hasTransition, transition } = transitionProps();
   if (!hasTransition) {
     callback();
-    viewport.triggerResize();
+    viewport().triggerResize();
     return Promise.resolve();
   }
 

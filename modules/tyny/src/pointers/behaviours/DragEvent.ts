@@ -1,13 +1,13 @@
 import { Event, EventOptions } from 'tyny-events';
 
-import PointerEvent from '../PointerEvent';
+import PointerListEvent from '../PointerListEvent';
 
 export interface DragEventOptions extends EventOptions {
-  listEvent: PointerEvent;
+  listEvent: PointerListEvent;
 }
 
 export default class DragEvent extends Event {
-  readonly listEvent: PointerEvent;
+  readonly listEvent: PointerListEvent;
 
   static clickEvent: string = 'click';
   static dragEvent: string = 'drag';

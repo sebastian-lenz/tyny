@@ -1,4 +1,5 @@
-import { transformProps, transitionProps } from 'tyny-utils';
+import transformProps from 'tyny-utils/lib/vendors/transformProps';
+import transitionProps from 'tyny-utils/lib/vendors/transitionProps';
 
 import { diff, DiffCallback, DiffResult } from './diff';
 import withoutTransition from './withoutTransition';

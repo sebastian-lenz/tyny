@@ -1,6 +1,8 @@
 import { InitChildOptions } from '../initializers/initChild';
 import child from './child';
 
+export { InitChildOptions };
+
 function children(name: string, options: InitChildOptions): ClassDecorator;
 function children(options: InitChildOptions): PropertyDecorator;
 function children(this: any, ...args: any[]) {

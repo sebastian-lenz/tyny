@@ -1,4 +1,5 @@
-import { IntervalType, memoize } from 'tyny-utils';
+import { IntervalType } from 'tyny-utils/lib/types/Interval';
+import { memoize } from 'tyny-utils';
 
 import Visibility from './Visibility';
 

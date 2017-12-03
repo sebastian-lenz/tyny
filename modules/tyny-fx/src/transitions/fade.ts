@@ -1,4 +1,5 @@
 import { Transition } from './index';
+
 import animate from '../animate';
 import fadeIn from './keyframes/fadeIn';
 import fadeOut from './keyframes/fadeOut';

@@ -1,4 +1,4 @@
-import { IntervalType } from 'tyny-utils';
+import { IntervalType } from 'tyny-utils/lib/types/Interval';
 import { Delegate, DelegateOptions } from 'tyny-events';
 import { viewport } from 'tyny-services/lib/viewport';
 

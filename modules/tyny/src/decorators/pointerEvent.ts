@@ -1,7 +1,8 @@
 import { setInitializer } from '../initializers';
+import PointerListEvent from '../pointers/PointerListEvent';
 import View from '../View';
 
-export interface ResizeEventOptions {}
+export { PointerListEvent };
 
 export default function pointerEvent(
   type: 'add' | 'commit' | 'remove' | 'update'

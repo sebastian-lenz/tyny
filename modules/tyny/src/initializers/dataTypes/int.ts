@@ -5,7 +5,7 @@ export interface IntDataTypeOptions extends DefaultDataTypeOptions<number> {
   type: 'int';
 }
 
-function toInteger(value: any): number | undefined {
+export function toInteger(value: any): number | undefined {
   if (typeof value === 'string') {
     return parseInt(value);
   } else if (typeof value === 'number') {

@@ -1,4 +1,4 @@
-import { PointType } from 'tyny-utils';
+import { PointType } from 'tyny-utils/lib/types/Point';
 
 import Adapter from './adapters/Adapter';
 import Velocity from './Velocity';

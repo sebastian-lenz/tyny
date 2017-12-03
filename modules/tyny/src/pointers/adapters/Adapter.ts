@@ -1,5 +1,5 @@
 import { Delegate, DelegateMap } from 'tyny-events';
-import { viewport } from 'tyny-services';
+import { viewport } from 'tyny-services/lib/viewport';
 
 import PointerList from '../PointerList';
 

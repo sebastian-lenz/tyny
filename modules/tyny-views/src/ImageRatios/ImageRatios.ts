@@ -1,5 +1,6 @@
 import { visibility, VisibilityTarget } from 'tyny-services/lib/visibility';
 import data from 'tyny/lib/decorators/data';
+import debounce from 'tyny-utils/lib/debounce';
 import dissolve from 'tyny-fx/lib/transitions/dissolve';
 import resizeEvent from 'tyny/lib/decorators/resizeEvent';
 import View, { ViewOptions } from 'tyny/lib/View';
@@ -23,17 +24,20 @@ export default class ImageRatios extends Swap<ImageCrop>
   })
   ratioSet: RatioSet;
 
+  debounceedUpdate: Function;
   inViewport: boolean;
 
   constructor(options: ImageRatiosOptions) {
     super({
       className: `${View.classNamePrefix}ImageRatios`,
+      transition: dissolve({ duration: 200 }),
       ...options,
       appendContent: true,
       disposeContent: true,
-      transition: dissolve(),
       transist: null,
     });
+
+    this.debounceedUpdate = debounce(this.update, 50);
 
     if (!options.disableVisibility) {
       visibility().register(this);
@@ -78,6 +82,6 @@ export default class ImageRatios extends Swap<ImageCrop>
 
   @resizeEvent(true)
   protected handleResize() {
-    this.update();
+    this.debounceedUpdate();
   }
 }

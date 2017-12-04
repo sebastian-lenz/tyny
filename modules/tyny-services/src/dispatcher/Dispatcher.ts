@@ -16,7 +16,7 @@ export default class Dispatcher extends EventEmitter {
   constructor() {
     super();
 
-    whenDomReady.then(() => {
+    whenDomReady().then(() => {
       this.lastTime = window.performance.now();
       window.requestAnimationFrame(this.handleFrame);
     });

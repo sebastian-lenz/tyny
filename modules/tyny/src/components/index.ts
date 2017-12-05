@@ -5,4 +5,4 @@ import ComponentNode from './ComponentNode';
 
 export { ComponentNode };
 
-export default new Components(document.body);
+export default new Components();

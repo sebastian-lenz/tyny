@@ -12,7 +12,7 @@ import timelineAnimation from './utils/timelineAnimation';
 export interface Tween extends Animation<void> {
   advance(
     properties: PropertyMap<ValueTypeSource>,
-    options: Partial<TweenOptions>
+    options?: Partial<TweenOptions>
   ): boolean;
 }
 
@@ -31,7 +31,7 @@ function tween(
   const extraProps = (timelines: TweenTimeline[]) => ({
     advance: (
       toProperties: PropertyMap<ValueTypeSource>,
-      toOptions: Partial<TweenOptions>
+      toOptions: Partial<TweenOptions> = {}
     ): boolean => {
       const safeToOptions = Object.assign({}, safeOptions, toOptions);
 

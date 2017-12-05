@@ -4,7 +4,7 @@ import transitionProps from 'tyny-utils/lib/vendors/transitionProps';
 import transist, { TransistOptions, TransistPropertyMap } from './transist';
 import withoutTransition from './withoutTransition';
 
-export interface TransistDimensionsOptions extends TransistOptions {
+export interface TransistDimensionsOptions extends Partial<TransistOptions> {
   transistHeight?: boolean;
   transistWidth?: boolean;
 }

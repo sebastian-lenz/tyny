@@ -31,10 +31,10 @@ export default function propertyAccessor(
       property,
       convert: identity,
       getValue: getter
-        ? (): any => getter.apply(target)
+        ? (): any => getter.call(target)
         : (): any => target[property],
       setValue: setter
-        ? (value: any) => setter.apply(target, value)
+        ? (value: any) => setter.call(target, value)
         : (value: any) => (target[property] = value),
     };
   }

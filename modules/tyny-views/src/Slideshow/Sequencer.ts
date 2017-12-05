@@ -41,14 +41,25 @@ export default class Sequencer<
     const toElement = to ? to.element : undefined;
 
     return whenViewLoaded(to)
-      .then(() => this.handleTransitionStart(options))
-      .then(() => transition(fromElement, toElement))
+      .then(() => {
+        this.handleTransitionStart(options);
+        return transition(fromElement, toElement);
+      })
       .then(() => this.handleTransitionEnd(options));
   }
 
   protected handleTransitionEnd(options: TOptions) {
     const { callbackContext, shelved, endCallback } = this;
+    const { from, to } = options;
     this.shelved = undefined;
+
+    if (from) {
+      from.removeClass('sequenceFrom');
+    }
+
+    if (to) {
+      to.removeClass('sequenceTo');
+    }
 
     if (shelved) {
       shelved.from = options.to;
@@ -63,9 +74,18 @@ export default class Sequencer<
   }
 
   protected handleTransitionStart(options: TOptions) {
+    const { from, to } = options;
     const { callbackContext, startCallback } = this;
     if (startCallback) {
       startCallback.call(callbackContext, options);
+    }
+
+    if (from) {
+      from.addClass('sequenceFrom');
+    }
+
+    if (to) {
+      to.addClass('sequenceTo');
     }
   }
 }

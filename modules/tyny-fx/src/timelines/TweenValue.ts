@@ -24,7 +24,6 @@ export default class TweenValue<TValue> {
 
   constructor(options: TweenValueOptions<TValue>) {
     Object.assign(this, options);
-
     const { delay, initialValue, targetValue, valueType } = options;
     const { toArray } = valueType;
     const baseValues = toArray(initialValue);
@@ -35,6 +34,7 @@ export default class TweenValue<TValue> {
     this.baseValues = baseValues;
     this.currentValue = initialValue;
     this.time = -delay;
+    this.valueChanges = valueChanges;
   }
 
   getCurrentValue(): TValue {

@@ -74,6 +74,7 @@ export default class TweenTimeline<TValue = any> extends Timeline<TValue> {
       return false;
     }
 
+    this.currentValue = currentValue;
     return true;
   }
 }

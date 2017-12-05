@@ -7,19 +7,26 @@ import fadeOut from './keyframes/fadeOut';
 export interface DissolveOptions {
   duration?: number;
   delay?: number;
+  noPureFadeIn?: boolean;
+  noPureFadeOut?: boolean;
   timingFunction?: string;
 }
 
 export default function dissolve(options: DissolveOptions = {}): Transition {
+  const { noPureFadeIn, noPureFadeOut, ...animationOptions } = options;
+
   return (from?: HTMLElement, to?: HTMLElement): Promise<void> => {
-    if (to) {
-      return animate(to, fadeIn(), options);
+    const animations = [];
+    if (from && (!noPureFadeOut || to)) {
+      animations.push(animate(from, fadeOut(), animationOptions));
     }
 
-    if (from) {
-      return animate(from, fadeOut(), options);
+    if (to && (!noPureFadeIn || from)) {
+      animations.push(animate(to, fadeIn(), animationOptions));
     }
 
-    return Promise.resolve();
+    return animations.length
+      ? Promise.all(animations).then(() => undefined)
+      : Promise.resolve();
   };
 }

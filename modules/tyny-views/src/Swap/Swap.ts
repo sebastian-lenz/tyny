@@ -8,6 +8,7 @@ import transistDimensions, {
 
 import Sequencer, { SequenceOptions } from '../Slideshow/Sequencer';
 import SwapContent from './SwapContent';
+import SwapEvent from './SwapEvent';
 
 export interface SwapOptions extends ViewOptions {
   appendContent?: boolean;
@@ -33,7 +34,7 @@ export default class Swap<TContent extends View = View> extends View {
   @$.data({ type: 'bool', defaultValue: false })
   disposeContent: boolean;
 
-  @$.data({ type: 'any', defaultValue: dissolve() })
+  @$.data({ type: 'any', defaultValue: () => dissolve() })
   transition: Transition;
 
   @$.data({ type: 'any', defaultValue: null })
@@ -93,12 +94,30 @@ export default class Swap<TContent extends View = View> extends View {
     } else {
       callback();
     }
+
+    this.emit(
+      new SwapEvent({
+        from,
+        target: <any>this,
+        to,
+        type: SwapEvent.transitionStartEvent,
+      })
+    );
   }
 
-  protected handleTransitionEnd({ from }: SwapSequencerOptions<TContent>) {
+  protected handleTransitionEnd({ from, to }: SwapSequencerOptions<TContent>) {
     const { disposeContent } = this;
     if (from && disposeContent) {
       from.dispose();
     }
+
+    this.emit(
+      new SwapEvent({
+        from,
+        target: <any>this,
+        to,
+        type: SwapEvent.transitionEndEvent,
+      })
+    );
   }
 }

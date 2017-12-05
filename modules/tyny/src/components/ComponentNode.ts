@@ -2,6 +2,7 @@ import { viewport, ViewportEvent } from 'tyny-services/lib/viewport';
 
 import { Component } from './Components';
 import View, { ViewClass, ViewOptions } from '../View';
+import { ComponentNode } from '../index';
 
 /**
  * Return an array describing the path from the given source element
@@ -80,6 +81,14 @@ export default class ComponentsNode {
     }
   }
 
+  getRootNode(): ComponentNode {
+    if (this.parent) {
+      return this.parent.getRootNode();
+    }
+
+    return this;
+  }
+
   getView(): View | undefined {
     return this.view;
   }
@@ -154,6 +163,38 @@ export default class ComponentsNode {
     this.viewClass = viewClass;
   }
 
+  synchronize() {
+    const { children, element } = this;
+    if (!children) {
+      return;
+    }
+
+    const root = this.getRootNode();
+    let index = 0;
+
+    while (index < children.length) {
+      const child = children[index];
+      const { parentElement } = child.element;
+
+      if (parentElement !== element) {
+        children.splice(index, 1);
+        const parent = parentElement
+          ? root.createDescendant(parentElement)
+          : undefined;
+
+        if (parent) {
+          parent.insertChild(child);
+        } else {
+          child.dispose();
+        }
+      } else {
+        index += 1;
+      }
+
+      child.synchronize();
+    }
+  }
+
   private createChild(element: HTMLElement): ComponentsNode {
     if (element.parentNode !== this.element) {
       throw new Error('Invalid child element given.');
@@ -214,6 +255,24 @@ export default class ComponentsNode {
     });
 
     return this.view;
+  }
+
+  private insertChild(node: ComponentNode) {
+    let { children, element } = this;
+    if (node.element.parentElement !== element) {
+      throw new Error('Invalid operation');
+    }
+
+    if (children) {
+      for (let index = 0; index < children.length; index++) {
+        if (children[index].element === node.element) {
+        }
+      }
+    } else {
+      children = this.children = [];
+    }
+
+    children.push(node);
   }
 
   private handleResize() {

@@ -79,7 +79,7 @@ export default class SourceSet {
   parse(str: string) {
     const sources = str.split(/,/);
 
-    for (let src of sources) {
+    sources.forEach(src => {
       src = src.trim();
       const match = sourceSetRegExp.exec(src);
 
@@ -95,7 +95,7 @@ export default class SourceSet {
       } else {
         this.add({ src });
       }
-    }
+    });
   }
 
   /**
@@ -147,7 +147,8 @@ export default class SourceSet {
       threshold = width * threshold;
     }
 
-    for (const source of sources) {
+    for (let index = 0; index < sources.length; index++) {
+      const source = sources[index];
       if (source.bias >= threshold) return source.src;
     }
 

@@ -14,6 +14,9 @@ import ucfirst from './ucfirst';
 import uniqueId from './uniqueId';
 import whenDomReady from './whenDomReady';
 
+export * from './types';
+export * from './vendors';
+
 export {
   before,
   dasherize,

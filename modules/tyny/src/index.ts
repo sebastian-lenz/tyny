@@ -1,5 +1,3 @@
-import 'tyny-utils/lib/polyfills';
-
 import View, { ViewClass, ViewOptions } from './View';
 import components, { ComponentNode } from './components';
 

@@ -10,7 +10,7 @@ export interface AnimateOptions {
 function animate(
   element: HTMLElement,
   name: string,
-  options: Partial<AnimateOptions>
+  options: Partial<AnimateOptions> = {}
 ): Promise<void> {
   const { animation, hasAnimation, onAnimationEnd } = animationProps();
   if (!hasAnimation) {
@@ -27,9 +27,7 @@ function animate(
 
   return new Promise(resolve => {
     const style = <any>element.style;
-    const value = `${name} ${duration}ms ${delay}ms ${timingFunction} ${
-      fillMode
-    }`;
+    const value = `${name} ${duration}ms ${delay}ms ${timingFunction} ${fillMode}`;
 
     const handleAnimationEnd = () => {
       element.removeEventListener(onAnimationEnd, handleAnimationEnd);

@@ -16,6 +16,7 @@ trap finish EXIT
 # Start all watchers
 for MODULE in "${MODULES[@]}"; do
   echo -e "\nWatching $MODULE..."
+  rm -rf $DIR/../modules/$MODULE/lib
   $DIR/../node_modules/.bin/tsc -w -p $DIR/../modules/$MODULE &
   sleep 4
 done

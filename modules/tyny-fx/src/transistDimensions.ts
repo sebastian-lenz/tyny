@@ -22,8 +22,8 @@ export default function transistDimensions(
   }
 
   const { transistHeight, transistWidth } = options;
-  const fromHeight = element.clientHeight;
-  const fromWidth = element.clientWidth;
+  const fromHeight = element.offsetHeight;
+  const fromWidth = element.offsetWidth;
   const properties: TransistPropertyMap = {};
   const style = <any>element.style;
 

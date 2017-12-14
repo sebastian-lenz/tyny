@@ -1,4 +1,5 @@
 import autoprefixer from 'autoprefixer';
+import babel from 'rollup-plugin-babel';
 import bootstrap from 'bootstrap-styl';
 import commonjs from 'rollup-plugin-commonjs';
 import livereload from 'rollup-plugin-livereload';
@@ -45,6 +46,17 @@ const plugins = [
   }),
   typescript({
     typescript: typescriptCompiler,
+  }),
+  babel({
+    presets: [
+      [
+        'env',
+        {
+          modules: false,
+        },
+      ],
+    ],
+    plugins: ['external-helpers'],
   }),
   ...(isWatching ? [livereload('public'), serve('public')] : [uglify()]),
 ];

@@ -73,7 +73,7 @@ export default class Viewport extends Delegate {
    *   scripts that turn scrolling on or off.
    */
   disableScrollbars(initiator: any) {
-    const { element, scrollInitiators } = this;
+    const { scrollInitiators } = this;
     let { scrollBarSize } = this;
 
     const index = scrollInitiators.indexOf(initiator);
@@ -82,11 +82,13 @@ export default class Viewport extends Delegate {
     }
 
     if (scrollInitiators.length === 1) {
-      const { style } = element;
+      const { body } = document;
+      const { style } = body;
+
       if (isNaN(scrollBarSize)) {
-        const { offsetWidth } = element;
+        const { offsetWidth } = body;
         style.overflow = 'hidden';
-        scrollBarSize = element.offsetWidth - offsetWidth;
+        scrollBarSize = body.offsetWidth - offsetWidth;
         this.scrollBarSize = scrollBarSize;
       } else {
         style.overflow = 'hidden';
@@ -105,15 +107,17 @@ export default class Viewport extends Delegate {
    *   An identifier of the service or class that enabled the scrollbars.
    */
   enableScrollbars(initiator: any) {
-    const { element, scrollInitiators } = this;
+    const { scrollInitiators } = this;
     const index = scrollInitiators.indexOf(initiator);
     if (index !== -1) {
       scrollInitiators.splice(index, 1);
     }
 
     if (scrollInitiators.length === 0) {
-      element.style.overflow = '';
-      element.style.paddingRight = '';
+      const { body } = document;
+      body.style.overflow = '';
+      body.style.paddingRight = '';
+
       this.handleResize();
       this.emitViewportEvent(ViewportEvent.scrollbarsEvent);
     }

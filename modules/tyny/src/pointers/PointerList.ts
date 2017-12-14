@@ -1,10 +1,10 @@
 import { EventEmitter } from 'tyny-events';
-import Point from 'tyny-utils/lib/types/Point';
-import SimpleTransform from 'tyny-utils/lib/types/SimpleTransform';
+import { Point, SimpleTransform } from 'tyny-utils';
 
 import Pointer, { PointerOptions, PointerUpdateOptions } from './Pointer';
 import PointerListEvent from './PointerListEvent';
 import Velocity from './Velocity';
+import View from '../View';
 
 import createAdapter, { Adapter } from './adapters';
 
@@ -261,5 +261,15 @@ export default class PointerList extends EventEmitter {
 
     velocity.push(toVelocity(this.getTransform()));
     this.emitPointerListEvent(PointerListEvent.commitEvent, pointer, event);
+  }
+
+  static forView(view: View): PointerList {
+    let { _pointerList } = <any>view;
+    if (!_pointerList) {
+      _pointerList = new PointerList(view.element);
+      (<any>view)._pointerList = _pointerList;
+    }
+
+    return _pointerList;
   }
 }

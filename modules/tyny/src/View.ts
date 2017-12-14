@@ -74,6 +74,14 @@ export default class View extends Delegate {
       template,
     } = options;
 
+    if (template) {
+      if (typeof template === 'function') {
+        element.innerHTML = template(this, options);
+      } else {
+        element.innerHTML = template;
+      }
+    }
+
     if (appendTo) {
       appendTo.appendChild(element);
     }
@@ -84,14 +92,6 @@ export default class View extends Delegate {
     if (_initializers) {
       for (const key in _initializers) {
         _initializers[key](this, options);
-      }
-    }
-
-    if (template) {
-      if (typeof template === 'function') {
-        element.innerHTML = template(this, options);
-      } else {
-        element.innerHTML = template;
       }
     }
   }
@@ -142,19 +142,6 @@ export default class View extends Delegate {
     }
 
     return _componentNode;
-  }
-
-  /**
-   * Return the pointer list of this view.
-   */
-  getPointerList(): PointerList {
-    let { _pointerList } = this;
-    if (!_pointerList) {
-      _pointerList = new PointerList(this.element);
-      this._pointerList = _pointerList;
-    }
-
-    return _pointerList;
   }
 
   getVisibilityBounds(): IntervalType {

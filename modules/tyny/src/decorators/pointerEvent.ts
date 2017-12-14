@@ -1,5 +1,5 @@
 import { setInitializer } from '../initializers';
-import PointerListEvent from '../pointers/PointerListEvent';
+import { PointerList, PointerListEvent } from '../pointers';
 import View from '../View';
 
 export { PointerListEvent };
@@ -14,7 +14,7 @@ export default function pointerEvent(
   ) {
     const propertyName = propertyKey.toString();
     setInitializer(target, propertyName, function(view: View) {
-      const pointerList = view.getPointerList();
+      const pointerList = PointerList.forView(view);
       view.listenTo(pointerList, type, (<any>view)[propertyKey]);
     });
   };

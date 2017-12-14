@@ -7,3 +7,4 @@ import './eventListener';
 import './matches';
 import './object';
 import './string';
+import './symbol';

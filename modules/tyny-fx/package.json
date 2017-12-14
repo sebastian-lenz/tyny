@@ -1,7 +1,7 @@
 {
   "name": "tyny-fx",
   "description": "Animations for tyny.",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "license": "MIT",
   "main": "./lib/index.js",
   "module": "./lib/index.js",
@@ -9,7 +9,8 @@
   "scripts": {
     "build": "../../scripts/build tyny-fx",
     "prepack": "../../scripts/prepack tyny-fx",
-    "postpack": "../../scripts/postpack tyny-fx"
+    "prepublishOnly": "../../scripts/prepublishOnly tyny-fx",
+    "postpublish": "../../scripts/postpublish tyny-fx"
   },
   "repository": {
     "type": "git",

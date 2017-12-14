@@ -1,1 +1,94 @@
+#!/bin/bash
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 MODULES=("tyny-utils" "tyny-events" "tyny-services" "tyny-fx" "tyny" "tyny-views")
+
+
+# Abort if the given module is unknown
+function assertIsModule {
+  if [[ ! " ${MODULES[@]} " =~ " $1 " ]]; then
+    echo -e "\x1B[31mUnknown module '$1'."
+    exit 1
+  fi
+}
+
+
+# Compile the module
+function compileModule {
+  $DIR/build $1
+  if [ $? -ne 0 ]; then
+    exit 1
+  fi
+}
+
+
+# Return local version string of given module
+function readLocalVersion {
+  cat $DIR/../modules/$1/package.json \
+    | grep version \
+    | head -1 \
+    | awk -F: '{ print $2 }' \
+    | sed 's/[",]//g' \
+    | tr -d '[[:space:]]'
+}
+
+
+# Return remote version string of given module
+function readRemoteVersion {
+  npm view $1 version
+}
+
+
+# Alter package.json
+function injectDependencies {
+  # Load package.json
+  PACKAGE_FILE=$DIR/../modules/$1/package.json
+  PACKAGE_BACKUP="$PACKAGE_FILE.local"
+
+  if [ ! -f $PACKAGE_FILE ]; then
+    echo -e "\n\x1B[31mpackage.json does not exist!\n"
+    exit 1
+  fi
+
+  PACKAGE=$(<$PACKAGE_FILE)
+
+
+  # Create a copy of package.json in package.json.local
+  if [ -f $PACKAGE_BACKUP ]; then
+    echo -e "\n\x1B[31mBackup of package.json already exists!\n"
+    exit 1
+  fi
+
+  mv $PACKAGE_FILE $PACKAGE_BACKUP
+
+
+  # Replace local modules
+  for MODULE in "${MODULES[@]}"; do
+    if [ $MODULE != $1 ]; then
+      VERSION=$(readLocalVersion $MODULE)
+      LOCAL="file:../$MODULE"
+      REMOTE="^$VERSION"
+      PACKAGE=${PACKAGE/$LOCAL/$REMOTE}
+    fi
+  done
+
+  echo "$PACKAGE" > $PACKAGE_FILE
+}
+
+
+# Copy package.json.local back to package.json
+function resetDependencies {
+  PACKAGE_FILE=$DIR/../modules/$1/package.json
+  PACKAGE_BACKUP="$PACKAGE_FILE.local"
+
+  if [ ! -f $PACKAGE_BACKUP ]; then
+    echo -e "\n\x1B[31mBackup of package.json does not exist!\n"
+    exit 1
+  fi
+
+  if [ -f $PACKAGE_FILE ]; then
+    rm $PACKAGE_FILE
+  fi
+
+  mv $PACKAGE_BACKUP $PACKAGE_FILE
+}

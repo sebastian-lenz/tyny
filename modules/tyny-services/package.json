@@ -1,7 +1,7 @@
 {
   "name": "tyny-services",
   "description": "Shared global services for tyny.",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "license": "MIT",
   "main": "./lib/index.js",
   "module": "./lib/index.js",
@@ -9,7 +9,8 @@
   "scripts": {
     "build": "../../scripts/build tyny-services",
     "prepack": "../../scripts/prepack tyny-services",
-    "postpack": "../../scripts/postpack tyny-services"
+    "prepublishOnly": "../../scripts/prepublishOnly tyny-services",
+    "postpublish": "../../scripts/postpublish tyny-services"
   },
   "repository": {
     "type": "git",

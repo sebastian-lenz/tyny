@@ -9,7 +9,8 @@
   "scripts": {
     "build": "../../scripts/build tyny-utils",
     "prepack": "../../scripts/prepack tyny-utils",
-    "postpack": "../../scripts/postpack tyny-utils"
+    "prepublishOnly": "../../scripts/prepublishOnly tyny-utils",
+    "postpublish": "../../scripts/postpublish tyny-utils"
   },
   "repository": {
     "type": "git",

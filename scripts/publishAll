@@ -1,0 +1,18 @@
+#!/bin/bash
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+. $DIR/config
+
+
+# Publish all modules
+for MODULE in "${MODULES[@]}"; do
+  LOCAL_VERSION=$(readLocalVersion $MODULE)
+  REMOTE_VERSION=$(readRemoteVersion $MODULE)
+
+  if [ $LOCAL_VERSION != $REMOTE_VERSION ]; then
+    echo "$MODULE needs update (local: $LOCAL_VERSION, remote: $REMOTE_VERSION)"
+    (cd $DIR/../modules/$MODULE; npm publish)
+  else
+    echo "$MODULE is up to date ($REMOTE_VERSION)"
+  fi
+done

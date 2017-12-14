@@ -1,7 +1,7 @@
 {
   "name": "tyny",
   "description": "Core view and components package of tyny.",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "license": "MIT",
   "main": "./lib/index.js",
   "module": "./lib/index.js",
@@ -9,7 +9,8 @@
   "scripts": {
     "build": "../../scripts/build tyny",
     "prepack": "../../scripts/prepack tyny",
-    "postpack": "../../scripts/postpack tyny"
+    "prepublishOnly": "../../scripts/prepublishOnly tyny",
+    "postpublish": "../../scripts/postpublish tyny"
   },
   "repository": {
     "type": "git",

@@ -27,8 +27,9 @@ export default class Slideshow<
     });
 
     const sequencer = new Sequencer();
-    this.listenTo(sequencer, 'transitionStart', this.handleTransitionStart);
-    this.listenTo(sequencer, 'transitionEnd', this.handleTransitionEnd);
+    sequencer.callbackContext = this;
+    sequencer.endCallback = this.handleTransitionEnd;
+    sequencer.startCallback = this.handleTransitionStart;
 
     this.transition = options.transition || dissolve();
     this.sequencer = sequencer;

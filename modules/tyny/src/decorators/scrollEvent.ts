@@ -1,14 +1,9 @@
-import { DelegatedEvent, DelegateOptions } from 'tyny-events';
+import { viewport } from 'tyny-services';
 
 import { setInitializer } from '../initializers';
 import View from '../View';
 
-export { DelegatedEvent };
-
-export default function delegate(
-  eventName: string,
-  options?: DelegateOptions
-): MethodDecorator {
+export default function scrollEvent(): MethodDecorator {
   return function<T>(
     target: Object,
     propertyKey: string | symbol,
@@ -16,11 +11,7 @@ export default function delegate(
   ) {
     const propertyName = propertyKey.toString();
     setInitializer(target, propertyName, function(view: View) {
-      eventName
-        .split(' ')
-        .forEach(name =>
-          view.delegate(name, (<any>view)[propertyKey], options)
-        );
+      view.listenTo(viewport(), 'scroll', (<any>view)[propertyKey]);
     });
   };
 }

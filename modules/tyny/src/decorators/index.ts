@@ -5,6 +5,8 @@ import data from './data';
 import delegate from './delegate';
 import pointerEvent from './pointerEvent';
 import resizeEvent from './resizeEvent';
+import scrollEvent from './scrollEvent';
+import windowPointerDownEvent from './windowPointerDownEvent';
 
 export {
   child,
@@ -14,4 +16,6 @@ export {
   delegate,
   pointerEvent,
   resizeEvent,
+  scrollEvent,
+  windowPointerDownEvent,
 };

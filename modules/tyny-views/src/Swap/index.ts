@@ -1,4 +1,10 @@
-import Swap, { SwapOptions } from './Swap';
-import SwapContent from './SwapContent';
+import Swap, { SwapOptions, SwapSequencerOptions } from './Swap';
+import SwapContent, { SwapContentOptions } from './SwapContent';
 
-export { Swap, SwapContent, SwapOptions };
+export {
+  Swap,
+  SwapContent,
+  SwapContentOptions,
+  SwapOptions,
+  SwapSequencerOptions,
+};

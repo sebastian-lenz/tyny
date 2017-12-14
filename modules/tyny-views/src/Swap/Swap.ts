@@ -43,7 +43,7 @@ export default class Swap<TContent extends View = View> extends View {
   protected content: TContent | undefined;
   protected sequencer: Sequencer<SwapSequencerOptions<TContent>>;
 
-  constructor(options: SwapOptions) {
+  constructor(options?: SwapOptions) {
     super(options);
 
     const sequencer = new Sequencer<SwapSequencerOptions<TContent>>();
@@ -57,10 +57,7 @@ export default class Swap<TContent extends View = View> extends View {
     return this.content;
   }
 
-  setContent(
-    content: TContent | undefined,
-    options: SwapTransitionOptions = {}
-  ) {
+  setContent(content?: TContent, options: SwapTransitionOptions = {}) {
     const { content: from, sequencer, transition, transist } = this;
     if (from === content) return;
     this.content = content;

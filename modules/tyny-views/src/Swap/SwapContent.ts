@@ -1,5 +1,7 @@
 import { SelectableView, View, ViewOptions } from 'tyny';
 
+export interface SwapContentOptions extends ViewOptions {}
+
 export default class SwapContent extends View implements SelectableView {
   isSelected: boolean = false;
 

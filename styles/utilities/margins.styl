@@ -1,0 +1,81 @@
+$utility-margin ?= {
+  responsive: true
+  property: margin
+  class: m
+  values: map-merge($spacers, {
+    auto: auto
+  })
+}
+
+$utility-margin-x ?= {
+  responsive: true
+  property: margin-right margin-left
+  class: mx
+  values: map-merge($spacers, {
+    auto: auto
+  })
+}
+
+$utility-margin-y ?= {
+  responsive: true
+  property: margin-top margin-bottom
+  class: my
+  values: map-merge($spacers, {
+    auto: auto
+  })
+}
+
+$utility-margin-top ?= {
+  responsive: true
+  property: margin-top
+  class: mt
+  values: map-merge($spacers, {
+    auto: auto
+  })
+}
+
+$utility-margin-right ?= {
+  responsive: true
+  property: margin-right
+  class: mr
+  values: map-merge($spacers, {
+    auto: auto
+  })
+}
+
+$utility-margin-bottom ?= {
+  responsive: true
+  property: margin-bottom
+  class: mb
+  values: map-merge($spacers, {
+    auto: auto
+  })
+}
+
+$utility-margin-left ?= {
+  responsive: true
+  property: margin-left
+  class: ml
+  values: map-merge($spacers, {
+    auto: auto
+  })
+}
+
+$utilities-margin-x ?= {
+  margin-x: $utility-margin-x,
+  margin-right: $utility-margin-right,
+  margin-left: $utility-margin-left,
+}
+
+$utilities-margin-y ?= {
+  margin-y: $utility-margin-y,
+  margin-top: $utility-margin-top,
+  margin-bottom: $utility-margin-bottom,
+}
+
+$utilities-margin ?= merge(
+  $utilities-margin-x, 
+  $utilities-margin-y, {
+    margin: $utility-margin
+  }
+)

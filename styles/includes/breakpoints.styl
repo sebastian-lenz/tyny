@@ -1,0 +1,70 @@
+breakpoint-next($name, $breakpoints = $grid-breakpoints)
+  $breakpoint-names = keys($breakpoints)
+  $index = index($breakpoint-names, $name)
+  if $index is null
+    error("" + "breakpoint `%s` not found in `%s`" % ($name $breakpoint-names))
+
+  return $index < length($breakpoint-names) ? $breakpoint-names[$index + 1] : null
+
+breakpoint-min-width($name, $breakpoints = $grid-breakpoints)
+  $min = $breakpoints[$name]
+  return $min != 0 ? $min : null
+
+breakpoint-max-width($name, $breakpoints = $grid-breakpoints)
+  $max = $breakpoints[$name]
+  return $max && $max > 0 ? $max - .02 : null
+
+breakpoint-suffix($name, $breakpoints = $grid-breakpoints)
+  return breakpoint-min-width($name, $breakpoints) == null ? "" : "\@" + $name
+
+
+breakpoint($name, $breakpoints = $grid-breakpoints)
+  $min = breakpoint-min-width($name, $breakpoints)
+
+  if $min
+    @media (min-width: $min)
+      {block}
+  else
+    {block}
+
+breakpoint-to($name, $breakpoints = $grid-breakpoints)
+  $max = breakpoint-max-width($name, $breakpoints)
+
+  if $max
+    @media (max-width: $max)
+      {block}
+  else
+    {block}
+
+breakpoint-upto($name, $breakpoints = $grid-breakpoints)
+  +breakpoint-to(breakpoint-next($name))
+    {block}
+
+breakpoint-between($lower, $upper, $breakpoints = $grid-breakpoints)
+  $min = breakpoint-min-width($lower, $breakpoints)
+  $max = breakpoint-max-width($upper, $breakpoints)
+
+  if $min != null && $max != null
+    @media (min-width: $min) and (max-width: $max)
+      {block}
+  else if $max == null
+    +media-breakpoint($lower, $breakpoints)
+      {block} 
+  else if $min == null
+    +media-breakpoint-to($upper, $breakpoints)
+      {block}
+
+breakpoint-only($name, $breakpoints = $grid-breakpoints)
+  $min = breakpoint-min-width($name, $breakpoints)
+  $next = breakpoint-next($name, $breakpoints)
+  $max = breakpoint-max-width($next)
+
+  if $min != null and $max != null
+    @media (min-width: $min) and (max-width: $max)
+      {block}
+  else if $max == null
+    +breakpoint($name, $breakpoints)
+      {block}
+  else if $min == null
+    +breakpoint-to($next, $breakpoints)
+      {block}

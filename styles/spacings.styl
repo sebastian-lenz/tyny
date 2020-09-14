@@ -1,0 +1,40 @@
+make-margin-h($name, $value)
+  .mx-{$name},
+  .ml-{$name}
+    margin-left: $value
+
+  .mx-{$name},
+  .mr-{$name}
+    margin-right: $value
+
+make-margin-v($name, $value)
+  .my-{$name},
+  .mt-{$name}
+    margin-top: $value
+
+  .my-{$name},
+  .mb-{$name}
+    margin-bottom: $value
+
+make-margins-v($margins = $spacings)
+  for $name, $value in $margins
+    make-margin-v($name, $value)
+
+
+make-padding-h($name, $value)
+  .px-{$name},
+  .pl-{$name}
+    padding-left: $value
+
+  .px-{$name},
+  .pr-{$name}
+    padding-right: $value
+
+make-padding-v($name, $value)
+  .py-{$name},
+  .pt-{$name}
+    padding-top: $value
+
+  .py-{$name},
+  .pb-{$name}
+    padding-bottom: $value

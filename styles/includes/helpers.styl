@@ -1,0 +1,23 @@
+noList()
+  margin: 0
+  padding: 0
+  list-style: none
+
+noChildMargins()
+  > *:first-child
+    margin-top: 0
+
+  > *:last-child
+    margin-bottom: 0
+
+noButton($padding = 0)
+  padding: $padding
+
+  background: transparent
+  border: none
+  border-radius: 0
+  outline: none
+
+  &:focus
+    outline: none
+

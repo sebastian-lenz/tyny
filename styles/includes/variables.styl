@@ -1,0 +1,76 @@
+$viewPrefix ?= 'ty';
+
+
+// Colors
+// ------
+
+$white ?= #fff
+$black ?= #000
+$text-color ?= #212529
+
+$body-bg ?= $white
+$body-color ?= $text-color
+$body-text-align ?= null
+
+
+// Typography
+// ----------
+
+$font-family-sans-serif ?= system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"
+$font-family-monospace ?= SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace
+$font-family-base ?= $font-family-sans-serif
+
+$font-weight-base ?= 400
+
+$font-size-root ?= null
+$font-size-base ?= 1rem
+$font-size-sm ?= $font-size-base * .875
+$font-size-lg ?= $font-size-base * 1.25
+
+$line-height-base ?= 1.5
+
+// Grid
+// ----
+
+$grid-breakpoints ?= {
+  xs: 0,
+  sm: 576px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px,
+  xxl: 1400px
+}
+
+$container-max-widths ?= {
+  sm: 540px,
+  md: 720px,
+  lg: 960px,
+  xl: 1140px,
+  xxl: 1320px
+}
+
+$grid-columns ?= 12
+$grid-gutter-width ?= 20px
+$grid-child-columns ?= 0
+$container-padding-x ?= 20px
+
+// Spacing
+// -------
+
+$spacer ?= 1rem
+$spacers ?= {
+  '0': 0,
+  '1': $spacer * 0.25,
+  '2': $spacer * 0.5,
+  '3': $spacer * 1,
+  '4': $spacer * 1.5,
+  '5': $spacer * 3,
+}
+
+$negative-spacers ?= {
+  n1: $spacer * -0.25,
+  n2: $spacer * -0.5,
+  n3: $spacer * -1,
+  n4: $spacer * -1.5,
+  n5: $spacer * -3,
+}

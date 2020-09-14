@@ -1,0 +1,19 @@
+image(
+  $baseClass = "." + $viewPrefix + "Image",
+  $wrapClass = $baseClass + "--wrap",
+)
+  {$baseClass}
+    opacity: 0
+    
+    &.loaded
+      opacity: 1
+
+  {$wrapClass}
+    relative()
+    display: block
+    height: 0
+
+    > img
+      absolute(0, false, false, 0)
+      width: 100%
+      height: 100%

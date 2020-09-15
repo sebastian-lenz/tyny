@@ -1,7 +1,0 @@
-.hidden
-  display: none
-
-for $breakpoint in keys($grid-breakpoints)
-  +breakpoint-only($breakpoint)
-    .hidden\\@{$breakpoint}
-      display: none

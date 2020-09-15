@@ -5,8 +5,7 @@ objectify($values)
   $result[$value] = $value for $value in $values
   return $result
 
-
-generate-utility($utility, $suffix, $is-rfs-media-query = false)
+make-utility($utility, $suffix, $is-rfs-media-query = false)
   for $key, $value in objectify($utility.values)
     $properties = $utility.property
 
@@ -20,9 +19,9 @@ generate-utility($utility, $suffix, $is-rfs-media-query = false)
       $property-class = ""
 
     // Don't prefix if value key is null (eg. with shadow class)
-    $property-class-modifier ''
+    $property-class-modifier = ''
     if $key
-      $property-class-modifier = $property-class ? "-" + $key : ""
+      $property-class-modifier = $property-class ? '-' + $key : $key
 
     if rfs in $utility
       // Inside the media query
@@ -36,12 +35,12 @@ generate-utility($utility, $suffix, $is-rfs-media-query = false)
 
 
     if $value != null
-      .{$property-class + $property-class-modifier + $suffix}
+      .{$property-class}{$property-class-modifier}{$suffix}
         for $property in $properties
           {$property}: $value
 
 
-generate-utilities($utilities, $breakpoints = $grid-breakpoints)
+make-utilities($utilities, $breakpoints = $grid-breakpoints)
   // Loop over each breakpoint
   for $breakpointName in keys($breakpoints)
 
@@ -51,11 +50,10 @@ generate-utilities($utilities, $breakpoints = $grid-breakpoints)
 
       // Loop over each utility property
       for $key, $utility in $utilities
-
         // The utility can be disabled with `false`, thus check if the utility is a map first
         // Only proceed if responsive media queries are enabled or if it's the base media query
         if typeof($utility) == "object" and ($utility.responsive or $suffix == "")
-          generate-utility($utility, $suffix)
+          make-utility($utility, $suffix)
 
   // RFS rescaling
   @media (min-width: $rfs-mq-value)
@@ -68,11 +66,11 @@ generate-utilities($utilities, $breakpoints = $grid-breakpoints)
           // The utility can be disabled with `false`, thus check if the utility is a map first
           // Only proceed if responsive media queries are enabled or if it's the base media query
           if typeof($utility) == "object" and $utility.rfs
-            generate-utility($utility, $suffix, true)
+            make-utility($utility, $suffix, true)
 
   @media print
     for $key, $utility in $utilities
       // The utility can be disabled with `false`, thus check if the utility is a map first
       // Then check if the utility needs print styles
       if typeof($utility) == "object" and $utility.print
-        generate-utility($utility, "-print")
+        make-utility($utility, "-print")

@@ -2,52 +2,52 @@ $utility-margin ?= {
   responsive: true
   property: margin
   class: m
-  values: map-merge($spacers, {
+  values: merge({
     auto: auto
-  })
+  }, $spacers)
 }
 
 $utility-margin-x ?= {
   responsive: true
   property: margin-right margin-left
   class: mx
-  values: map-merge($spacers, {
+  values: merge({
     auto: auto
-  })
+  }, $spacers)
 }
 
 $utility-margin-y ?= {
   responsive: true
   property: margin-top margin-bottom
   class: my
-  values: map-merge($spacers, {
+  values: merge({
     auto: auto
-  })
+  }, $spacers)
 }
 
 $utility-margin-top ?= {
   responsive: true
   property: margin-top
   class: mt
-  values: map-merge($spacers, {
+  values: merge({
     auto: auto
-  })
+  }, $spacers)
 }
 
 $utility-margin-right ?= {
   responsive: true
   property: margin-right
   class: mr
-  values: map-merge($spacers, {
+  values: merge({
     auto: auto
-  })
+  }, $spacers)
 }
 
 $utility-margin-bottom ?= {
   responsive: true
   property: margin-bottom
   class: mb
-  values: map-merge($spacers, {
+  values: merge($spacers, {
     auto: auto
   })
 }
@@ -56,9 +56,9 @@ $utility-margin-left ?= {
   responsive: true
   property: margin-left
   class: ml
-  values: map-merge($spacers, {
+  values: merge({
     auto: auto
-  })
+  }, $spacers)
 }
 
 $utilities-margin-x ?= {
@@ -74,8 +74,9 @@ $utilities-margin-y ?= {
 }
 
 $utilities-margin ?= merge(
-  $utilities-margin-x, 
-  $utilities-margin-y, {
+  {
     margin: $utility-margin
-  }
+  },
+  $utilities-margin-x, 
+  $utilities-margin-y
 )

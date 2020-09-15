@@ -1,0 +1,34 @@
+$utility-background-color ?= {
+  property: background-color
+  class: bg
+  values: merge({
+      "body": $body-bg
+      "white": $white
+      "transparent": transparent
+  }, $theme-colors)
+}
+
+$utility-gradient ?= {
+  property: background-image
+  class: bg
+  values: {
+    gradient: var(--bs-gradient)
+  }
+}
+
+$utility-shadow ?= {
+  property: box-shadow
+  class: shadow
+  values: {
+    '': $box-shadow
+    sm: $box-shadow-sm
+    lg: $box-shadow-lg
+    none: none
+  }
+}
+
+$utilities-background ?= {
+  background-color: $utility-background-color
+  gradient: $utility-gradient
+  shadow: $utility-shadow
+}

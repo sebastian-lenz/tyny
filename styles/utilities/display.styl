@@ -1,0 +1,47 @@
+$utility-display ?= {
+  responsive: true
+  print: true
+  property: display
+  class: d
+  values: inline inline-block block table table-row table-cell flex inline-flex none
+}
+
+utility-float ?= {
+  responsive: true
+  property: float
+  values: left right none
+}
+
+$utility-overflow ?= {
+  property: overflow
+  values: auto hidden
+}
+
+$utility-pointer-events ?= {
+  property: pointer-events
+  class: pe
+  values: none auto
+}
+
+$utility-position ?= {
+  property: position
+  values: static relative absolute fixed sticky
+}
+
+$utility-visibility ?= {
+  property: visibility
+  class: null
+  values: {
+    visible: visible
+    invisible: hidden
+  }
+}
+
+$utilities-display ?= {
+  display: $utility-display
+  float: $utility-float
+  overflow: $utility-overflow
+  pointer-events: $utility-pointer-events
+  position: $utility-position
+  visibility: $utility-visibility
+}

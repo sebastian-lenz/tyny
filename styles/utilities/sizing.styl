@@ -1,0 +1,82 @@
+$utility-width ?= {
+  property: width
+  class: w
+  values: {
+    '25': 25%
+    '50': 50%
+    '75': 75%
+    '100': 100%
+    'auto': auto
+  }
+}
+
+$utility-max-width ?= {
+  property: max-width
+  class: mw
+  values: {
+    '100': 100%
+  }
+}
+
+$utility-viewport-width ?= {
+  property: width
+  class: vw
+  values: {
+    '100': 100vw
+  }
+}
+
+$utility-min-viewport-width ?= {
+  property: min-width
+  class: min-vw
+  values: {
+    '100': 100vw
+  }
+}
+
+$utility-height ?= {
+  property: height
+  class: h
+  values: {
+    '25': 25%
+    '50': 50%
+    '75': 75%
+    '100': 100%
+    'auto': auto
+  }
+}
+
+$utility-max-height ?= {
+  property: max-height
+  class: mh
+  values: {
+    '100': 100%
+  }
+}
+
+$utility-viewport-height ?= {
+  property: height
+  class: vh
+  values: {
+    '100': 100vh
+  }
+}
+
+$utility-min-viewport-height ?= {
+  property: min-height
+  class: min-vh
+  values: {
+    '100': 100vh
+  }
+}
+
+$utilities-sizing ?= {
+  width: $utility-width
+  max-width: $utility-max-width
+  viewport-width: $utility-viewport-width
+  min-viewport-width: $utility-min-viewport-width
+  height: $utility-height
+  max-height: $utility-max-height
+  viewport-height: $utility-viewport-height
+  min-viewport-height: $utility-min-viewport-height
+}

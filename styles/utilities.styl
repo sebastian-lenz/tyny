@@ -1,0 +1,26 @@
+@import './helpers/utilities.styl'
+
+@import './utilities/background.styl'
+@import './utilities/border.styl'
+@import './utilities/display.styl'
+@import './utilities/flex.styl'
+@import './utilities/margin.styl'
+@import './utilities/margin-negative.styl'
+@import './utilities/padding.styl'
+@import './utilities/sizing.styl'
+@import './utilities/text.styl'
+
+$utilities ?= merge(
+  {},
+  $utilities-background,
+  $utilities-border,
+  $utilities-display,
+  $utilities-flex,
+  $utilities-margin,
+  $utilities-margin-negative,
+  $utilities-padding,
+  $utilities-sizing,
+  $utilities-text,
+)
+
+make-utilities($utilities)

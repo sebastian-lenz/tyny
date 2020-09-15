@@ -1,0 +1,112 @@
+$utility-align ?= {
+  property: vertical-align
+  class: align
+  values: baseline top middle bottom text-bottom text-top
+}
+
+$utility-color ?= {
+  property: color
+  class: text
+  values: merge($theme-colors {
+    "white": $white
+    "body": $body-color
+    "muted": $text-muted
+    "black-50": rgba($black, 0.5)
+    "white-50": rgba($white, 0.5)
+    "reset": inherit
+  })
+}
+
+$utility-font-family ?= {
+  property: font-family
+  class: font
+  values: {
+    monospace: $font-family-monospace
+  }
+}
+
+$utility-font-style ?= {
+  property: font-style
+  class: font
+  values: {
+    italic: italic
+    normal: normal
+  }
+}
+
+$utility-font-weight ?= {
+  property: font-weight
+  values: {
+    light: $font-weight-light
+    lighter: $font-weight-lighter
+    normal: $font-weight-normal
+    bold: $font-weight-bold
+    bolder: $font-weight-bolder
+  }
+}
+
+$utility-line-height ?= {
+  property: line-height
+  class: lh
+  values: {
+    '1': 1
+    sm: $line-height-sm
+    base: $line-height-base
+    lg: $line-height-lg
+  }
+}
+
+$utility-text-align ?= {
+  responsive: true
+  property: text-align
+  class: text
+  values: left right center
+}
+
+$utility-text-decoration ?= {
+  property: text-decoration
+  values: none underline line-through
+}
+
+$utility-text-transform ?= {
+  property: text-transform
+  class: text
+  values: lowercase uppercase capitalize
+}
+
+$utility-user-select ?= {
+  property: user-select
+  values: all auto none
+}
+
+$utility-white-space ?= {
+  property: white-space
+  class: text
+  values: {
+    wrap: normal
+    nowrap: nowrap
+  }
+}
+
+$utility-word-wrap ?= {
+  property: word-wrap word-break
+  class: text
+  values: {
+    break: break-word
+  }
+}
+
+$utilities-text = {
+  align: $utility-align
+  color: $utility-color
+  font-family: $utility-font-family
+  font-style: $utility-font-style
+  font-weight: $utility-font-weight
+  line-height: $utility-line-height
+  text-align: $utility-text-align
+  text-decoration: $utility-text-decoration
+  text-transform: $utility-text-transform
+  user-select: $utility-user-select
+  white-space: $utility-white-space
+  word-wrap: $utility-word-wrap
+}

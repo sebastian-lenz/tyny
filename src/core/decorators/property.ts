@@ -53,7 +53,11 @@ export function property(options: PropertyOptions = {}): PropertyDecorator {
 
         if (param) {
           const { type, ...options } = param;
-          return (values[name] = this.params[type]({ ...options, name }));
+          return (values[name] = this.params[type]({
+            defaultValue: get,
+            ...options,
+            name,
+          }));
         }
 
         return (values[name] = get ? get() : undefined);

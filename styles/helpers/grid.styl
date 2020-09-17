@@ -1,0 +1,77 @@
+make-row($gutter = $grid-gutter-width)
+  display: flex
+  flex-wrap: wrap
+  margin-right: $gutter * -0.5
+  margin-left: $gutter * -0.5
+
+make-col-ready($gutter = $grid-gutter-width)
+  flex-shrink: 0
+  width: 100%
+  max-width: 100%
+  padding-right: $gutter * 0.5
+  padding-left: $gutter * 0.5
+
+make-col($size, $columns = $grid-columns)
+  flex: 0 0 auto
+  width: percentage($size / $columns)
+
+make-col-auto()
+  flex: 0 0 auto
+  width: auto
+
+make-col-offset($size, $columns = $grid-columns)
+  $num = $size / $columns
+  margin-left: $num == 0 ? 0 : percentage($num)
+
+row-cols($count)
+  & > *
+    flex: 0 0 auto
+    width: 100% / $count
+
+make-grid-columns-child-widths($suffix, $grid-row-columns)
+  .child-width-auto{$suffix} > *
+    make-col-auto()
+
+  for $i in (1...($grid-row-columns + 1))
+    .child-width-{$i}{$suffix}
+      row-cols($i)
+
+make-grid-columns-widths($suffix, $columns)
+  .width-auto{$suffix}
+    make-col-auto()
+
+  for $i in (1...($columns + 1))
+    .width-{$i}{$suffix}
+      make-col($i, $columns)
+
+  for $i in (0...$columns)
+    unless $suffix == "" && $i == 0
+      .offset-{$i}{$suffix}
+        make-col-offset($i, $columns)
+
+make-grid-columns($columns = $grid-columns, $breakpoints = $grid-breakpoints)
+  for $breakpoint in keys($breakpoints)
+    $suffix = breakpoint-suffix($breakpoint, $breakpoints)
+
+    +breakpoint($breakpoint, $breakpoints)
+      .col{$suffix}
+        flex: 1 0 0%
+
+      if $grid-child-columns > 0
+        make-grid-columns-child-widths($suffix, $grid-child-columns)
+
+      if $columns > 0
+        make-grid-columns-widths($suffix, $columns)
+
+make-grid(
+  $gutter = $grid-gutter-width, 
+  $columns = $grid-columns,
+  $breakpoints = $grid-breakpoints
+)
+  .row
+    make-row($gutter)
+
+    > *
+      make-col-ready($gutter)
+
+  make-grid-columns($columns, $breakpoints)

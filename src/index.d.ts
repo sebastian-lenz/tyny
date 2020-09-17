@@ -5,6 +5,11 @@ declare namespace tyny {
   // DOM API
   // -------
 
+  type DelegateEvent<T extends Event = Event> = T & {
+    current: HTMLElement;
+    delegate: HTMLElement;
+  };
+
   type ElementQuery = string | ElementLike;
   type ElementLike =
     | EventTarget

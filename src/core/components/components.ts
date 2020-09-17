@@ -9,6 +9,7 @@ import { toElement } from '../../utils/dom/misc/toElement';
 import { ucFirst } from '../../utils/lang/string/ucFirst';
 
 import type { View, ViewClass, ViewComponent } from '../View';
+import { isString } from '../../utils/lang/string';
 
 const components: tyny.Map<ViewComponent> = {};
 
@@ -178,11 +179,32 @@ function emitThrottled(event: string) {
   };
 }
 
-export function getView<T extends View = View>(
+export function getParentView<TView extends View = View>(
   element: any,
-  name: string
-): T | null {
-  return (getViews(element)[name] as T) || null;
+  ctor: ViewClass<TView> | string
+): TView | null {
+  return (
+    getView(element, ctor) ||
+    (element.parentElement ? getParentView(element.parentElement, ctor) : null)
+  );
+}
+
+export function getView<TView extends View = View>(
+  element: any,
+  ctor: ViewClass<TView> | string
+): TView | null {
+  const views = getViews(element);
+  if (isString(ctor)) {
+    return (views[ctor] as TView) || null;
+  }
+
+  for (const name in views) {
+    if (views[name] instanceof ctor) {
+      return views[name] as TView;
+    }
+  }
+
+  return null;
 }
 
 export function getViews(element: any): tyny.ViewMap {

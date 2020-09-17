@@ -64,6 +64,10 @@ export class View extends Lifecycle {
     }
   }
 
+  get behaviours(): Array<Behaviour> {
+    return [...this._behaviours];
+  }
+
   get component(): ViewComponent<this> {
     return this._component;
   }

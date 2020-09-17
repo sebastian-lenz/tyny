@@ -101,15 +101,14 @@ export class VisibilityObserver {
   private targets: VisibilityTarget[] = [];
 
   constructor() {
-    const { targets: _targets } = this;
-
-    function callback(entries: IntersectionObserverEntry[]) {
+    const callback = (entries: IntersectionObserverEntry[]) => {
+      const { targets } = this;
       entries.forEach((entry) => {
-        _targets
+        targets
           .filter((target) => target.el === entry.target)
           .forEach((target) => target.setVisible(entry.isIntersecting));
       });
-    }
+    };
 
     this.observer = new IntersectionObserver(callback, {
       rootMargin: '500px 0px',

@@ -36,10 +36,10 @@ function shift(
   if (invert) focus = 1 - focus;
 
   let shift = Math.round(-size * focus + space / 2);
-  if (space < size) {
-    if (shift > 0) shift = 0;
-    if (shift < space - size) shift = space - size;
-  }
+  // if (space < size) {
+  if (shift > 0) shift = 0;
+  if (shift < space - size) shift = space - size;
+  // }
 
   return shift;
 }

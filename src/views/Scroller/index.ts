@@ -5,6 +5,13 @@ import { transform } from '../../utils/env/transformProps';
 import { tween, Tween, TweenOptions } from '../../fx/tween';
 import { View, ViewOptions, update, property } from '../../core';
 
+const createBounds = () => ({
+  xMin: 0,
+  xMax: 0,
+  yMin: 0,
+  yMax: 0,
+});
+
 export interface ScrollerOptions extends ViewOptions {
   content?: HTMLElement | string;
   direction?: DragDirection;
@@ -14,30 +21,27 @@ export interface ScrollerOptions extends ViewOptions {
 }
 
 export class Scroller extends View implements ScrollableView {
-  dragBehaviour: DragScrollBehaviour;
   currentTarget: tyny.Point | null = null;
   currentTween: Tween | null = null;
-  positionBounds: tyny.BoundingBox = { xMin: 0, xMax: 0, yMin: 0, yMax: 0 };
-  useContentMargins: boolean = false;
+  readonly dragBehaviour: DragScrollBehaviour;
+  readonly positionBounds: tyny.BoundingBox = createBounds();
+  readonly viewportSize: tyny.Dimensions = { width: 0, height: 0 };
   protected _position: tyny.Point;
 
   @property({ param: { type: 'element' } })
   content!: HTMLElement | null;
+
+  @property({ param: { defaultValue: true, type: 'bool' } })
+  useContentMargins!: boolean;
 
   @property({ param: { defaultValue: ':scope', type: 'element' } })
   viewport!: HTMLElement | null;
 
   constructor(options: ScrollerOptions) {
     super(options);
-    const { params } = this;
+
     const { direction = 'both', position = { x: 0, y: 0 } } = options;
-
     this._position = { ...position };
-
-    this.useContentMargins = params.bool({
-      defaultValue: true,
-      name: 'useContentMargins',
-    });
 
     this.dragBehaviour = this.addBehaviour(DragScrollBehaviour, {
       direction,
@@ -55,14 +59,7 @@ export class Scroller extends View implements ScrollableView {
   }
 
   set position(value: tyny.Point) {
-    const { content } = this;
-    const { x, y } = this.toDisplayOffset(value);
-    this._position.x = value.x;
-    this._position.y = value.y;
-
-    if (content) {
-      (<any>content.style)[transform] = `translate(${-x}px, ${-y}px)`;
-    }
+    this.setPosition(value);
   }
 
   clampPosition(value: tyny.Point): tyny.Point {
@@ -80,6 +77,17 @@ export class Scroller extends View implements ScrollableView {
   gotoPosition(value: tyny.Point) {
     stop(this);
     this.position = this.clampPosition(value);
+  }
+
+  setPosition(value: tyny.Point) {
+    const { content } = this;
+    const { x, y } = this.toDisplayOffset(value);
+    this._position.x = value.x;
+    this._position.y = value.y;
+
+    if (content) {
+      (<any>content.style)[transform] = `translate(${-x}px, ${-y}px)`;
+    }
   }
 
   toDisplayOffset(value: tyny.Point): tyny.Point {
@@ -113,17 +121,20 @@ export class Scroller extends View implements ScrollableView {
 
   @update({ mode: 'read', events: ['resize', 'update'] })
   protected onMeasure() {
-    const { content, useContentMargins, viewport } = this;
+    const { content, useContentMargins, viewport, viewportSize } = this;
     const bounds = this.positionBounds;
 
     if (!content || !viewport) {
       return;
     }
 
+    const height = (viewportSize.width = viewport.offsetHeight);
+    const width = (viewportSize.width = viewport.offsetWidth);
+
     bounds.xMin = 0;
-    bounds.xMax = content.scrollWidth - viewport.offsetWidth;
+    bounds.xMax = content.scrollWidth - width;
     bounds.yMin = 0;
-    bounds.yMax = content.scrollHeight - viewport.offsetHeight;
+    bounds.yMax = content.scrollHeight - height;
 
     if (useContentMargins) {
       const style = window.getComputedStyle(content);

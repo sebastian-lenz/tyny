@@ -1,3 +1,5 @@
+import { supportsWebp } from '../../utils/env/webp';
+
 const sourceSetRegExp = /([^ ]+) (\d+)([WwXx])/;
 
 export type SourceSetSource = string | Source[] | SourceSetMode;
@@ -15,11 +17,13 @@ export interface Source {
 
 export interface SafeSource extends Source {
   bias: number;
+  isWebp: boolean;
 }
 
 export class SourceSet {
   mode: SourceSetMode | null = null;
   sources: SafeSource[] = [];
+  webpCheck: Promise<void>;
 
   constructor(data?: SourceSetSource) {
     if (Array.isArray(data)) {
@@ -29,12 +33,21 @@ export class SourceSet {
     } else if (typeof data === 'string') {
       this.parse(data);
     }
+
+    this.webpCheck = this.sources.some((source) => source.isWebp)
+      ? supportsWebp().then((hasWebp) => {
+          if (!hasWebp) {
+            this.sources = this.sources.filter((source) => !source.isWebp);
+          }
+        })
+      : Promise.resolve();
   }
 
   add(source: Source) {
     const { mode: currentMode, sources } = this;
     let safeSource: SafeSource = {
       bias: Number.MAX_VALUE,
+      isWebp: /\.webp$/.test(source.src),
       ...source,
     };
 
@@ -54,24 +67,28 @@ export class SourceSet {
     sources.sort((a, b) => a.bias - b.bias);
   }
 
-  get(width: number): string {
-    const { mode, sources } = this;
-    const count = sources.length;
-    if (count === 0) {
-      return '';
-    }
+  get(width: number): Promise<string> {
+    return this.webpCheck.then(() => {
+      const { mode, sources } = this;
+      const count = sources.length;
+      if (count === 0) {
+        return '';
+      }
 
-    let threshold = window.devicePixelRatio ? window.devicePixelRatio : 1;
-    if (mode === SourceSetMode.Width) {
-      threshold = width * threshold;
-    }
+      let threshold = window.devicePixelRatio ? window.devicePixelRatio : 1;
+      if (mode === SourceSetMode.Width) {
+        threshold = width * threshold;
+      }
 
-    for (let index = 0; index < sources.length; index++) {
-      const source = sources[index];
-      if (source.bias >= threshold) return source.src;
-    }
+      for (let index = 0; index < sources.length; index++) {
+        const source = sources[index];
+        if (source.bias >= threshold) {
+          return source.src;
+        }
+      }
 
-    return sources[count - 1].src;
+      return sources[count - 1].src;
+    });
   }
 
   parse(rawValue: string) {

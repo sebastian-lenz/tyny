@@ -35,7 +35,9 @@ export interface PointerBehaviourVelocity {
   scale: number;
 }
 
-export interface PointerBehaviourOptions extends BehaviourOptions {}
+export interface PointerBehaviourOptions extends BehaviourOptions {
+  target?: HTMLElement | null;
+}
 
 export class PointerBehaviour<TView extends View = View> extends Behaviour<
   TView
@@ -50,7 +52,8 @@ export class PointerBehaviour<TView extends View = View> extends Behaviour<
 
   constructor(view: TView, options: PointerBehaviourOptions = {}) {
     super(view, options);
-    this.adapter = createAdapter(view.el, this);
+
+    this.adapter = createAdapter(options.target || view.el, this);
   }
 
   get center(): tyny.Point {

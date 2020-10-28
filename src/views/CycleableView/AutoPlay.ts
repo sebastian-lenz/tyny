@@ -10,6 +10,7 @@ export interface AutoPlayOptions {
 export class AutoPlay extends Behaviour<CycleableView> {
   id: number = Math.round(Math.random() * 1024);
   interval: number;
+  isStarted: boolean = false;
   protected _timeout: number | null = null;
 
   constructor(view: CycleableView, options: AutoPlayOptions = {}) {
@@ -34,6 +35,8 @@ export class AutoPlay extends Behaviour<CycleableView> {
       clearTimeout(_timeout);
       this._timeout = null;
     }
+
+    this.isStarted = false;
   }
 
   start() {
@@ -42,6 +45,7 @@ export class AutoPlay extends Behaviour<CycleableView> {
       clearTimeout(_timeout);
     }
 
+    this.isStarted = true;
     this._timeout = window.setTimeout(onTimeout, interval);
   }
 

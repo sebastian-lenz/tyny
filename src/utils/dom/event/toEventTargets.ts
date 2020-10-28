@@ -2,7 +2,7 @@ import { findAll } from '../node/find';
 import { notNullified } from '../../lang/misc/notNullified';
 import { isString } from '../../lang/string/isString';
 import { toNode } from '../misc/toNode';
-import { toNodes } from '../misc/tonodes';
+import { toNodes } from '../misc/toNodes';
 
 function isEventTarget(target: any): target is EventTarget {
   return target && 'addEventListener' in target;

@@ -65,11 +65,11 @@ export function isBreakpoint(name: BreakpointName): boolean {
 }
 
 export function isAboveBreakpoint(name: BreakpointName): boolean {
-  return findNameIndex(name) >= currentIndex;
+  return findNameIndex(name) < currentIndex;
 }
 
 export function isBelowBreakpoint(name: BreakpointName): boolean {
-  return findNameIndex(name) <= currentIndex;
+  return findNameIndex(name) > currentIndex;
 }
 
 on(window, 'resize', onResize);

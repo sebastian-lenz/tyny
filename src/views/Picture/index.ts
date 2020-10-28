@@ -93,12 +93,13 @@ export class Picture extends View implements VisibilityTarget {
       const image = document.createElement('img');
       const item: PictureImage = (images[url] = {
         image,
-        isLoaded: image.complete,
+        isLoaded: false,
         source,
         url,
       });
 
       image.src = url;
+      item.isLoaded = !!image.complete;
       image.addEventListener('load', () => {
         item.isLoaded = true;
         this.tryTransist();

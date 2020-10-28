@@ -10,18 +10,19 @@ import { ucFirst } from '../../utils/lang/string/ucFirst';
 
 import type { View, ViewClass, ViewComponent } from '../View';
 import { isString } from '../../utils/lang/string';
+import { noop } from '../../utils/lang/function';
 
+const activeScrollEventOrigins: Array<any> = [];
 const components: tyny.Map<ViewComponent> = {};
-
+let hasActiveScrollEvent: boolean | null = null;
 let isInitialized = false;
+let unbindScrollEvent: Function | null = null;
 
 function addGlobalEvents() {
   on(window, 'load resize', emitThrottled('resize'));
   on(window, breakpointEvent, emitThrottled('breakpoint'));
-  on(window, 'scroll', emitThrottled('scroll'), {
-    passive: true,
-    capture: true,
-  });
+
+  setActiveScrollEvent(activeScrollEventOrigins.length > 0);
 }
 
 function applyAttribute({ target }: MutationRecord): boolean {
@@ -44,7 +45,7 @@ function applyAttribute({ target }: MutationRecord): boolean {
       createView(component, target);
       hasChanged = true;
     } else {
-      names.splice(index, 1);
+      names.splice(nameIndex, 1);
     }
   }
 
@@ -179,6 +180,35 @@ function emitThrottled(event: string) {
   };
 }
 
+function setActiveScrollEvent(value: boolean) {
+  if (hasActiveScrollEvent === value) return;
+  hasActiveScrollEvent = value;
+
+  if (unbindScrollEvent) {
+    unbindScrollEvent();
+  }
+
+  if (value) {
+    window.addEventListener('touchmove', noop, { passive: false });
+    window.addEventListener('touchforcechange', noop, { passive: false });
+  }
+
+  unbindScrollEvent = on(window, 'scroll', emitThrottled('scroll'), {
+    passive: !value,
+    capture: true,
+  });
+}
+
+export function emitUpdate(target?: tyny.ElementLike, type?: string) {
+  const element = target ? toElement(target) : document.body;
+
+  parents(element)
+    .reverse()
+    .forEach((element) => emitLocalUpdate(element, type));
+
+  apply(element, (element) => emitLocalUpdate(element, type));
+}
+
 export function getParentView<TView extends View = View>(
   element: any,
   ctor: ViewClass<TView> | string
@@ -242,14 +272,15 @@ export function registerViews(ctors: tyny.Map<ViewClass>) {
   }
 }
 
-export function emitUpdate(target?: tyny.ElementLike, type?: string) {
-  const element = target ? toElement(target) : document.body;
+export function toggleActiveScrollEvent(origin: any, active: boolean) {
+  const index = activeScrollEventOrigins.indexOf(origin);
+  if (active && index === -1) {
+    activeScrollEventOrigins.push(origin);
+  } else if (!active && index !== -1) {
+    activeScrollEventOrigins.splice(index, 1);
+  }
 
-  parents(element)
-    .reverse()
-    .forEach((element) => emitLocalUpdate(element, type));
-
-  apply(element, (element) => emitLocalUpdate(element, type));
+  setActiveScrollEvent(activeScrollEventOrigins.length > 0);
 }
 
 if (window && window.MutationObserver) {

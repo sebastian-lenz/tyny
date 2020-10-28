@@ -65,6 +65,10 @@ export function on(
 ): Function {
   const targets = toEventTargets(target);
 
+  if (scope) {
+    listener = listener.bind(scope);
+  }
+
   if (listener.length > 1) {
     listener = detail(listener);
   }
@@ -75,10 +79,6 @@ export function on(
 
   if (selector) {
     listener = delegate(targets, selector, listener);
-  }
-
-  if (scope) {
-    listener = listener.bind(scope);
   }
 
   const listenerOptions = useCaptureFilter(options);

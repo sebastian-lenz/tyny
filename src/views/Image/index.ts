@@ -72,7 +72,7 @@ export class Image extends View implements VisibilityTarget {
   update() {
     const { displayWidth, isVisible, sourceSet } = this;
     if (isVisible) {
-      this.setSource(sourceSet.get(displayWidth));
+      sourceSet.get(displayWidth).then((source) => this.setSource(source));
     }
   }
 

@@ -3,7 +3,7 @@ import { CycleableView, CycleableViewOptions } from '../CycleableView';
 import { dissolve } from '../../fx/transitions/dissolve';
 import { Sequencer, SequenceOptions } from './Sequencer';
 import { Transition } from '../../fx/transitions';
-import { BrowseBehaviour } from './BrowseBehaviour';
+import { BrowseBehaviour, BrowseBehaviourOptions } from './BrowseBehaviour';
 
 export const slideshowDismissEvent = 'tyny:slideshowDismiss';
 export const slideshowEndEvent = 'tyny:slideshowEnd';
@@ -17,6 +17,7 @@ export interface SlideshowEventArgs {
 
 export interface SlideshowOptions extends CycleableViewOptions {
   autoPlay?: AutoPlayOptions;
+  browse?: BrowseBehaviourOptions;
   transition?: Transition;
 }
 
@@ -28,6 +29,7 @@ export class Slideshow extends CycleableView<SlideshowTransitionOptions> {
   public autoPlay: AutoPlay;
   public browseBehaviour: BrowseBehaviour;
   public defaultTransition: Transition;
+  protected wasAutoPlaying: boolean = false;
   protected sequencer!: Sequencer<SequenceOptions>;
 
   constructor(options: SlideshowOptions) {
@@ -38,7 +40,7 @@ export class Slideshow extends CycleableView<SlideshowTransitionOptions> {
     });
 
     this.autoPlay = this.addBehaviour(AutoPlay, options.autoPlay);
-    this.browseBehaviour = this.addBehaviour(BrowseBehaviour);
+    this.browseBehaviour = this.addBehaviour(BrowseBehaviour, options.browse);
     this.defaultTransition = options.transition || dissolve();
 
     this.sequencer = new Sequencer<SequenceOptions>({
@@ -62,12 +64,15 @@ export class Slideshow extends CycleableView<SlideshowTransitionOptions> {
       return false;
     }
 
+    this.wasAutoPlaying = this.autoPlay.isStarted;
     this.autoPlay.pause();
     return true;
   }
 
   onBrowseEnd(): void {
-    this.autoPlay.start();
+    if (this.wasAutoPlaying) {
+      this.autoPlay.start();
+    }
   }
 
   protected onTransition(

@@ -1,4 +1,5 @@
-import { closest, matches } from './matches';
+import { closest } from './closest';
+import { matches } from './matches';
 import { isDocument, toElement, toNode } from '../misc';
 import { isString } from '../../lang/string';
 

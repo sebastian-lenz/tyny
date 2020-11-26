@@ -1,4 +1,4 @@
-import { closest } from '../node/matches';
+import { closest } from '../node/closest';
 import { findAll } from '../node/find';
 import { isBoolean } from '../../lang/misc/isBoolean';
 import { isElement } from '../misc/isElement';

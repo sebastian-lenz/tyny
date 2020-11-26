@@ -1,8 +1,7 @@
 import { Behaviour, BehaviourOptions } from '../../core/Behaviour';
 
 import type { FilterableView } from './index';
-import type { Modifier } from './Modifier';
-import type { Url } from '../../utils/types/Url';
+import type { Modifier, SyncOptions } from './Modifier';
 
 export interface BehaviourModifierOptions extends BehaviourOptions {}
 
@@ -20,5 +19,5 @@ export abstract class BehaviourModifier<
 
   abstract getParams(): tyny.Map<string | null>;
 
-  abstract sync(url: Url): boolean;
+  abstract sync(options: SyncOptions): boolean;
 }

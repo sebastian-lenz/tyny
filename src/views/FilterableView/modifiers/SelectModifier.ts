@@ -1,5 +1,5 @@
 import { event, property } from '../../../core';
-import { Url } from '../../../utils/types/Url';
+import { SyncOptions } from '../Modifier';
 import { ViewModifier, ViewModifierOptions } from '../ViewModifier';
 
 export interface SelectModifierOptions extends ViewModifierOptions {
@@ -64,7 +64,7 @@ export class SelectModifier extends ViewModifier {
     }
   }
 
-  sync(url: Url): boolean {
+  sync({ url }: SyncOptions): boolean {
     const value = url.getParam(this.paramName);
     if (this.getValue() === value) {
       return false;

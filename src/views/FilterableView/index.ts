@@ -6,7 +6,8 @@ import { Swap, SwapOptions } from '../Swap';
 import { Url } from '../../utils/types/Url';
 import { ViewModifier } from './ViewModifier';
 
-export type FilterableViewParams = tyny.Map<string | null | undefined>;
+export type FilterableViewParam = string | null | undefined;
+export type FilterableViewParams = tyny.Map<FilterableViewParam>;
 
 export interface FilterableViewOptions extends SwapOptions {}
 
@@ -16,10 +17,13 @@ export class FilterableView<
   TParams extends FilterableViewParams = FilterableViewParams
 > extends Swap {
   //
-  staticParams: tyny.Map<string> = {};
+  skipSameUrl: boolean = true;
+  staticParams: FilterableViewParams = {};
   protected _basePath: string = '';
+  protected _fetchPath: string | undefined;
   protected _hasChanges: boolean = false;
   protected _request: Promise<any> | null = null;
+  static responseCache: tyny.Map<string> = {};
 
   constructor(options: FilterableViewOptions) {
     super({
@@ -41,17 +45,25 @@ export class FilterableView<
     ];
   }
 
-  commit() {
+  commit({ disableLoad }: { disableLoad?: boolean } = {}) {
     if (this._hasChanges) return;
     this._hasChanges = true;
 
     setTimeout(() => {
-      window.history.pushState(null, document.title, this.getUrl());
+      const url = this.getUrl();
+      if (this.skipSameUrl && window.location.href === url) {
+        this._hasChanges = false;
+        return;
+      }
 
-      this.load();
+      window.history.pushState(null, document.title, url);
+      if (!disableLoad) {
+        this.load();
+      }
+
       this.trigger(filterChangedEvent, { target: this });
       this._hasChanges = false;
-    }, 0);
+    }, 50);
   }
 
   getParams(overrides: Partial<TParams> = {}): TParams {
@@ -61,9 +73,9 @@ export class FilterableView<
     ) as TParams;
   }
 
-  getUrl(overrides: Partial<TParams> = {}): string {
+  getUrl(overrides: Partial<TParams> = {}, path = this._basePath): string {
     return Url.compose({
-      path: this._basePath,
+      path,
       query: this.getParams(overrides),
     });
   }
@@ -72,11 +84,11 @@ export class FilterableView<
     this.modifiers.forEach((modifier) => modifier.softReset());
   }
 
-  sync(silent?: boolean) {
+  sync(silent: boolean = false) {
     const { modifiers } = this;
     const url = new Url(window.location.href);
     const hasChanged = modifiers.reduce(
-      (hasChanged, modifier) => modifier.sync(url) || hasChanged,
+      (hasChanged, modifier) => modifier.sync({ silent, url }) || hasChanged,
       false
     );
 
@@ -93,19 +105,31 @@ export class FilterableView<
   // Protected methods
   // -----------------
 
-  protected load() {
-    const url = this.getUrl(this.staticParams as any);
+  protected createRequest(): Promise<string | null | false> {
+    const { responseCache } = FilterableView;
+    const url = this.getUrl(this.staticParams as any, this._fetchPath);
+    if (url in responseCache) {
+      return Promise.resolve(responseCache[url]);
+    }
 
-    const request = (this._request = fetch(url)
+    return fetch(url)
       .then((response) => response.text())
-      .then((html) => {
-        if (this._request !== request) return;
-        this._request = null;
+      .then((html) => (responseCache[url] = html));
+  }
 
+  protected load() {
+    const request = (this._request = this.createRequest().then((result) => {
+      if (this._request !== request) return;
+      this._request = null;
+
+      if (result === null) {
+        this.setContent(null);
+      } else if (result !== false) {
         const parser = new DOMParser();
-        const document = parser.parseFromString(html, 'text/html');
+        const document = parser.parseFromString(result, 'text/html');
         this.setContent(document.body.firstElementChild as any);
-      }));
+      }
+    }));
   }
 
   protected onConnected() {

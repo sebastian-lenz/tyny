@@ -1,6 +1,7 @@
 import { attr } from '../../../utils/dom/attr';
 import { event } from '../../../core/decorators/event';
 import { FilterableView } from '../index';
+import { SyncOptions } from '../Modifier';
 import { toInt } from '../../../utils/lang/number/toInt';
 import { Url } from '../../../utils/types/Url';
 
@@ -49,7 +50,7 @@ export class PageModifier extends BehaviourModifier {
     this.setPage(1);
   }
 
-  sync(url: Url): boolean {
+  sync({ url }: SyncOptions): boolean {
     const page = url.getParam(this.paramName, '1');
     const value = parseInt(page);
     if (this.value === value) {

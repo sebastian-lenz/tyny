@@ -1,7 +1,13 @@
+import type { FilterableViewParams } from './index';
 import type { Url } from '../../utils/types/Url';
 
+export interface SyncOptions {
+  silent: boolean;
+  url: Url;
+}
+
 export interface Modifier {
-  getParams(): tyny.Map<string | null>;
+  getParams(): FilterableViewParams;
   softReset(): void;
-  sync(url: Url): boolean;
+  sync(options: SyncOptions): boolean;
 }

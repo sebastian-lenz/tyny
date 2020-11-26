@@ -1,8 +1,7 @@
 import { FilterableView } from './index';
 import { getParentView, property, View, ViewOptions } from '../../core';
 
-import type { Modifier } from './Modifier';
-import type { Url } from '../../utils/types/Url';
+import type { Modifier, SyncOptions } from './Modifier';
 
 export interface ViewModifierOptions extends ViewOptions {}
 
@@ -20,5 +19,5 @@ export abstract class ViewModifier extends View implements Modifier {
 
   abstract getParams(): tyny.Map<string | null>;
 
-  abstract sync(url: Url): boolean;
+  abstract sync(options: SyncOptions): boolean;
 }

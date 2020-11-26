@@ -196,11 +196,12 @@ export class Picture extends View implements VisibilityTarget {
     const source = this.findSource();
     if (!source || !isVisible || (nextImage && progress)) return;
 
-    const url = source.sourceSet.get(this.displayWidth);
-    const image = this.getImage(source, url);
-    if ((currentImage === image && !nextImage) || nextImage === image) return;
+    source.sourceSet.get(this.displayWidth).then((url) => {
+      const image = this.getImage(source, url);
+      if ((currentImage === image && !nextImage) || nextImage === image) return;
 
-    this.nextImage = image;
-    this.tryTransist();
+      this.nextImage = image;
+      this.tryTransist();
+    });
   }
 }

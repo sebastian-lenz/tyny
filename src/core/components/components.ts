@@ -94,6 +94,11 @@ function applyMutation(mutation: MutationRecord, updates: Array<Element>) {
 }
 
 function connect(element: HTMLElement) {
+  // IE has no classlist on svg elements
+  if (!('classList' in element)) {
+    return;
+  }
+
   const views = element.__tynyViews as tyny.ViewApiMap;
   if (views) {
     for (const name in views) {
@@ -101,11 +106,12 @@ function connect(element: HTMLElement) {
     }
   }
 
-  element.classList.forEach((className) => {
+  for (let index = 0; index < element.classList.length; index++) {
+    const className = element.classList[index];
     if (className in components) {
       createView(components[className], element);
     }
-  });
+  }
 }
 
 function createObserver() {

@@ -25,13 +25,14 @@ export interface BrowsableView extends CycleableView {
 
 export interface BrowseBehaviourOptions extends DragBehaviourOptions {
   enabled?: boolean;
+  effect?: Effect;
 }
 
 export class BrowseBehaviour<
   TView extends BrowsableView = BrowsableView
 > extends DragBehaviour<TView> {
   //
-  effect: Effect = new SlideEffect();
+  effect: Effect;
   enabled: boolean;
   initialOffset: number = 0;
   offset: number | null = null;
@@ -40,7 +41,11 @@ export class BrowseBehaviour<
 
   constructor(
     view: TView,
-    { enabled = true, ...options }: BrowseBehaviourOptions
+    {
+      enabled = true,
+      effect = new SlideEffect(),
+      ...options
+    }: BrowseBehaviourOptions
   ) {
     super(view, {
       direction: 'horizontal',
@@ -48,6 +53,7 @@ export class BrowseBehaviour<
     });
 
     this.enabled = enabled;
+    this.effect = effect;
     this._listeners = [
       on(view.el, 'click', this.onViewClick, { capture: true, scope: this }),
     ];

@@ -20,6 +20,7 @@ export class DropDown extends View {
   @property({
     param: {
       className: `${process.env.TYNY_PREFIX}DropDown--flyout`,
+      defaultValue: `.${process.env.TYNY_PREFIX}DropDown--flyout`,
       tagName: 'div',
       type: 'element',
     },
@@ -29,6 +30,7 @@ export class DropDown extends View {
   @property({
     param: {
       className: `${process.env.TYNY_PREFIX}DropDown--label`,
+      defaultValue: `.${process.env.TYNY_PREFIX}DropDown--label`,
       tagName: 'div',
       type: 'element',
     },
@@ -44,7 +46,8 @@ export class DropDown extends View {
   constructor({
     groupLabel = (el) => el.label,
     optionLabel = (el) => el.label,
-    selectedLabel = (els) => els.map((el) => el.label).join(', '),
+    selectedLabel = (els) =>
+      els.length ? els.map((el) => el.label).join(', ') : '',
     ...options
   }: DropDownOptions = {}) {
     super(options);

@@ -58,8 +58,14 @@ export class Picture extends View implements VisibilityTarget {
   }
 
   setVisible(value: boolean) {
+    if (this.isVisible === value) return;
     this.isVisible = value;
-    if (value) this.updateImage();
+
+    if (value && !this.displayWidth) {
+      this.triggerUpdate('resize');
+    } else {
+      this.updateImage();
+    }
   }
 
   protected findSource(

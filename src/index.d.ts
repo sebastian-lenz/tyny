@@ -11,14 +11,10 @@ declare namespace tyny {
   };
 
   type ElementQuery = string | ElementLike;
-  type ElementLike =
-    | EventTarget
-    | Node
-    | Node[]
-    | NodeList
-    | HTMLCollection
-    | undefined
-    | null;
+
+  type ElementListLike = Node[] | NodeList | HTMLCollection;
+
+  type ElementLike = ElementListLike | EventTarget | Node | undefined | null;
 
   // Geom
   // ----

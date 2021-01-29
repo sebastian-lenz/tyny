@@ -1,5 +1,5 @@
 import { BehaviourModifier } from './BehaviourModifier';
-import { event, getViewsRecursive, property } from '../../core';
+import { event, getChildViews, property } from '../../core';
 import { fetch } from '../../utils/env/fetch';
 import { Modifier } from './Modifier';
 import { Swap, SwapOptions } from '../Swap';
@@ -18,7 +18,7 @@ export class FilterableView<
 > extends Swap {
   //
   skipSameUrl: boolean = true;
-  staticParams: FilterableViewParams = {};
+  staticParams: Partial<TParams> = {};
   protected _basePath: string = '';
   protected _fetchPath: string | undefined;
   protected _hasChanges: boolean = false;
@@ -39,7 +39,7 @@ export class FilterableView<
       ...this.behaviours.filter(
         (b): b is BehaviourModifier => b instanceof BehaviourModifier
       ),
-      ...getViewsRecursive(this.el).filter(
+      ...getChildViews(this.el).filter(
         (v): v is ViewModifier => v instanceof ViewModifier
       ),
     ];

@@ -21,7 +21,7 @@ export class Image extends View implements VisibilityTarget {
 
   @property({ immutable: true })
   get promise(): Promise<void> {
-    return new Promise((resolve) => {
+    return new Promise<void>((resolve) => {
       const { el } = this;
       el.complete ? resolve() : once(el, 'load', () => resolve());
     }).then(() => {

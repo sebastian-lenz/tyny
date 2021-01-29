@@ -1,4 +1,4 @@
-import { View, getViewsRecursive } from '../../core';
+import { View, getChildViews } from '../../core';
 
 export interface LoadableView extends View {
   load(): Promise<any>;
@@ -10,7 +10,7 @@ export function isLoadable(value: any): value is LoadableView {
 
 export function whenLoaded(element: HTMLElement | null | undefined) {
   return Promise.all(
-    getViewsRecursive(element)
+    getChildViews(element)
       .filter(isLoadable)
       .map((view) => view.load())
   );

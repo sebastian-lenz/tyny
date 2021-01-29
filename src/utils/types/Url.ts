@@ -1,9 +1,11 @@
 export interface UrlParts {
+  fragment?: string;
   path: string;
   query: tyny.Map<string | null | undefined>;
 }
 
 export class Url {
+  fragment!: string;
   path!: string;
   query!: tyny.Map<string>;
 
@@ -28,10 +30,12 @@ export class Url {
   }
 
   parse(url: string): this {
-    const [path, query = ''] = url.split('?', 2);
+    const [pathQuery, fragment = ''] = url.split('#', 2);
+    const [path, query = ''] = pathQuery.split('?', 2);
     const values = query.split('&');
 
     this.path = path;
+    this.fragment = fragment;
     this.query = values.reduce((params, value) => {
       const parts = value.split('=', 2);
       if (parts.length == 2) {
@@ -54,11 +58,16 @@ export class Url {
     return this;
   }
 
+  setParams(value: tyny.Map<string>): this {
+    Object.keys(value).forEach((key) => this.setParam(key, value[key]));
+    return this;
+  }
+
   toString(): string {
     return Url.compose(this);
   }
 
-  static compose({ path, query }: UrlParts) {
+  static compose({ fragment, path, query }: UrlParts) {
     const parts = [path];
     const search = [];
 
@@ -73,7 +82,9 @@ export class Url {
       parts.push(search.join('&'));
     }
 
-    return parts.join('?');
+    let url = parts.join('?');
+    if (fragment) url += '#' + fragment;
+    return url;
   }
 
   static create(value: string): Url {

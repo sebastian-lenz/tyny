@@ -4,7 +4,7 @@
     "experimentalDecorators": true,
     "importHelpers": true,
     "lib": ["DOM", "ES2015", "ES2016.Array.Include", "ES2017.Object"],
-    "module": "ES6",
+    "module": "es2020",
     "moduleResolution": "node",
     "outDir": "./lib",
     "strict": true,

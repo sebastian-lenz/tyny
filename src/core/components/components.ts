@@ -215,6 +215,38 @@ export function emitUpdate(target?: tyny.ElementLike, type?: string) {
   apply(element, (element) => emitLocalUpdate(element, type));
 }
 
+export function getChildView<TView extends View = View>(
+  parent: HTMLElement | null | undefined,
+  ctor: ViewClass<TView> | string,
+  includeSelf: boolean = false
+): TView | null {
+  const children = getChildViews(parent, includeSelf);
+  for (let index = 0; index < children.length; index++) {
+    const child = children[index];
+    if (
+      isString(ctor) ? child.component.name === ctor : child instanceof ctor
+    ) {
+      return child as TView;
+    }
+  }
+
+  return null;
+}
+
+export function getChildViews(
+  parent: HTMLElement | null | undefined,
+  includeSelf: boolean = false
+): View[] {
+  const views: View[] = [];
+  apply(parent, (element) => {
+    if (element.__tynyViews && (includeSelf || element !== parent)) {
+      views.push(...(Object.values(element.__tynyViews) as any));
+    }
+  });
+
+  return views;
+}
+
 export function getParentView<TView extends View = View>(
   element: any,
   ctor: ViewClass<TView> | string
@@ -245,19 +277,6 @@ export function getView<TView extends View = View>(
 
 export function getViews(element: any): tyny.ViewMap {
   return (element && element.__tynyViews) || {};
-}
-
-export function getViewsRecursive(
-  root: HTMLElement | null | undefined
-): View[] {
-  const views: View[] = [];
-  apply(root, (element) => {
-    if (element.__tynyViews) {
-      views.push(...(Object.values(element.__tynyViews) as any));
-    }
-  });
-
-  return views;
 }
 
 export function registerViews(ctors: tyny.Map<ViewClass>) {

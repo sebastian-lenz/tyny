@@ -9,10 +9,15 @@ export interface TransistDimensionsOptions extends Partial<TransistOptions> {
 }
 
 export function transistDimensions(
-  element: HTMLElement,
+  element: HTMLElement | null | undefined,
   callback: Function,
   options: TransistDimensionsOptions
 ): Promise<void> {
+  if (!element) {
+    callback();
+    return Promise.resolve();
+  }
+
   const { extraProperties, transistHeight, transistWidth } = options;
   const fromHeight = element.offsetHeight;
   const fromWidth = element.offsetWidth;

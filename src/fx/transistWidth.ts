@@ -6,7 +6,7 @@ export interface TransistWidthOptions extends Partial<TransistOptions> {
 }
 
 export function transistWidth(
-  element: HTMLElement,
+  element: HTMLElement | null | undefined,
   callback: Function,
   options: TransistWidthOptions = {}
 ): Promise<void> {

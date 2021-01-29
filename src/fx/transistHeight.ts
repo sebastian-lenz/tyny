@@ -6,7 +6,7 @@ export interface TransistHeightOptions extends Partial<TransistOptions> {
 }
 
 export function transistHeight(
-  element: HTMLElement,
+  element: HTMLElement | null | undefined,
   callback: Function,
   options: TransistHeightOptions = {}
 ): Promise<void> {

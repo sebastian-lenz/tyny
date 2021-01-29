@@ -5,17 +5,12 @@
   "main": "./lib/index.js",
   "author": "",
   "license": "ISC",
-  "type": "module",
   "sideEffects": [
     "./lib/core/components/components.js"
   ],
   "scripts": {
     "build": "rm -r ./lib && tsc",
     "watch": "tsc -w"
-  },
-  "exports": {
-    ".": "./lib/index.js",
-    "./utils/dom": "./lib/utils/dom/index.js"
   },
   "dependencies": {
     "tslib": "^2.0.0"

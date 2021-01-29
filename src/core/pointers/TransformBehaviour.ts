@@ -11,7 +11,7 @@ import type { View } from '../View';
 
 export interface TransformBehaviourOptions extends PointerBehaviourOptions {}
 
-export default class TransformBehaviour<
+export class TransformBehaviour<
   TView extends View = View
 > extends PointerBehaviour<TView> {
   //

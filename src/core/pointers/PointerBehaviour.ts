@@ -1,5 +1,6 @@
 import { Behaviour, BehaviourOptions } from '../Behaviour';
 import { createAdapter } from './adapters';
+import { event } from '../decorators';
 import { Pointer, PointerOptions, PointerMoveOptions } from './Pointer';
 import { Transform2D } from '../../utils/types/Transform2D';
 import { Velocity } from './Velocity';
@@ -39,9 +40,9 @@ export interface PointerBehaviourOptions extends BehaviourOptions {
   target?: HTMLElement | null;
 }
 
-export class PointerBehaviour<TView extends View = View> extends Behaviour<
-  TView
-> {
+export class PointerBehaviour<
+  TView extends View = View
+> extends Behaviour<TView> {
   //
   readonly initialCenter: tyny.Point = { x: 0, y: 0 };
   readonly initialTransform: Transform2D = Transform2D.identity();
@@ -161,6 +162,15 @@ export class PointerBehaviour<TView extends View = View> extends Behaviour<
         this.removePointer(event, pointer.id);
       }
     }
+  }
+
+  /**
+   * Prevent all drag events from heppaning inside elements that
+   * we control mouse events on. Fixes drag behviour in firefox.
+   */
+  @event({ name: 'dragstart' })
+  onNativeDragStart(event: Event) {
+    event.preventDefault();
   }
 
   // Behaviour API

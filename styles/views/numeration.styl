@@ -1,8 +1,10 @@
 numerationBullets(
+  $base = {},
   $baseClass = "." + $viewPrefix + "Numeration",
   $itemClass = $baseClass + "--item",
   $itemHeight = 40px,
   $itemWidth = 18px,
+  $justifyContent = center,
   $radius = 4px,
   $default = { background: transparent, border: 1px solid #fff },
   $hover = { 
@@ -14,12 +16,14 @@ numerationBullets(
     display: flex
     flex-flow: row nowrap
     align-items: center
-    justify-content: center
+    justify-content: $justifyContent
     margin: 0
     padding: 0
 
     font-size: 0
     list-style: none
+    
+    {$base}
 
   {$itemClass}
     position: relative

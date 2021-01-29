@@ -190,4 +190,13 @@ $box-shadow-inset ?= inset 0 1px 2px rgba($black, .075)
 // Easings
 // -------
 
-$ease-out-expo = cubic-bezier(0.19, 1, 0.22, 1)
+$ease-out-expo ?= cubic-bezier(0.19, 1, 0.22, 1)
+
+
+// Views
+// -----
+
+// Applied to image, imagecrop and picture wrappers
+// Can e.g. set a common background color
+
+$tyny-image-wrapper ?= {}

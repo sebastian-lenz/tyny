@@ -4,6 +4,7 @@ import type { View } from '../../core';
 export enum CropMode {
   Cover,
   Fit,
+  FitColumn,
   Stretch,
   Width,
   Height,
@@ -122,6 +123,7 @@ export class Crop {
         scale = Math.max(maskWidth / width, maskHeight / height);
         break;
       case CropMode.Fit:
+      case CropMode.FitColumn:
         scale = Math.min(maskWidth / width, maskHeight / height);
         break;
       case CropMode.Width:
@@ -153,6 +155,10 @@ export class Crop {
       case CropMode.Cover:
         left = shift(maskWidth, width, focusX);
         top = shift(maskHeight, height, focusY);
+        break;
+      case CropMode.FitColumn:
+        forcedHeight = height;
+        forcedWidth = width;
         break;
       case CropMode.Fit:
         left = (maskWidth - width) * focusX;

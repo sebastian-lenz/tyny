@@ -74,6 +74,7 @@ export class View extends Lifecycle {
 
   callUpdate(type: string = 'update') {
     super.callUpdate(type);
+
     (this._behaviours as any).forEach((api: tyny.ViewApi) =>
       api.callUpdate(type)
     );
@@ -95,16 +96,16 @@ export class View extends Lifecycle {
     }
   }
 
-  find(selector: Selector): HTMLElement | null {
-    return find(selector, this.el);
+  find<T extends HTMLElement = HTMLElement>(selector: Selector): T | null {
+    return find<T>(selector, this.el);
   }
 
   findView<T extends View>(selector: Selector, ctor: ViewClass<T>): T | null {
     return this.findAllViews(selector, ctor)[0] || null;
   }
 
-  findAll(selector: Selector): HTMLElement[] {
-    return findAll(selector, this.el);
+  findAll<T extends HTMLElement = HTMLElement>(selector: Selector): T[] {
+    return findAll<T>(selector, this.el);
   }
 
   findAllViews<T extends View>(selector: Selector, ctor: ViewClass<T>): T[] {

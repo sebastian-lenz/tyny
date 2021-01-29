@@ -14,11 +14,12 @@ export class Masonry<
   TItem extends HTMLElement = HTMLElement
 > extends CollectionView<TItem> {
   //
-  protected _strategy: MasonryStrategy | null;
+  protected _strategy: MasonryStrategy | null = null;
 
   constructor(options: MasonryOptions = {}) {
     super(options);
-    this._strategy = options.strategy || null;
+
+    this.strategy = options.strategy || null;
   }
 
   get container(): HTMLElement {

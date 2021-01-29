@@ -64,7 +64,7 @@ export class ColumnPacking implements MasonryStrategy {
     if (height !== this.height) {
       this.height = height;
       result.push(() => {
-        masonry.el.style.height = `${height}px`;
+        masonry.container.style.height = `${height}px`;
       });
     }
 

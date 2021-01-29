@@ -8,7 +8,7 @@ import { removeAttr } from '../attr';
 
 export type Selector = string | undefined | null;
 
-export type SelectorContext = Document | Element;
+export type SelectorContext = Document | Element | undefined | null;
 
 // Formerly supported passing an element as first argument
 /*
@@ -55,20 +55,17 @@ function query(
 
 function query(
   selector: Selector,
-  context: SelectorContext | undefined,
+  context: SelectorContext,
   first: true
 ): Element | null;
 
-function query(
-  selector: Selector,
-  context: SelectorContext = document,
-  first?: boolean
-) {
+function query(selector: Selector, context: SelectorContext, first?: boolean) {
   let removes: Array<Function> = [];
   if (!selector || !isString(selector)) {
     return null;
   }
 
+  context = context ? context : document;
   if (selector === ':scope') {
     return first ? toElement(context) : toElements(context);
   }
@@ -124,16 +121,16 @@ function query(
   }
 }
 
-export function find(
+export function find<T extends HTMLElement = HTMLElement>(
   selector: Selector,
   context?: SelectorContext
-): HTMLElement | null {
-  return toElement(query(selector, context, true));
+): T | null {
+  return toElement(query(selector, context, true)) as T | null;
 }
 
-export function findAll(
+export function findAll<T extends HTMLElement = HTMLElement>(
   selector: Selector,
   context?: SelectorContext
-): HTMLElement[] {
-  return toElements(query(selector, context));
+): T[] {
+  return toElements(query(selector, context)) as T[];
 }

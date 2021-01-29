@@ -19,7 +19,7 @@ const closestFn =
   };
 
 export function closest(
-  element: Element | undefined | null,
+  element: Element | EventTarget | undefined | null,
   selector: string
 ): Element | null;
 

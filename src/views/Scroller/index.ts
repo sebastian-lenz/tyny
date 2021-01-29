@@ -4,6 +4,7 @@ import { stop } from '../../fx/dispatcher';
 import { transform } from '../../utils/env/transformProps';
 import { tween, Tween, TweenOptions } from '../../fx/tween';
 import { View, ViewOptions, update, property } from '../../core';
+import { findAll } from '../../utils/dom/node';
 
 const createBounds = () => ({
   xMin: 0,
@@ -12,9 +13,17 @@ const createBounds = () => ({
   yMax: 0,
 });
 
+export const scrollerScrollEvent = 'tyny:scrollerScroll';
+
+export interface ScrollerEventArgs {
+  target: Scroller;
+  position: tyny.Point;
+}
+
 export interface ScrollerOptions extends ViewOptions {
   content?: HTMLElement | string;
   direction?: DragDirection;
+  itemSelector?: string;
   position?: tyny.Point;
   useContentMargins?: boolean;
   viewport?: HTMLElement | string;
@@ -23,6 +32,7 @@ export interface ScrollerOptions extends ViewOptions {
 export class Scroller extends View implements ScrollableView {
   currentTarget: tyny.Point | null = null;
   currentTween: Tween | null = null;
+  readonly direction: DragDirection;
   readonly dragBehaviour: DragScrollBehaviour;
   readonly positionBounds: tyny.BoundingBox = createBounds();
   readonly viewportSize: tyny.Dimensions = { width: 0, height: 0 };
@@ -30,6 +40,14 @@ export class Scroller extends View implements ScrollableView {
 
   @property({ param: { type: 'element' } })
   content!: HTMLElement | null;
+
+  @property({ param: { defaultValue: '> *', type: 'string' } })
+  get items() {
+    return findAll(this.itemSelector, this.content || this.el);
+  }
+
+  @property({ param: { defaultValue: '> *', type: 'string' } })
+  itemSelector!: string;
 
   @property({ param: { defaultValue: true, type: 'bool' } })
   useContentMargins!: boolean;
@@ -41,6 +59,7 @@ export class Scroller extends View implements ScrollableView {
     super(options);
 
     const { direction = 'both', position = { x: 0, y: 0 } } = options;
+    this.direction = direction;
     this._position = { ...position };
 
     this.dragBehaviour = this.addBehaviour(DragScrollBehaviour, {
@@ -80,14 +99,19 @@ export class Scroller extends View implements ScrollableView {
   }
 
   setPosition(value: tyny.Point) {
-    const { content } = this;
-    const { x, y } = this.toDisplayOffset(value);
-    this._position.x = value.x;
-    this._position.y = value.y;
+    const { _position, content, direction } = this;
+    if (direction !== 'vertical') _position.x = value.x;
+    if (direction !== 'horizontal') _position.y = value.y;
 
     if (content) {
+      const { x, y } = this.toDisplayOffset(_position);
       (<any>content.style)[transform] = `translate(${-x}px, ${-y}px)`;
     }
+
+    this.trigger(scrollerScrollEvent, <ScrollerEventArgs>{
+      target: this,
+      position: { ..._position },
+    });
   }
 
   toDisplayOffset(value: tyny.Point): tyny.Point {
@@ -98,7 +122,7 @@ export class Scroller extends View implements ScrollableView {
     return value;
   }
 
-  tweenTo(position: tyny.Point, options: Partial<TweenOptions>): void {
+  tweenTo(position: tyny.Point, options: Partial<TweenOptions> = {}): void {
     let { currentTween } = this;
     this.currentTarget = position;
 

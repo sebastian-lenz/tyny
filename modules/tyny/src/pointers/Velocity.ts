@@ -55,7 +55,7 @@ export default class Velocity<T extends VelocityData> {
     const { samples, trackingPeriod } = this;
     const now = Date.now();
 
-    while (samples.length && now - samples[0].time < trackingPeriod) {
+    while (samples.length && now - samples[0].time > trackingPeriod) {
       samples.shift();
     }
   }

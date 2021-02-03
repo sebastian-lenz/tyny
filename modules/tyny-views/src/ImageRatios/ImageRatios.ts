@@ -16,36 +16,46 @@ export interface ImageRatiosOptions extends ViewOptions {
 
 export default class ImageRatios extends Swap<ImageCrop>
   implements VisibilityTarget {
-  @data({
-    type: 'class',
-    attributeName: 'data-ratioset',
-    ctor: RatioSet,
-    defaultValue: () => new RatioSet(),
-  })
+  debouncedUpdate: Function;
+  inViewport: boolean = false;
   ratioSet: RatioSet;
-
-  debounceedUpdate: Function;
-  inViewport: boolean;
 
   constructor(options: ImageRatiosOptions) {
     super({
       className: `${View.classNamePrefix}ImageRatios`,
-      transition: dissolve({ duration: 200 }),
+      transition: dissolve({ duration: 200, noPureFadeIn: true }),
       ...options,
       appendContent: true,
       disposeContent: true,
       transist: null,
     });
 
-    this.debounceedUpdate = debounce(this.update, 50);
+    this.ratioSet = this.createArgs().instance({
+      attribute: 'data-ratioset',
+      ctor: RatioSet,
+      name: 'ratioSet',
+    });
+
+    this.debouncedUpdate = debounce(this.update, 50);
 
     if (!options.disableVisibility) {
       visibility().register(this);
     }
   }
 
+  load(): Promise<void> {
+    this.inViewport = true;
+    this.update();
+
+    if (!this.content) {
+      return Promise.resolve();
+    }
+
+    return this.content.load();
+  }
+
   setInViewport(inViewport: boolean) {
-    if (this.inViewport == inViewport) return;
+    if (this.inViewport === inViewport) return;
     this.inViewport = inViewport;
     this.update();
 
@@ -66,7 +76,7 @@ export default class ImageRatios extends Swap<ImageCrop>
           appendTo: element,
           crop,
           disableVisibility: true,
-          image: {
+          imageOptions: {
             height: crop.height,
             sourceSet: crop.sourceSet,
             width: crop.width,
@@ -82,6 +92,6 @@ export default class ImageRatios extends Swap<ImageCrop>
 
   @resizeEvent(true)
   protected handleResize() {
-    this.debounceedUpdate();
+    this.debouncedUpdate();
   }
 }

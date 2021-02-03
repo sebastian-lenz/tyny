@@ -10,6 +10,7 @@ export enum CropMode {
 }
 
 export interface CropOptions {
+  disableMaskResize?: boolean;
   focusY?: number;
   focusX?: number;
   maxScale?: number;
@@ -17,8 +18,18 @@ export interface CropOptions {
   mode?: CropMode;
 }
 
+export interface CropResult {
+  left: number;
+  top: number;
+  width: number;
+  height: number;
+  forcedHeight: number | undefined;
+  forcedWidth: number | undefined;
+}
+
 export function cropOptions(): OptionDefinition[] {
   return [
+    { name: 'disableMaskResize', type: 'bool' },
     { name: 'focusX', type: 'number' },
     { name: 'focusY', type: 'number' },
     { name: 'maxScale', type: 'number' },
@@ -56,6 +67,7 @@ function shift(
 }
 
 const defaultOptions = {
+  disableMaskResize: false,
   focusY: 0.5,
   focusX: 0.5,
   height: 0,
@@ -66,13 +78,14 @@ const defaultOptions = {
 };
 
 export default class Crop {
-  focusX: number;
-  focusY: number;
-  height: number;
-  maxScale: number;
-  minScale: number;
-  mode: CropMode;
-  width: number;
+  disableMaskResize: boolean = false;
+  focusX: number = 0.5;
+  focusY: number = 0.5;
+  height: number = 0;
+  maxScale: number = Number.MAX_VALUE;
+  minScale: number = 0;
+  mode: CropMode = CropMode.Cover;
+  width: number = 0;
 
   constructor(options?: CropOptions | string) {
     let resolved: CropOptions;
@@ -87,22 +100,21 @@ export default class Crop {
     Object.assign(this, defaultOptions, resolved);
   }
 
-  apply(mask: HTMLElement, image: HTMLImageElement) {
-    const {
-      left,
-      top,
-      width,
-      height,
-      forcedHeight,
-      forcedWidth,
-    } = this.getCrop(mask.offsetWidth, mask.offsetHeight);
+  apply(mask: HTMLElement, image: HTMLElement): CropResult {
+    const result = this.getCrop(mask.offsetWidth, mask.offsetHeight);
+    const { left, top, width, height, forcedHeight, forcedWidth } = result;
 
     image.style.left = `${Math.floor(left)}px`;
     image.style.top = `${Math.floor(top)}px`;
     image.style.width = `${Math.ceil(width)}px`;
     image.style.height = `${Math.ceil(height)}px`;
-    mask.style.width = forcedWidth == null ? '' : `${forcedWidth}px`;
-    mask.style.height = forcedHeight == null ? '' : `${forcedHeight}px`;
+
+    if (!this.disableMaskResize) {
+      mask.style.width = forcedWidth == null ? '' : `${forcedWidth}px`;
+      mask.style.height = forcedHeight == null ? '' : `${forcedHeight}px`;
+    }
+
+    return result;
   }
 
   getImageDimensions(maskWidth: number, maskHeight: number): DimensionsType {
@@ -138,7 +150,7 @@ export default class Crop {
     };
   }
 
-  getCrop(maskWidth: number, maskHeight: number) {
+  getCrop(maskWidth: number, maskHeight: number): CropResult {
     const { focusX, focusY, mode } = this;
     let { width, height } = this.getImageDimensions(maskWidth, maskHeight);
     let left: number = 0;

@@ -52,7 +52,7 @@ export default class SourceSet {
   /**
    * The mode used to determine the current source.
    */
-  mode: SourceSetMode;
+  mode: SourceSetMode | undefined;
 
   /**
    * SourceSet constructor.

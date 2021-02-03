@@ -1,10 +1,11 @@
 import { Event, EventOptions } from 'tyny-events';
+import Dispatcher from './Dispatcher';
 
-export interface DispatcherEventOptions extends EventOptions {
+export interface DispatcherEventOptions extends EventOptions<Dispatcher> {
   timeStep: number;
 }
 
-export default class DispatcherEvent extends Event {
+export default class DispatcherEvent extends Event<Dispatcher> {
   readonly timeStep: number;
 
   static readonly frameEvent: string = 'frame';

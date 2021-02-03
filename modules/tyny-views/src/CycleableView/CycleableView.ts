@@ -31,7 +31,6 @@ export default class CycleableView<
   /**
    * Whether the children should be looped or not.
    */
-  @$.data({ type: 'bool', defaultValue: false })
   isLooped: boolean;
 
   /**
@@ -41,6 +40,11 @@ export default class CycleableView<
 
   constructor(options: CycleableViewOptions = {}) {
     super(options);
+
+    this.isLooped = this.createArgs(options).bool({
+      name: 'isLooped',
+      defaultValue: false,
+    });
 
     const { initialIndex } = options;
     if (initialIndex !== void 0) {

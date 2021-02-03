@@ -17,7 +17,7 @@ export default class TweenTimeline<TValue = any> extends Timeline<TValue> {
     super(options);
 
     const { initialValue, valueType } = this;
-    const { context, property, ...tweenOptions } = options;
+    const { rejectOnStop, context, property, ...tweenOptions } = options;
 
     this.baseValue = valueType.origin();
     this.targetValue = options.targetValue;
@@ -32,9 +32,11 @@ export default class TweenTimeline<TValue = any> extends Timeline<TValue> {
       return false;
     }
 
+    const { rejectOnStop, ...tweenOptions } = options;
+
     tweenValues.push(
       new TweenValue({
-        ...options,
+        ...tweenOptions,
         initialValue: valueType.origin(),
         targetValue: valueType.subtract(to, targetValue),
         valueType,

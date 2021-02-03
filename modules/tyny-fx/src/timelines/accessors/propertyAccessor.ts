@@ -20,8 +20,8 @@ export default function propertyAccessor(
       target,
       property,
       convert: identity,
-      getValue: (): any => getter.apply(target),
-      setValue: (value: any) => setter.apply(target, value),
+      getValue: (): any => getter.call(target),
+      setValue: (value: any) => setter.call(target, value),
     };
   }
 

@@ -7,7 +7,7 @@ export default class TransformBehaviour extends Behaviour {
   maxPointers: number | undefined;
   minPointers: number = 1;
 
-  protected isActive: boolean;
+  protected isActive: boolean = false;
 
   constructor(list: PointerList) {
     super(list);
@@ -23,6 +23,7 @@ export default class TransformBehaviour extends Behaviour {
   ): boolean {
     const event = new TransformEvent({
       listEvent,
+      target: this,
       type,
     });
 

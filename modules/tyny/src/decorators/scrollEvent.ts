@@ -1,9 +1,9 @@
-import { viewport } from 'tyny-services';
+import { viewport, ViewportEvent } from 'tyny-services';
 
 import { setInitializer } from '../initializers';
 import View from '../View';
 
-export default function scrollEvent(): MethodDecorator {
+export default function scrollEvent(init?: boolean): MethodDecorator {
   return function<T>(
     target: Object,
     propertyKey: string | symbol,
@@ -11,7 +11,20 @@ export default function scrollEvent(): MethodDecorator {
   ) {
     const propertyName = propertyKey.toString();
     setInitializer(target, propertyName, function(view: View) {
-      view.listenTo(viewport(), 'scroll', (<any>view)[propertyKey]);
+      const listener = (<any>view)[propertyKey];
+      const service = viewport();
+
+      view.listenTo(service, 'scroll', listener);
+
+      if (init) {
+        listener.call(
+          view,
+          new ViewportEvent({
+            target: service,
+            type: ViewportEvent.scrollEvent,
+          })
+        );
+      }
     });
   };
 }

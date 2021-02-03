@@ -5,7 +5,7 @@ import DragEvent from './DragEvent';
 
 export default class DragBehaviour extends Behaviour {
   direction: 'horizontal' | 'vertical' | 'both' = 'both';
-  threshold: number = 5;
+  threshold: number = 3;
 
   protected watchMode: 'idle' | 'listening' | 'draging' = 'idle';
 
@@ -20,6 +20,8 @@ export default class DragBehaviour extends Behaviour {
   protected emitDragEvent(type: string, listEvent: PointerListEvent): boolean {
     const event = new DragEvent({
       listEvent,
+      pointerList: listEvent.target,
+      target: this,
       type,
     });
 

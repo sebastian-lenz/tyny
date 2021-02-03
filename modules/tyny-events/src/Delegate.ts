@@ -1,8 +1,12 @@
 import EventEmitter from './EventEmitter';
 import hasPassiveEvents from './utils/hasPassiveEvents';
 
+export interface DelegateEventListener {
+  (evt: DelegatedEvent): void;
+}
+
 export interface DelegateMap {
-  [event: string]: EventListener;
+  [event: string]: DelegateEventListener;
 }
 
 export interface DelegateOptions {
@@ -15,7 +19,7 @@ export interface DelegateListener {
   element: Element | Document | Window;
   eventName: string;
   handler: EventListener;
-  listener: EventListener;
+  listener: DelegateEventListener;
   scope: any;
   selector: string | undefined;
 }
@@ -67,7 +71,7 @@ export default class Delegate extends EventEmitter {
    */
   delegate(
     eventName: string,
-    listener: EventListener,
+    listener: DelegateEventListener,
     options: DelegateOptions = {}
   ): EventListener {
     const { selector, scope = this } = options;
@@ -82,6 +86,7 @@ export default class Delegate extends EventEmitter {
       handler = function(event: any) {
         let node = <HTMLElement>(event.target || event.srcElement);
         for (; node && node != element; node = <HTMLElement>node.parentNode) {
+          if (!node.matches) break;
           if (!node.matches(selector)) continue;
           event.delegateTarget = node;
           listener.call(scope, event);
@@ -127,7 +132,7 @@ export default class Delegate extends EventEmitter {
    */
   undelegate(
     eventName: string,
-    listener?: EventListener,
+    listener?: DelegateEventListener,
     options: DelegateOptions = {}
   ): this {
     const { _delegates } = this;

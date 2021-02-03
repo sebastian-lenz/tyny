@@ -33,22 +33,20 @@ export default class Image extends View implements VisibilityTarget {
   /**
    * The natural height of this image.
    */
-  @data({ type: 'int', attributeName: 'height', defaultValue: Number.NaN })
   height: number;
 
   /**
    * The natural width of this image.
    */
-  @data({ type: 'int', attributeName: 'width', defaultValue: Number.NaN })
   width: number;
 
   /**
    * The set of source files used by this image.
    */
-  @data({ type: 'class', ctor: SourceSet, attributeName: 'data-srcset' })
   sourceSet: SourceSet;
 
-  readonly element: HTMLImageElement;
+  // prettier-ignore
+  readonly element!: HTMLImageElement;
 
   /**
    * Whether this element is currently within the visible viewport bounds or not.
@@ -72,8 +70,37 @@ export default class Image extends View implements VisibilityTarget {
       })
     );
 
+    const args = this.createArgs(options);
+
+    this.height = args.int({
+      attribute: 'height',
+      defaultValue: Number.NaN,
+      name: 'height',
+    });
+
+    this.width = args.int({
+      attribute: 'width',
+      defaultValue: Number.NaN,
+      name: 'width',
+    });
+
+    this.sourceSet = args.instance({
+      attribute: 'data-srcset',
+      ctor: SourceSet,
+      name: 'sourceSet',
+    });
+
+    this.promise = this.createPromise();
+
+    if (!options.disableVisibility) {
+      visibility().register(this);
+    }
+  }
+
+  private createPromise() {
     const { element } = this;
-    this.promise = new Promise(resolve => {
+
+    return new Promise(resolve => {
       const handleLoad = () => {
         this.undelegate('load', handleLoad);
         resolve();
@@ -103,10 +130,6 @@ export default class Image extends View implements VisibilityTarget {
         })
       );
     });
-
-    if (!options.disableVisibility) {
-      visibility().register(this);
-    }
   }
 
   /**

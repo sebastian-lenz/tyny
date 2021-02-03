@@ -1,11 +1,12 @@
 import { identity } from 'tyny-utils';
 
+import { toBoolean } from '../initializers/dataTypes/bool';
 import { toEnum } from '../initializers/dataTypes/enum';
 import { toInteger } from '../initializers/dataTypes/int';
 import { toNumber } from '../initializers/dataTypes/number';
 import { toString } from '../initializers/dataTypes/string';
 
-export type OptionType = 'enum' | 'int' | 'number' | 'string';
+export type OptionType = 'bool' | 'enum' | 'int' | 'number' | 'string';
 export type OptionConverter = (value: any) => any;
 export type OptionMap = { [name: string]: any };
 
@@ -37,8 +38,13 @@ function toOptionMap(source: any): OptionMap {
 
   return source.split(';').reduce(
     (memo, arg) => {
-      let [name, value] = arg.split('=', 2);
-      if (name && value) memo[name.trim()] = value.trim();
+      const splitIndex = arg.indexOf('=');
+      if (splitIndex !== -1) {
+        const name = arg.substr(0, splitIndex);
+        const value = arg.substr(splitIndex + 1);
+        memo[name.trim()] = value.trim();
+      }
+
       return memo;
     },
     {} as OptionMap
@@ -47,8 +53,10 @@ function toOptionMap(source: any): OptionMap {
 
 function getConverter(option: OptionDefinition): OptionConverter {
   switch (option.type) {
+    case 'bool':
+      return toBoolean;
     case 'enum':
-      return toEnum(option.values);
+      return value => toEnum(option.values, value);
     case 'int':
       return toInteger;
     case 'number':

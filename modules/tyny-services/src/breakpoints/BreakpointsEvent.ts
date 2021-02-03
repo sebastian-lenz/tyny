@@ -1,12 +1,13 @@
 import { Event, EventOptions } from 'tyny-events';
 
 import { Breakpoint } from './index';
+import Breakpoints from './Breakpoints';
 
-export interface BreakpointsEventOptions extends EventOptions {
+export interface BreakpointsEventOptions extends EventOptions<Breakpoints> {
   breakpoint: Breakpoint;
 }
 
-export default class BreakpointsEvent extends Event {
+export default class BreakpointsEvent extends Event<Breakpoints> {
   readonly breakpoint: Breakpoint;
 
   static readonly changeEvent: string = 'change';

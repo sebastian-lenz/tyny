@@ -17,7 +17,7 @@
     "url": "https://github.com/sebastian-lenz/tyny.git"
   },
   "devDependencies": {
-    "typescript": "^2.6.1"
+    "typescript": "^2.7.1"
   },
   "dependencies": {
     "native-promise-only": "^0.8.1",

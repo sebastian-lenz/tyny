@@ -3,17 +3,15 @@ import { View } from 'tyny';
 
 import CycleableView from './CycleableView';
 
-export interface CycleableViewEventOptions extends EventOptions {
+export interface CycleableViewEventOptions extends EventOptions<CycleableView> {
   fromView?: View;
   options: any;
-  target: CycleableView;
   toView?: View;
 }
 
-export default class CycleableViewEvent extends Event {
+export default class CycleableViewEvent extends Event<CycleableView> {
   readonly fromView: View | undefined;
   readonly options: any;
-  readonly target: CycleableView;
   readonly toView: View | undefined;
 
   static changeEvent: string = 'change';

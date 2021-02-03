@@ -22,12 +22,13 @@ export default class MomentumTimeline<TValue> extends Timeline<TValue> {
       maxValue,
       minValue,
       property,
-      ...valueOptions,
+      rejectOnStop,
+      ...valueOptions
     } = options;
 
     const { fromArray, toArray } = this.valueType;
-    const maxValues = maxValue ? toArray(maxValue) : undefined;
-    const minValues = minValue ? toArray(minValue) : undefined;
+    const maxValues = maxValue != undefined ? toArray(maxValue) : undefined;
+    const minValues = minValue != undefined ? toArray(minValue) : undefined;
     const velocities = toArray(initialVelocity);
     const axes = toArray(this.initialValue).map(
       (value, index) =>

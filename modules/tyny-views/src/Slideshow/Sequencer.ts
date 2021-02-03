@@ -2,6 +2,15 @@ import { Transition } from 'tyny-fx/lib/transitions';
 import { EventEmitter } from 'tyny-events';
 import { View, whenViewLoaded } from 'tyny';
 
+export interface SequencerOptions<
+  TOptions extends SequenceOptions = SequenceOptions
+> {
+  callbackContext?: any;
+  dismissCallback?: SequencerCallback<TOptions> | undefined;
+  endCallback?: SequencerCallback<TOptions> | undefined;
+  startCallback?: SequencerCallback<TOptions> | undefined;
+}
+
 export interface SequenceOptions<TView extends View = View> {
   from: TView | undefined;
   to: TView | undefined;
@@ -16,19 +25,28 @@ export default class Sequencer<
   TOptions extends SequenceOptions = SequenceOptions
 > {
   callbackContext: any;
+  dismissCallback: SequencerCallback<TOptions> | undefined;
   endCallback: SequencerCallback<TOptions> | undefined;
   startCallback: SequencerCallback<TOptions> | undefined;
 
   protected sequence: Promise<any> | undefined;
   protected shelved: TOptions | undefined;
 
+  constructor(options: SequencerOptions<TOptions> = {}) {
+    Object.assign(this, options);
+  }
+
   inTransition(): boolean {
     return !!this.sequence;
   }
 
   transist(options: TOptions) {
-    const { sequence } = this;
+    const { callbackContext, dismissCallback, sequence } = this;
+
     if (sequence) {
+      if (this.shelved && dismissCallback) {
+        dismissCallback.call(callbackContext, this.shelved);
+      }
       this.shelved = options;
     } else {
       this.sequence = this.createSequence(options);

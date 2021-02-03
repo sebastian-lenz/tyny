@@ -1,3 +1,4 @@
+import hasPassiveEvents from 'tyny-events/lib/utils/hasPassiveEvents';
 import { DelegateMap } from 'tyny-events';
 
 import Adapter from './Adapter';
@@ -10,6 +11,8 @@ const each = (touches: TouchList, callback: (touch: Touch) => void) => {
     callback(touches[index]);
   }
 };
+
+let iIOSFix = false;
 
 export default class TouchAdapter extends Adapter {
   mouseAdapter: MouseAdapter;
@@ -62,6 +65,20 @@ export default class TouchAdapter extends Adapter {
   }
 
   static isSupported(): boolean {
-    return 'ontouchstart' in window;
+    if (iIOSFix) {
+      return true;
+    }
+
+    let isSupported = 'ontouchstart' in window;
+    if (isSupported) {
+      iIOSFix = true;
+      window.addEventListener(
+        'touchmove',
+        function() {},
+        hasPassiveEvents() ? { passive: false } : undefined
+      );
+    }
+
+    return isSupported;
   }
 }

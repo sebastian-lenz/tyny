@@ -1,7 +1,8 @@
 import { DataType, DefaultDataTypeOptions } from './index';
 import dataReader from '../utils/dataReader';
 
-export interface EnumDataTypeOptions extends DefaultDataTypeOptions<number> {
+export interface EnumDataTypeOptions
+  extends DefaultDataTypeOptions<number | string> {
   type: 'enum';
 
   /**
@@ -10,32 +11,33 @@ export interface EnumDataTypeOptions extends DefaultDataTypeOptions<number> {
   values: any;
 }
 
-export function toEnum(values: any) {
-  const lookupTable: any = {};
-  if (typeof values === 'object') {
-    Object.keys(values).forEach(value => {
-      if (!/^\d+$/.test(value)) {
-        lookupTable[value.toLowerCase()] = values[value];
-      }
-    });
+export function toEnum<T extends Object>(
+  enumType: T,
+  value: any
+): T[keyof T] | undefined {
+  if (enumType.hasOwnProperty(value)) {
+    return value;
   }
 
-  return function(value: any): number | undefined {
-    if (typeof value == 'string') {
-      value = value.toLowerCase();
-      return value in lookupTable ? lookupTable[value] : undefined;
+  if (typeof value === 'string') {
+    value = value.toLowerCase();
+    for (let key in enumType) {
+      const enumValue = enumType[key];
+      if (typeof enumValue === 'string') {
+        if (enumValue.toLowerCase() === value.toLowerCase()) {
+          return parseInt(key) as any;
+        }
+      } else if (value === enumValue) {
+        return enumValue;
+      }
     }
+  }
 
-    if (value in values) {
-      return value;
-    }
-
-    return undefined;
-  };
+  return undefined;
 }
 
 export default function enumDataType(
   options: EnumDataTypeOptions
-): DataType<number | undefined> {
-  return dataReader(options, toEnum(options.values));
+): DataType<number | string | undefined> {
+  return dataReader(options, value => toEnum(options.values, value));
 }

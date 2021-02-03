@@ -3,15 +3,13 @@ import { Event, EventOptions } from 'tyny-events';
 
 import ChildableView from './ChildableView';
 
-export interface ChildableViewEventOptions extends EventOptions {
+export interface ChildableViewEventOptions extends EventOptions<ChildableView> {
   index: number;
-  target: ChildableView;
   view: View;
 }
 
-export default class ChildableViewEvent extends Event {
+export default class ChildableViewEvent extends Event<ChildableView> {
   readonly index: number;
-  readonly target: ChildableView;
   readonly view: View;
 
   static addEvent: string = 'add';

@@ -5,22 +5,8 @@ import data from 'tyny/lib/decorators/data';
 import resizeEvent from 'tyny/lib/decorators/resizeEvent';
 
 import { Image, ImageOptions } from '../Image';
-import Crop, { CropMode, CropOptions } from './Crop';
+import Crop, { CropMode, CropOptions, CropResult } from './Crop';
 import ImageCropEvent from './ImageCropEvent';
-
-function createImage(
-  owner: ImageCrop,
-  ownerOptions: ImageCropOptions,
-  element?: HTMLElement
-) {
-  return new Image({
-    ...(ownerOptions.image || {}),
-    appendTo: owner.element,
-    disableVisibility: true,
-    element,
-    owner,
-  });
-}
 
 /**
  * Constructor options for the ImageWrap class.
@@ -33,7 +19,7 @@ export interface ImageCropOptions extends ViewOptions {
    */
   disableVisibility?: boolean;
 
-  image?: ImageOptions;
+  imageOptions?: ImageOptions;
 }
 
 /**
@@ -43,19 +29,19 @@ export default class ImageCrop extends View implements VisibilityTarget {
   /**
    * The scale mode used to transform the image.
    */
-  @data({ type: 'class', ctor: Crop, defaultValue: () => new Crop() })
   crop: Crop;
 
   /**
    * The image instance displayed by this wrapper.
    */
-  @child({ autoCreate: true, factory: createImage, selector: 'img' })
   image: Image;
 
   /**
    * Whether this element is currently within the visible viewport bounds or not.
    */
-  inViewport: boolean;
+  inViewport: boolean = false;
+
+  currentCrop: CropResult | null = null;
 
   constructor(options: ImageCropOptions = {}) {
     super({
@@ -63,10 +49,26 @@ export default class ImageCrop extends View implements VisibilityTarget {
       ...options,
     });
 
-    const { crop, image } = this;
+    const { imageOptions = {} } = options;
+    const args = this.createArgs(options);
+    const crop = args.instance({
+      ctor: Crop,
+      name: 'crop',
+    });
+
+    const image = new Image({
+      ...imageOptions,
+      appendTo: this.element,
+      disableVisibility: true,
+      element: this.query('img'),
+      owner: this,
+    });
+
     crop.width = image.width;
     crop.height = image.height;
 
+    this.crop = crop;
+    this.image = image;
     this.listenToOnce(image, 'load', this.handleImageLoad);
 
     if (!options.disableVisibility) {
@@ -103,7 +105,7 @@ export default class ImageCrop extends View implements VisibilityTarget {
 
   update() {
     const { crop, element, image } = this;
-    crop.apply(element, image.element);
+    this.currentCrop = crop.apply(element, image.element);
   }
 
   /**

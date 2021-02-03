@@ -4,16 +4,14 @@ import { viewport } from 'tyny-services/lib/viewport';
 
 import { CreateElementOptions } from './utils/createElement';
 import { Initializer, InitializerMap } from './initializers';
+import Args from './Args';
 import PointerList from './pointers/PointerList';
 
 import components, { ComponentNode } from './components';
 import ensureElement from './utils/ensureElement';
 
-export interface ViewClass<
-  TView extends View = View,
-  TViewOptions extends ViewOptions = ViewOptions
-> {
-  new (options: TViewOptions): TView;
+export interface ViewClass<TView extends View = View> {
+  new (options: any): TView;
 }
 
 export type MaybeView = View | undefined;
@@ -29,6 +27,12 @@ export interface ViewOptions extends CreateElementOptions {
   template?: string | Function;
 }
 
+export interface CreateChildOptions<T extends View> {
+  options?: any;
+  selector: string;
+  viewClass: ViewClass<T>;
+}
+
 /**
  * Base class of all views.
  */
@@ -36,7 +40,8 @@ export default class View extends Delegate {
   /**
    * The underlying DOM element of this view.
    */
-  readonly element: HTMLElement;
+  // prettier-ignore
+  readonly element!: HTMLElement;
 
   /**
    * The component registry node linked to this view.
@@ -128,6 +133,57 @@ export default class View extends Delegate {
         element.parentNode.removeChild(element);
       }
     }
+  }
+
+  query<T extends HTMLElement = HTMLElement>(selectors: string): T {
+    return <T>this.element.querySelector(selectors);
+  }
+
+  queryAll<T extends HTMLElement = HTMLElement>(selectors: string): T[] {
+    return Array.prototype.slice.call(this.element.querySelectorAll(selectors));
+  }
+
+  protected createArgs(options: ViewOptions = {}) {
+    const args = new Args(options, this.element);
+    args.view = this;
+    return args;
+  }
+
+  protected createChild<T extends View>({
+    options = {},
+    selector,
+    viewClass,
+  }: CreateChildOptions<T>): T {
+    return new viewClass({
+      element: this.query(selector),
+      owner: this,
+      ...options,
+    });
+  }
+
+  protected createOptionalChild<T extends View>({
+    options = {},
+    selector,
+    viewClass,
+  }: CreateChildOptions<T>): T | null {
+    const element = this.query(selector);
+    if (!element) return null;
+
+    return new viewClass({
+      element,
+      owner: this,
+      ...options,
+    });
+  }
+
+  protected createChildren<T extends View>({
+    options = {},
+    selector,
+    viewClass,
+  }: CreateChildOptions<T>): T[] {
+    return this.queryAll(selector).map(
+      element => new viewClass({ element, owner: this, ...options })
+    );
   }
 
   /**

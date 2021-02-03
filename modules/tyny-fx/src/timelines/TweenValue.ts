@@ -13,14 +13,20 @@ export interface TweenValueOptions<TValue> {
 export default class TweenValue<TValue> {
   protected baseValues: number[];
   protected currentValue: TValue;
-  protected delay: number;
-  protected duration: number;
-  protected easing: EasingFunction;
-  protected initialValue: TValue;
-  protected targetValue: TValue;
+  // prettier-ignore
+  protected delay!: number;
+  // prettier-ignore
+  protected duration!: number;
+  // prettier-ignore
+  protected easing!: EasingFunction;
+  // prettier-ignore
+  protected initialValue!: TValue;
+  // prettier-ignore
+  protected targetValue!: TValue;
   protected time: number;
   protected valueChanges: number[];
-  protected valueType: ValueType<TValue>;
+  // prettier-ignore
+  protected valueType!: ValueType<TValue>;
 
   constructor(options: TweenValueOptions<TValue>) {
     Object.assign(this, options);

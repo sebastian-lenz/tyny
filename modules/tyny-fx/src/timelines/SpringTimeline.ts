@@ -46,12 +46,6 @@ export default class SpringTimeline<TValue = any> extends Timeline<TValue> {
       return false;
     }
 
-    if (length(velocity) < this.epsilon) {
-      this.currentValue = targetValue;
-      this.handleFinished();
-      return false;
-    }
-
     const { currentValue } = this;
     const change: TValue = subtract(targetValue, currentValue);
     const newVelocity = add(
@@ -61,6 +55,13 @@ export default class SpringTimeline<TValue = any> extends Timeline<TValue> {
 
     this.currentValue = add(currentValue, newVelocity);
     this.velocity = newVelocity;
+
+    if (length(newVelocity) < this.epsilon) {
+      this.currentValue = targetValue;
+      this.handleFinished();
+      return false;
+    }
+
     return true;
   }
 }

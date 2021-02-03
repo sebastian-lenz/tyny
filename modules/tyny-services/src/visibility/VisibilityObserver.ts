@@ -10,7 +10,7 @@ export default class VisibilityObserver extends Interval {
   protected visibility: Visibility;
 
   constructor(visibility: Visibility, target: VisibilityTarget) {
-    super();
+    super(0, 0);
     this.target = target;
     this.visibility = visibility;
   }

@@ -1,14 +1,10 @@
 import { Event, EventOptions } from 'tyny-events';
 
-export interface ViewportEventOptions extends EventOptions {
-  hasScrollbars: boolean;
-  height: number;
-  scrollLeft: number;
-  scrollTop: number;
-  width: number;
-}
+import Viewport from './Viewport';
 
-export default class ViewportEvent extends Event {
+export interface ViewportEventOptions extends EventOptions<Viewport> {}
+
+export default class ViewportEvent extends Event<Viewport> {
   readonly hasScrollbars: boolean;
   readonly height: number;
   readonly scrollLeft: number;
@@ -21,10 +17,12 @@ export default class ViewportEvent extends Event {
 
   constructor(options: ViewportEventOptions) {
     super(options);
-    this.hasScrollbars = options.hasScrollbars;
-    this.height = options.height;
-    this.scrollLeft = options.scrollLeft;
-    this.scrollTop = options.scrollTop;
-    this.width = options.width;
+
+    const { target } = options;
+    this.hasScrollbars = target.hasScrollbars();
+    this.height = target.height;
+    this.scrollLeft = target.scrollLeft;
+    this.scrollTop = target.scrollTop;
+    this.width = target.width;
   }
 }

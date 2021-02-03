@@ -131,7 +131,7 @@ export default class PointerList extends EventEmitter {
         pointer.clientY - center.y
       );
 
-      scale += b.length() / a.length() * weight;
+      scale += (b.length() / a.length()) * weight;
       rotate += (b.rotation() - a.rotation()) * weight;
     });
 

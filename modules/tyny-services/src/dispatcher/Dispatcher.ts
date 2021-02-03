@@ -8,7 +8,7 @@ import DispatcherEvent from './DispatcherEvent';
  */
 export default class Dispatcher extends EventEmitter {
   // Timestamp of the last frame.
-  private lastTime: number;
+  private lastTime: number = -1;
 
   /**
    * Dispatcher constructor.
@@ -30,6 +30,7 @@ export default class Dispatcher extends EventEmitter {
     if (timeStep > 0) {
       this.emit(
         new DispatcherEvent({
+          target: this,
           timeStep,
           type: DispatcherEvent.frameEvent,
         })

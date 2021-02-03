@@ -36,17 +36,14 @@ export default class ChildableView<TChild extends View = View> extends View {
   /**
    * The container children will be placed in.
    */
-  @$.data({ type: 'element' })
   protected container: HTMLElement;
 
   /**
    * Default view class used to construct children.
    */
-  @$.data({ type: 'any', defaultValue: View })
   protected viewClass: ViewClass;
 
-  @$.data({ type: 'any' })
-  protected viewOptions?: ViewOptions;
+  protected viewOptions: ViewOptions;
 
   /**
    * The list of children attached to this view.
@@ -56,11 +53,18 @@ export default class ChildableView<TChild extends View = View> extends View {
   constructor(options: ChildableViewOptions = {}) {
     super(options);
 
-    if (!this.container) {
-      this.container = this.element;
-    }
+    const args = this.createArgs(options);
+    const {
+      container = this.element,
+      selector,
+      viewClass = View,
+      viewOptions = {},
+    } = options;
 
-    const { selector } = options;
+    this.viewClass = viewClass;
+    this.viewOptions = viewOptions;
+    this.container = args.element({ name: 'container' }) || this.element;
+
     if (selector) {
       const { children, container } = this;
       const elements = container.querySelectorAll(selector);
@@ -116,6 +120,16 @@ export default class ChildableView<TChild extends View = View> extends View {
     }
 
     return this;
+  }
+
+  find(callback: {
+    (child: TChild, index: number): boolean;
+  }): TChild | undefined {
+    return this.children.find(callback);
+  }
+
+  forEach(callback: { (child: TChild, index: number): void }) {
+    this.children.forEach(callback);
   }
 
   getChild(index: number): TChild | undefined {

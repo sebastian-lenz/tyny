@@ -32,7 +32,7 @@ export default class Breakpoints extends EventEmitter {
       10
     );
 
-    this.update();
+    this.current = this.update();
   }
 
   setBreakpoints(value: Breakpoint[]) {
@@ -40,7 +40,7 @@ export default class Breakpoints extends EventEmitter {
     this.update();
   }
 
-  update() {
+  update(): Breakpoint {
     const { breakpoints } = this;
     const { width: viewportWidth } = viewport();
     const deviceWidth = this.getDeviceWidth();
@@ -66,10 +66,13 @@ export default class Breakpoints extends EventEmitter {
       this.emit(
         new BreakpointsEvent({
           breakpoint,
+          target: this,
           type: BreakpointsEvent.changeEvent,
         })
       );
     }
+
+    return breakpoint;
   }
 
   protected handleViewportResize() {

@@ -17,9 +17,10 @@
     "url": "https://github.com/sebastian-lenz/tyny.git"
   },
   "devDependencies": {
-    "typescript": "^2.6.1"
+    "typescript": "^2.7.1"
   },
   "dependencies": {
+    "@types/googlemaps": "^3.30.4",
     "tslib": "^1.8.0",
     "tyny-events": "file:../tyny-events",
     "tyny-utils": "file:../tyny-utils"

@@ -27,7 +27,7 @@ const findPath = (
 };
 
 export default class ComponentsNode {
-  private allowChildComponents: boolean;
+  private allowChildComponents: boolean = false;
   private children: ComponentsNode[] | undefined;
   private element: HTMLElement;
   private parent: ComponentsNode | null;
@@ -118,6 +118,19 @@ export default class ComponentsNode {
     return result;
   }
 
+  initializeChildViews(): View[] {
+    const { children } = this;
+    const result: View[] = [];
+
+    if (children) {
+      for (let index = 0; index < children.length; index++) {
+        result.push(...children[index].initializeAllViews());
+      }
+    }
+
+    return result;
+  }
+
   registerComponent(component: Component): ComponentsNode[] {
     const { allowChildComponents, selector, viewClass } = component;
     const { element } = this;
@@ -193,6 +206,10 @@ export default class ComponentsNode {
 
       child.synchronize();
     }
+  }
+
+  triggerLocalResize() {
+    this.handleResize();
   }
 
   private createChild(element: HTMLElement): ComponentsNode {
@@ -278,8 +295,8 @@ export default class ComponentsNode {
   private handleResize() {
     const { children, postResizeHandler, preResizeHandler, view } = this;
 
-    if (postResizeHandler) {
-      postResizeHandler.call(view);
+    if (preResizeHandler) {
+      preResizeHandler.call(view);
     }
 
     if (children) {
@@ -288,8 +305,8 @@ export default class ComponentsNode {
       }
     }
 
-    if (preResizeHandler) {
-      preResizeHandler.call(view);
+    if (postResizeHandler) {
+      postResizeHandler.call(view);
     }
   }
 

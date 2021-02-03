@@ -34,22 +34,31 @@ export default class Pointer {
   clientX: number;
   clientY: number;
   id: string;
-  initialTransformClientX: number;
-  initialTransformClientY: number;
   initialClientX: number;
   initialClientY: number;
+  initialTransformClientX: number;
+  initialTransformClientY: number;
   lastClientX: number;
   lastClientY: number;
   type: PointerType;
   velocity: Velocity<PointerVelocity>;
 
   constructor(options: PointerOptions) {
-    Object.assign(this, options);
+    const { clientX, clientY } = options;
 
+    this.adapter = options.adapter;
+    this.clientX = clientX;
+    this.clientY = clientY;
+    this.id = options.id;
+    this.initialClientX = clientX;
+    this.initialClientY = clientY;
+    this.initialTransformClientX = clientX;
+    this.initialTransformClientY = clientY;
+    this.lastClientX = clientX;
+    this.lastClientY = clientY;
+    this.type = options.type;
     this.velocity = new Velocity(createVelocity);
-    this.initialClientX = options.clientX;
-    this.initialClientY = options.clientY;
-    this.update(options);
+    this.velocity.push({ clientX, clientY });
   }
 
   getDelta(): PointType {
@@ -71,6 +80,7 @@ export default class Pointer {
 
   update(options: PointerUpdateOptions) {
     const { clientX, clientY } = options;
+
     this.lastClientX = this.clientX;
     this.lastClientY = this.clientY;
     this.clientX = clientX;

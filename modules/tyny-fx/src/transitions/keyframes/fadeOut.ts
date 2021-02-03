@@ -1,6 +1,8 @@
+import { memoize } from 'tyny-utils';
+
 import keyframes from '../../keyframes';
 
-export default function fadeOut(): string {
+export default memoize(function fadeOut(): string {
   return keyframes('tynyFadeOutKeyframes', {
     from: {
       opacity: '1',
@@ -9,4 +11,4 @@ export default function fadeOut(): string {
       opacity: '0',
     },
   });
-}
+});

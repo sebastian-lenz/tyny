@@ -28,6 +28,7 @@ export default function breakpointEvent(init?: boolean): MethodDecorator {
           view,
           new BreakpointsEvent({
             breakpoint: service.current,
+            target: service,
             type: BreakpointsEvent.changeEvent,
           })
         );

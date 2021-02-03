@@ -5,14 +5,16 @@ import { ValueTypeSource } from './timelines/valueTypes/index';
 import MomentumTimeline from './timelines/MomentumTimeline';
 
 import easeOutExpo from './easings/easeOutExpo';
-import timelineAnimation from './utils/timelineAnimation';
+import timelineAnimation, {
+  TimelineAnimationOptions,
+} from './utils/timelineAnimation';
 import toMomentumValues, {
   FromVelocityValuesMap,
 } from './utils/toMomentumValues';
 
 export interface Momentum extends Animation<void> {}
 
-export interface MomentumOptions {
+export interface MomentumOptions extends TimelineAnimationOptions {
   /**
    * Duration of animation when bouncing back.
    */

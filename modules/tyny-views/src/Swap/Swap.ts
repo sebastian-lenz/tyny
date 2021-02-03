@@ -28,29 +28,38 @@ export interface SwapSequencerOptions<TContent extends View = View>
 }
 
 export default class Swap<TContent extends View = View> extends View {
-  @$.data({ type: 'bool', defaultValue: false })
   appendContent: boolean;
-
-  @$.data({ type: 'bool', defaultValue: false })
   disposeContent: boolean;
-
-  @$.data({ type: 'any', defaultValue: () => dissolve() })
   transition: Transition;
-
-  @$.data({ type: 'any', defaultValue: null })
   transist: TransistDimensionsOptions | null;
 
   protected content: TContent | undefined;
   protected sequencer: Sequencer<SwapSequencerOptions<TContent>>;
 
-  constructor(options?: SwapOptions) {
+  constructor(options: SwapOptions = {}) {
     super(options);
 
-    const sequencer = new Sequencer<SwapSequencerOptions<TContent>>();
-    sequencer.callbackContext = this;
-    sequencer.endCallback = this.handleTransitionEnd;
-    sequencer.startCallback = this.handleTransitionStart;
-    this.sequencer = sequencer;
+    const args = this.createArgs(options);
+    const { transition = dissolve(), transist = null } = options;
+
+    this.appendContent = args.bool({
+      defaultValue: false,
+      name: 'appendContent',
+    });
+
+    this.disposeContent = args.bool({
+      defaultValue: false,
+      name: 'disposeContent',
+    });
+
+    this.transition = transition;
+    this.transist = transist;
+    this.sequencer = new Sequencer<SwapSequencerOptions<TContent>>({
+      callbackContext: this,
+      dismissCallback: this.handleTransitionDismiss,
+      endCallback: this.handleTransitionEnd,
+      startCallback: this.handleTransitionStart,
+    });
   }
 
   getContent(): TContent | undefined {
@@ -69,6 +78,13 @@ export default class Swap<TContent extends View = View> extends View {
       from,
       to: content,
     });
+  }
+
+  protected handleTransitionDismiss({ to }: SwapSequencerOptions<TContent>) {
+    const { disposeContent } = this;
+    if (to && disposeContent) {
+      to.dispose();
+    }
   }
 
   protected handleTransitionStart({

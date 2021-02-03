@@ -2,6 +2,7 @@
 /examples/public
 /node_modules
 /modules/**/lib
+/modules/**/node_modules
 
 .DS_Store
 .vscode

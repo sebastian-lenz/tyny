@@ -5,7 +5,7 @@ export interface BoolDataTypeOptions extends DefaultDataTypeOptions<boolean> {
   type: 'bool';
 }
 
-function toBoolean(value: any): boolean {
+export function toBoolean(value: any): boolean {
   if (typeof value === 'string') {
     value = value.toLowerCase();
     return value == 'true' || value == 'yes' || value == '1';

@@ -1,7 +1,6 @@
 import { Delegate } from 'tyny-events';
 
 import { dispatcher, DispatcherEvent } from '../dispatcher';
-
 import ViewportEvent from './ViewportEvent';
 
 /**
@@ -21,9 +20,6 @@ const isCSS1Compat = (document.compatMode || '') === 'CSS1Compat';
  * event to speed up page rendering.
  */
 export default class Viewport extends Delegate {
-  // The underlying element of this delegate.
-  element: HTMLElement;
-
   // The height of the viewport.
   height: number = 0;
 
@@ -123,6 +119,10 @@ export default class Viewport extends Delegate {
     }
   }
 
+  hasScrollbars(): boolean {
+    return this.scrollInitiators.length === 0;
+  }
+
   setScrollLeft(value: number) {
     if (this.scrollLeft === value) return;
     window.scrollTo(value, this.scrollTop);
@@ -141,17 +141,7 @@ export default class Viewport extends Delegate {
   }
 
   protected emitViewportEvent(type: string) {
-    const { width, height, scrollInitiators, scrollLeft, scrollTop } = this;
-    this.emit(
-      new ViewportEvent({
-        hasScrollbars: scrollInitiators.length === 0,
-        height,
-        scrollLeft,
-        scrollTop,
-        type,
-        width,
-      })
-    );
+    this.emit(new ViewportEvent({ target: this, type }));
   }
 
   /**

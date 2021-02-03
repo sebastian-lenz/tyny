@@ -4,9 +4,13 @@ import Timeline, { TimelineOptions } from '../timelines/Timeline';
 
 import director from '../director';
 
+export interface TimelineAnimationOptions {
+  rejectOnStop?: boolean;
+}
+
 export default function timelineAnimation<
   TProperty,
-  TOptions,
+  TOptions extends TimelineAnimationOptions,
   TTimeline extends Timeline,
   TExtraProps
 >(
@@ -44,7 +48,9 @@ export default function timelineAnimation<
     }
 
     function handleStopped() {
-      reject();
+      if (options.rejectOnStop) {
+        reject();
+      }
     }
   }).then(() => {
     return children.reduce(

@@ -1,10 +1,10 @@
-import { View } from 'tyny';
+import { View, isSelectableView } from 'tyny';
 import { Transition } from 'tyny-fx/lib/transitions';
 import dissolve from 'tyny-fx/lib/transitions/dissolve';
 
 import { CycleableView, CycleableViewOptions } from '../CycleableView';
-import Sequencer from './Sequencer';
-import SlideshowSlide from './SlideshowSlide';
+import Sequencer, { SequenceOptions } from './Sequencer';
+import SlideshowEvent from './SlideshowEvent';
 
 export interface SlideshowOptions extends CycleableViewOptions {
   transition?: Transition;
@@ -15,21 +15,24 @@ export interface SlideshowTransitionOptions {
 }
 
 export default class Slideshow<
-  TChild extends View = SlideshowSlide
+  TChild extends View = View
 > extends CycleableView<TChild, SlideshowTransitionOptions> {
   transition: Transition;
-  protected sequencer: Sequencer;
+  protected sequencer: Sequencer<SequenceOptions<TChild>>;
 
   constructor(options: SlideshowOptions = {}) {
     super({
       className: `${View.classNamePrefix}Slideshow`,
+      isLooped: true,
       ...options,
     });
 
-    const sequencer = new Sequencer();
-    sequencer.callbackContext = this;
-    sequencer.endCallback = this.handleTransitionEnd;
-    sequencer.startCallback = this.handleTransitionStart;
+    const sequencer = new Sequencer<SequenceOptions<TChild>>({
+      callbackContext: this,
+      dismissCallback: this.handleTransitionDismiss,
+      endCallback: this.handleTransitionEnd,
+      startCallback: this.handleTransitionStart,
+    });
 
     this.transition = options.transition || dissolve();
     this.sequencer = sequencer;
@@ -44,7 +47,44 @@ export default class Slideshow<
     sequencer.transist({ transition, from, to, ...options });
   }
 
-  protected handleTransitionEnd() {}
+  protected handleTransitionDismiss({ from, to }: SequenceOptions<TChild>) {
+    this.emit(
+      new SlideshowEvent({
+        from,
+        target: <any>this,
+        to,
+        type: SlideshowEvent.transitionDismissEvent,
+      })
+    );
+  }
 
-  protected handleTransitionStart() {}
+  protected handleTransitionStart({ from, to }: SequenceOptions<TChild>) {
+    if (isSelectableView(from)) {
+      from.setSelected(false);
+    }
+
+    if (isSelectableView(to)) {
+      to.setSelected(true);
+    }
+
+    this.emit(
+      new SlideshowEvent({
+        from,
+        target: <any>this,
+        to,
+        type: SlideshowEvent.transitionStartEvent,
+      })
+    );
+  }
+
+  protected handleTransitionEnd({ from, to }: SequenceOptions<TChild>) {
+    this.emit(
+      new SlideshowEvent({
+        from,
+        target: <any>this,
+        to,
+        type: SlideshowEvent.transitionEndEvent,
+      })
+    );
+  }
 }

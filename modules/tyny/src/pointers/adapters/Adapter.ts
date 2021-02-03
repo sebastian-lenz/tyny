@@ -12,7 +12,7 @@ export default abstract class Adapter extends Delegate {
     this.pointerList = pointerList;
 
     this.listenTo(pointerList, 'commit', this.handleListCommit);
-    this.delegateEvents(this.getEvents());
+    this.delegateEvents(this.getEvents(), { passive: false });
   }
 
   dispose() {
@@ -29,7 +29,7 @@ export default abstract class Adapter extends Delegate {
     this.isTracking = true;
 
     const events = this.getTrackingEvents();
-    viewport().delegateEvents(events, { scope: this });
+    viewport().delegateEvents(events, { passive: false, scope: this });
   }
 
   protected stopTracking() {
@@ -37,7 +37,7 @@ export default abstract class Adapter extends Delegate {
     this.isTracking = false;
 
     const events = this.getTrackingEvents();
-    viewport().undelegateEvents(events, { scope: this });
+    viewport().undelegateEvents(events, { passive: false, scope: this });
   }
 
   protected handleListCommit() {

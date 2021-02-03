@@ -40,6 +40,6 @@
     "tyny-services": "file:./modules/tyny-services",
     "tyny-utils": "file:./modules/tyny-utils",
     "tyny-views": "file:./modules/tyny-views",
-    "typescript": "^2.6.1"
+    "typescript": "^2.7.1"
   }
 }

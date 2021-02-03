@@ -5,13 +5,15 @@ import { ValueTypeSource } from './timelines/valueTypes/index';
 import SpringTimeline from './timelines/SpringTimeline';
 
 import toTimelineValues, { FromToValuesMap } from './utils/toTimelineValues';
-import timelineAnimation from './utils/timelineAnimation';
+import timelineAnimation, {
+  TimelineAnimationOptions,
+} from './utils/timelineAnimation';
 
 export interface Spring extends Animation<void> {
   advance(properties: PropertyMap<ValueTypeSource>): boolean;
 }
 
-export interface SpringOptions {
+export interface SpringOptions extends TimelineAnimationOptions {
   acceleration: number;
   epsilon: number;
   friction: number;
@@ -50,7 +52,7 @@ function spring(
 
 namespace spring {
   export const defaultOptions: SpringOptions = {
-    acceleration: 0.2,
+    acceleration: 0.1,
     epsilon: 0.1,
     friction: 0.4,
   };

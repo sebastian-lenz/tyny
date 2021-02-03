@@ -1,8 +1,21 @@
 import { DelegateMap } from 'tyny-events';
+import { memoize } from 'tyny-utils';
 
 import Adapter from './Adapter';
 
 const id = (event: PointerEvent) => `pointer-${event.pointerId}`;
+const isSupported = memoize(() => {
+  const result = 'PointerEvent' in window;
+  if (result) {
+    try {
+      window.addEventListener('touchmove', function() {}, { passive: true });
+    } catch (e) {
+      window.addEventListener('touchmove', function() {});
+    }
+  }
+
+  return result;
+});
 
 export default class PointerAdapter extends Adapter {
   protected getEvents(): DelegateMap {
@@ -42,6 +55,6 @@ export default class PointerAdapter extends Adapter {
   }
 
   static isSupported(): boolean {
-    return 'PointerEvent' in window;
+    return isSupported();
   }
 }

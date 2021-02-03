@@ -29,14 +29,15 @@ function animate(
     const style = <any>element.style;
     const value = `${name} ${duration}ms ${delay}ms ${timingFunction} ${fillMode}`;
 
-    const handleAnimationEnd = () => {
+    const handleAnimationEnd = (event: Event | undefined) => {
+      if (event && event.target !== element) return;
       element.removeEventListener(onAnimationEnd, handleAnimationEnd);
       clearTimeout(timeout);
       style[animation] = '';
       resolve();
     };
 
-    const timeout = setTimeout(handleAnimationEnd, duration + 100);
+    const timeout = setTimeout(handleAnimationEnd, duration + delay + 100);
     element.addEventListener(onAnimationEnd, handleAnimationEnd);
     style[animation] = value;
   });

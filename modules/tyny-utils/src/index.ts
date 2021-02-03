@@ -2,6 +2,7 @@ import before from './before';
 import dasherize from './dasherize';
 import defaultToWhiteSpace from './defaultToWhiteSpace';
 import escapeRegExp from './escapeRegExp';
+import findEventTarget from './findEventTarget';
 import identity from './identity';
 import isHtmlElement from './isHtmlElement';
 import isImageLoaded from './isImageLoaded';
@@ -22,6 +23,7 @@ export {
   dasherize,
   defaultToWhiteSpace,
   escapeRegExp,
+  findEventTarget,
   identity,
   isHtmlElement,
   isImageLoaded,

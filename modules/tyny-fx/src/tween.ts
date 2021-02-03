@@ -7,7 +7,9 @@ import { ValueTypeSource } from './timelines/valueTypes/index';
 import TweenTimeline from './timelines/TweenTimeline';
 
 import toTimelineValues, { FromToValuesMap } from './utils/toTimelineValues';
-import timelineAnimation from './utils/timelineAnimation';
+import timelineAnimation, {
+  TimelineAnimationOptions,
+} from './utils/timelineAnimation';
 
 export interface Tween extends Animation<void> {
   advance(
@@ -16,7 +18,7 @@ export interface Tween extends Animation<void> {
   ): boolean;
 }
 
-export interface TweenOptions {
+export interface TweenOptions extends TimelineAnimationOptions {
   delay: number;
   duration: number;
   easing: EasingFunction;

@@ -14,7 +14,7 @@ export default class Components {
   components: Component[] = [];
   isUpdateQued: boolean = false;
   pendingComponents: Component[] = [];
-  root: ComponentNode | null;
+  root: ComponentNode | null = null;
 
   constructor() {
     whenDomReady().then(() => {

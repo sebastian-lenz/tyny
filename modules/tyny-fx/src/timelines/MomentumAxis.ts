@@ -21,23 +21,23 @@ export interface MomentumValue {
  * Calculates the momentum of a single axis.
  */
 export default class Axis {
-  protected bounceDelta: number;
-  protected bounceDuration: number;
-  protected bounceEasing: EasingFunction;
-  protected bounceInitial: number | undefined;
-  protected bounceStep: number;
-  protected bounceTarget: number;
-  protected currentValue: number;
-  protected deceleration: number;
-  protected epsilon: number;
-  protected friction: number;
-  protected maxValue: number | undefined;
-  protected minValue: number | undefined;
-  protected velocity: number;
+  protected bounceDelta: number = 0;
+  protected bounceDuration: number = 0;
+  // prettier-ignore
+  protected bounceEasing!: EasingFunction;
+  protected bounceInitial: number | undefined = undefined;
+  protected bounceStep: number = 0;
+  protected bounceTarget: number = 0;
+  protected currentValue: number = 0;
+  protected deceleration: number = 0;
+  protected epsilon: number = 0;
+  protected friction: number = 0;
+  protected maxValue: number | undefined = undefined;
+  protected minValue: number | undefined = undefined;
+  protected velocity: number = 0;
 
   constructor(options: MomentumValueOptions) {
     const { initialValue, initialVelocity, ...remaining } = options;
-
     Object.assign(this, remaining);
 
     this.currentValue = initialValue;
@@ -59,7 +59,7 @@ export default class Axis {
       minValue,
     } = this;
 
-    if (bounceInitial != null) {
+    if (bounceInitial != undefined) {
       const { bounceDelta, bounceDuration, bounceEasing, bounceTarget } = this;
       const bounceStep = (this.bounceStep += timeStep);
 
@@ -77,7 +77,7 @@ export default class Axis {
       }
     }
 
-    if (maxValue != null && currentValue > maxValue) {
+    if (maxValue != undefined && currentValue > maxValue) {
       const excess = maxValue - currentValue;
       if (velocity > 0) {
         velocity = (velocity + excess * deceleration) * friction;
@@ -94,7 +94,7 @@ export default class Axis {
       return true;
     }
 
-    if (minValue != null && currentValue < minValue) {
+    if (minValue != undefined && currentValue < minValue) {
       const excess = minValue - currentValue;
       if (velocity < 0) {
         velocity = (velocity + excess * deceleration) * friction;

@@ -3,15 +3,13 @@ import View from 'tyny/lib/View';
 
 import Swap from './Swap';
 
-export interface SwapEventOptions extends EventOptions {
+export interface SwapEventOptions extends EventOptions<Swap> {
   from?: View;
-  target: Swap;
   to?: View;
 }
 
-export default class SwapEvent extends Event {
+export default class SwapEvent extends Event<Swap> {
   readonly from: View | undefined;
-  readonly target: Swap;
   readonly to: View | undefined;
 
   static transitionEndEvent: string = 'transitionEnd';

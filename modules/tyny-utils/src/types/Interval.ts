@@ -7,6 +7,11 @@ export default class Interval implements IntervalType {
   max: number;
   min: number;
 
+  constructor(min: number, max: number) {
+    this.min = min;
+    this.max = max;
+  }
+
   getLength(): number {
     return this.max - this.min;
   }

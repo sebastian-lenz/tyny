@@ -1,11 +1,12 @@
 import animate from './animate';
-import momentum from './momentum';
+import momentum, { Momentum } from './momentum';
+import spring, { Spring } from './spring';
 import stop from './stop';
 import transist from './transist';
 import transistDimensions from './transistDimensions';
 import transistHeight from './transistHeight';
 import transistWidth from './transistWidth';
-import tween from './tween';
+import tween, { Tween, TweenOptions } from './tween';
 
 export type AnimationPlayState = 'playing' | 'stopped' | 'finished';
 
@@ -24,10 +25,15 @@ export interface EasingFunction {
 export {
   animate,
   momentum,
+  Momentum,
+  spring,
+  Spring,
   stop,
   transist,
   transistDimensions,
   transistHeight,
   transistWidth,
   tween,
+  Tween,
+  TweenOptions,
 };

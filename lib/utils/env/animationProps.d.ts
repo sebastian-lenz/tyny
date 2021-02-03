@@ -1,0 +1,10 @@
+export declare const onAnimationEnd: string;
+export declare const onAnimationIteration: string;
+export declare const onAnimationStart: string;
+export declare const animation: string;
+export declare const animationDelay: string;
+export declare const animationDuration: string;
+export declare const animationFillMode: string;
+export declare const animationName: string;
+export declare const animationTimingFunction: string;
+export declare const keyframes: string;

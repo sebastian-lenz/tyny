@@ -1,0 +1,19 @@
+{
+  "name": "tyny",
+  "version": "2.0.0",
+  "description": "",
+  "main": "./lib/index.js",
+  "author": "Sebastian Lenz",
+  "license": "MIT",
+  "sideEffects": [
+    "./lib/core/components/components.js"
+  ],
+  "dependencies": {
+    "tslib": "^2.0.0"
+  },
+  "prettier": {
+    "trailingComma": "es5",
+    "tabWidth": 2,
+    "singleQuote": true
+  }
+}

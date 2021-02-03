@@ -1,0 +1,76 @@
+objectify($values)
+  return $values if typeof($values) == "object"
+
+  $result = {}
+  $result[$value] = $value for $value in $values
+  return $result
+
+make-utility($utility, $suffix, $is-rfs-media-query = false)
+  for $key, $value in objectify($utility.values)
+    $properties = $utility.property
+
+    // Multiple properties are possible, for example with vertical or horizontal margins or paddings
+    // if typeof($properties) == "string"
+    //   $properties: append((), $properties)
+
+    // Use custom class if present
+    $property-class = class in $utility ? $utility.class : $properties[0]
+    if $property-class == null
+      $property-class = ""
+
+    // Don't prefix if value key is null (eg. with shadow class)
+    $property-class-modifier = ''
+    if $key
+      $property-class-modifier = $property-class ? '-' + $key : $key
+
+    if rfs in $utility
+      // Inside the media query
+      if $is-rfs-media-query
+        $val = rfs-value($value)
+
+        // Do not render anything if fluid and non fluid values are the same
+        $value = $val == rfs-fluid-value($value) ? null : $val
+      else
+        $value = rfs-fluid-value($value);
+
+
+    if $value != null
+      .{$property-class}{$property-class-modifier}{$suffix}
+        for $property in $properties
+          {$property}: $value
+
+
+make-utilities($utilities, $breakpoints = $grid-breakpoints)
+  // Loop over each breakpoint
+  for $breakpointName in keys($breakpoints)
+
+    // Generate media query if needed
+    +breakpoint($breakpointName)
+      $suffix = breakpoint-suffix($breakpointName, $breakpoints)
+
+      // Loop over each utility property
+      for $key, $utility in $utilities
+        // The utility can be disabled with `false`, thus check if the utility is a map first
+        // Only proceed if responsive media queries are enabled or if it's the base media query
+        if typeof($utility) == "object" and ($utility.responsive or $suffix == "")
+          make-utility($utility, $suffix)
+
+  // RFS rescaling
+  @media (min-width: $rfs-mq-value)
+    for $breakpointName, $breakpoint in keys($breakpoints)
+      $suffix = breakpoint-suffix($breakpointName, $breakpoints)
+
+      if $breakpoint < $rfs-breakpoint
+        // Loop over each utility property
+        for $key, $utility in $utilities
+          // The utility can be disabled with `false`, thus check if the utility is a map first
+          // Only proceed if responsive media queries are enabled or if it's the base media query
+          if typeof($utility) == "object" and $utility.rfs
+            make-utility($utility, $suffix, true)
+
+  @media print
+    for $key, $utility in $utilities
+      // The utility can be disabled with `false`, thus check if the utility is a map first
+      // Then check if the utility needs print styles
+      if typeof($utility) == "object" and $utility.print
+        make-utility($utility, "-print")

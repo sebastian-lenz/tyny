@@ -1,0 +1,68 @@
+$utility-margin-negative ?= {
+  responsive: true
+  property: margin
+  class: m
+  values: $negative-spacers
+}
+
+$utility-margin-negative-x ?= {
+  responsive: true
+  property: margin-right margin-left
+  class: mx
+  values: $negative-spacers
+}
+
+$utility-margin-negative-y ?= {
+  responsive: true
+  property: margin-top margin-bottom
+  class: my
+  values: $negative-spacers
+}
+
+$utility-margin-negative-top ?= {
+  responsive: true
+  property: margin-top
+  class: mt
+  values: $negative-spacers
+}
+
+$utility-margin-negative-right ?= {
+  responsive: true
+  property: margin-right
+  class: mr
+  values: $negative-spacers
+}
+
+$utility-margin-negative-bottom ?= {
+  responsive: true
+  property: margin-bottom
+  class: mb
+  values: $negative-spacers
+}
+
+$utility-margin-negative-left ?= {
+  responsive: true
+  property: margin-left
+  class: ml
+  values: $negative-spacers
+}
+
+$utilities-margin-negative-x ?= {
+  margin-negative-x: $utility-margin-negative-x
+  margin-negative-right: $utility-margin-negative-right
+  margin-negative-left: $utility-margin-negative-left
+}
+
+$utilities-margin-negative-y ?= {
+  margin-negative-y: $utility-margin-negative-y
+  margin-negative-top: $utility-margin-negative-top
+  margin-negative-bottom: $utility-margin-negative-bottom
+}
+
+$utilities-margin-negative ?= merge(
+  {
+    margin-negative: $utility-margin-negative
+  },
+  $utilities-margin-negative-x,
+  $utilities-margin-negative-y
+)

@@ -1,0 +1,54 @@
+numerationBullets(
+  $base = {},
+  $baseClass = "." + $viewPrefix + "Numeration",
+  $itemClass = $baseClass + "--item",
+  $itemHeight = 40px,
+  $itemWidth = 18px,
+  $justifyContent = center,
+  $radius = 4px,
+  $default = { background: transparent, border: 1px solid #fff },
+  $hover = { 
+    background: rgba(255, 255, 255, 0.5)
+  },
+  $selected = { background: #fff },
+)
+  {$baseClass}
+    display: flex
+    flex-flow: row nowrap
+    align-items: center
+    justify-content: $justifyContent
+    margin: 0
+    padding: 0
+
+    font-size: 0
+    list-style: none
+    
+    {$base}
+
+  {$itemClass}
+    position: relative
+    display: block
+    width: $itemWidth
+    height: $itemHeight
+
+    cursor: pointer
+
+  {$itemClass}:after
+    content: ''
+    display: block
+    position: absolute
+    top: $itemHeight * 0.5 - $radius
+    left: $itemWidth * 0.5 - $radius
+    width: $radius * 2
+    height: $radius * 2
+
+    border-radius: $radius
+    transition: background 100ms, border 100ms, opacity 100ms, color 100ms
+    
+    {$default}
+
+  {$itemClass}:hover:after
+    {$hover}
+    
+  {$itemClass}.selected:after
+    {$selected}

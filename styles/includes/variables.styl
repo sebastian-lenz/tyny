@@ -1,0 +1,202 @@
+$viewPrefix ?= 'ty';
+
+
+// Colors
+// ------
+
+$white          ?=  #fff
+$gray-100       ?=  #f8f9fa
+$gray-200       ?=  #e9ecef
+$gray-300       ?=  #dee2e6
+$gray-400       ?=  #ced4da
+$gray-500       ?=  #adb5bd
+$gray-600       ?=  #6c757d
+$gray-700       ?=  #495057
+$gray-800        ?= #343a40
+$gray-900        ?= #212529
+$black           ?= #000
+
+$blue            ?= #0d6efd
+$indigo          ?= #6610f2
+$purple          ?= #6f42c1
+$pink            ?= #d63384
+$red             ?= #dc3545
+$orange          ?= #fd7e14
+$yellow          ?= #ffc107
+$green           ?= #198754
+$teal            ?= #20c997
+$cyan            ?= #0dcaf0
+
+$primary         ?= $blue
+$secondary       ?= $gray-600
+$success         ?= $green
+$info            ?= $cyan
+$warning         ?= $yellow
+$danger          ?= $red
+$light           ?= $gray-100
+$dark            ?= $gray-800
+
+$colors ?= {
+  "blue":       $blue,
+  "indigo":     $indigo,
+  "purple":     $purple,
+  "pink":       $pink,
+  "red":        $red,
+  "orange":     $orange,
+  "yellow":     $yellow,
+  "green":      $green,
+  "teal":       $teal,
+  "cyan":       $cyan,
+  "white":      $white,
+  "gray":       $gray-600,
+  "gray-dark":  $gray-800
+}
+
+$grays ?= {
+  "100":        $gray-100
+  "200":        $gray-200
+  "300":        $gray-300
+  "400":        $gray-400
+  "500":        $gray-500
+  "600":        $gray-600
+  "700":        $gray-700
+  "800":        $gray-800
+  "900":        $gray-900
+}
+
+$theme-colors ?= {
+  "primary":    $primary
+  "secondary":  $secondary
+  "success":    $success
+  "info":       $info
+  "warning":    $warning
+  "danger":     $danger
+  "light":      $light
+  "dark":       $dark
+}
+
+
+// Typography
+// ----------
+
+$font-family-sans-serif ?= system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"
+$font-family-monospace  ?= SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace
+$font-family-base       ?= $font-family-sans-serif
+
+$font-weight-lighter ?= lighter
+$font-weight-light   ?= 300
+$font-weight-normal  ?= 400
+$font-weight-bold    ?= 700
+$font-weight-bolder  ?= bolder
+$font-weight-base    ?= $font-weight-normal
+
+$font-size-root      ?= null
+$font-size-base      ?= 1rem
+$font-size-sm        ?= $font-size-base * .875
+$font-size-lg        ?= $font-size-base * 1.25
+
+$line-height-base    ?= 1.5
+$line-height-sm      ?= 1.25
+$line-height-lg      ?= 2
+
+$text-color          ?= $gray-900
+$text-muted          ?= $gray-600
+
+
+// Body
+// ----
+
+$body-bg         ?= $white
+$body-color      ?= $text-color
+$body-text-align ?= null
+
+
+// Grid
+// ----
+
+$grid-child-columns ?= 0
+$grid-columns ?= 12
+$grid-gutter-width ?= 20px
+$grid-breakpoints ?= {
+  xs: 0,
+  sm: 576px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px,
+  xxl: 1400px
+}
+
+$container-padding-x ?= 20px
+$container-max-widths ?= {
+  sm: 540px,
+  md: 720px,
+  lg: 960px,
+  xl: 1140px,
+  xxl: 1320px
+}
+
+
+// Spacing
+// -------
+
+$spacer ?= 1rem
+$spacers ?= {
+  '0': 0,
+  '1': $spacer * 0.25,
+  '2': $spacer * 0.5,
+  '3': $spacer * 1,
+  '4': $spacer * 1.5,
+  '5': $spacer * 3,
+}
+
+$negative-spacers ?= {
+  n1: $spacer * -0.25,
+  n2: $spacer * -0.5,
+  n3: $spacer * -1,
+  n4: $spacer * -1.5,
+  n5: $spacer * -3,
+}
+
+
+// Border
+// ------
+
+$border-width     ?= 1px
+$border-color     ?= $gray-300
+
+$border-radius    ?=.25rem
+$border-radius-sm ?=.2rem
+$border-radius-lg ?=.3rem
+
+$border-widths ?={
+  '0': 0,
+  '1': 1px,
+  '2': 2px,
+  '3': 3px,
+  '4': 4px,
+  '5': 5px
+}
+
+
+// Shadows
+// -------
+
+$box-shadow       ?= 0 .5rem 1rem rgba($black, .15)
+$box-shadow-sm    ?= 0 .125rem .25rem rgba($black, .075)
+$box-shadow-lg    ?= 0 1rem 3rem rgba($black, .175)
+$box-shadow-inset ?= inset 0 1px 2px rgba($black, .075)
+
+
+// Easings
+// -------
+
+$ease-out-expo ?= cubic-bezier(0.19, 1, 0.22, 1)
+
+
+// Views
+// -----
+
+// Applied to image, imagecrop and picture wrappers
+// Can e.g. set a common background color
+
+$tyny-image-wrapper ?= {}

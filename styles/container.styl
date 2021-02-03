@@ -1,0 +1,23 @@
+@import './helpers/container.styl'
+
+.container,
+.container-fluid
+  make-container()
+
+for $breakpoint, $container-max-width in $container-max-widths
+  .container-{$breakpoint}
+    @extend .container-fluid
+
+  +breakpoint($breakpoint, $grid-breakpoints)
+    $responsive-container-{$breakpoint}
+      max-width: $container-max-width
+
+    $extend-breakpoint = true
+
+    for $name, $width in $grid-breakpoints
+      if $extend-breakpoint
+        .container{breakpoint-suffix($name, $grid-breakpoints)}
+          @extend $responsive-container-{$breakpoint}
+
+        if $breakpoint == $name
+          $extend-breakpoint = false

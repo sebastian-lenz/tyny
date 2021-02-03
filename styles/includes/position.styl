@@ -1,0 +1,22 @@
+position($type, $top = false, $right = false, $bottom = false, $left = false)
+  position: $type
+  if $top != false
+    top: $top
+  if $right != false
+    right: $right
+  if $bottom != false
+    bottom: $bottom
+  if $left != false
+    left: $left
+
+fixed($top = false, $right = false, $bottom = false, $left = false)
+  position(fixed, $top, $right, $bottom, $left)
+
+relative($top = false, $right = false, $bottom = false, $left = false)
+  position(relative, $top, $right, $bottom, $left)
+
+absolute($top = false, $right = false, $bottom = false, $left = false)
+  position(absolute, $top, $right, $bottom, $left)
+
+static($top = false, $right = false, $bottom = false, $left = false)
+  position(static, $top, $right, $bottom, $left)

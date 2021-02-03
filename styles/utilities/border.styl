@@ -1,0 +1,121 @@
+$utility-border ?= {
+  property: border
+  values: {
+    '': $border-width solid $border-color
+    '0': 0
+  }
+}
+
+$utility-border-top ?= {
+  property: border-top
+  values: {
+    '': $border-width solid $border-color
+    '0': 0
+  }
+}
+
+$utility-border-right ?= {
+  property: border-right
+  values: {
+    '': $border-width solid $border-color
+    '0': 0
+  }
+}
+
+$utility-border-bottom ?= {
+  property: border-bottom
+  values: {
+    '': $border-width solid $border-color
+    '0': 0
+  }
+}
+
+$utility-border-left ?= {
+  property: border-left
+  values: {
+    '': $border-width solid $border-color
+    '0': 0
+  }
+}
+
+$utility-border-color ?= {
+  property: border-color
+  class: border
+  values: merge({
+    "white": $white,
+  }, $theme-colors)
+}
+
+$utility-border-width ?= {
+  property: border-width
+  class: border
+  values: $border-widths
+} 
+
+$utility-rounded ?= {
+  property: border-radius
+  class: rounded
+  values: {
+    '': $border-radius
+    'sm': $border-radius-sm
+    'lg': $border-radius-lg
+    'circle': 50%
+    '0': 0
+  }
+}
+
+$utility-rounded-top ?= {
+  property: border-top-left-radius border-top-right-radius
+  class: rounded-top
+  values: {
+    '': $border-radius
+  }
+}
+
+$utility-rounded-right ?= {
+  property: border-top-right-radius border-bottom-right-radius
+  class: rounded-right
+  values: {
+    '': $border-radius
+  }
+}
+
+$utility-rounded-bottom ?= {
+  property: border-bottom-right-radius border-bottom-left-radius
+  class: rounded-bottom
+  values: {
+    '': $border-radius
+  }
+}
+
+$utility-rounded-left ?= {
+  property: border-bottom-left-radius border-top-left-radius
+  class: rounded-left
+  values: {
+    '': $border-radius
+  }
+}
+
+$utilities-border-rounded ?= {
+  rounded: $utility-rounded,
+  rounded-top: $utility-rounded-top,
+  rounded-right: $utility-rounded-right,
+  rounded-bottom: $utility-rounded-bottom,
+  rounded-left: $utility-rounded-left,
+}
+
+$utilities-border-style ?= {
+  border: $utility-border
+  border-top: $utility-border-top
+  border-right: $utility-border-right
+  border-bottom: $utility-border-bottom
+  border-left: $utility-border-left
+  border-color: $utility-border-color
+  border-width: $utility-border-width
+}
+
+$utilities-border ?= merge(
+  {}, 
+  $utilities-border-rounded,
+  $utilities-border-style,
+)

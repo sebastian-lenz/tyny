@@ -1,3 +1,3 @@
-/// <reference path="./index.d.ts" />
+/// <reference path="../typings/index.d.ts" />
 
 export * from './core';

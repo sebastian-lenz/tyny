@@ -19,7 +19,7 @@
     "bootstrap-styl": "^5.0.8",
     "chokidar": "^1.7.0",
     "handlebars": "^4.0.11",
-    "highlight.js": "^9.12.0",
+    "highlight.js": "^10.4.1",
     "metalsmith": "^2.3.0",
     "metalsmith-layouts": "^1.8.1",
     "metalsmith-static": "0.0.5",

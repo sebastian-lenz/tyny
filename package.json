@@ -32,7 +32,7 @@
     "rollup-plugin-serve": "^0.4.2",
     "rollup-plugin-typescript": "^0.8.1",
     "rollup-plugin-uglify": "^2.0.1",
-    "showdown": "^1.8.3",
+    "showdown": "^1.9.1",
     "stylus": "^0.54.5",
     "tyny": "file:./modules/tyny",
     "tyny-events": "file:./modules/tyny-events",

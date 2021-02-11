@@ -48,7 +48,7 @@ export abstract class AbstractAdapter {
 
     this._isTracking = true;
     this._trackingListeners = Object.keys(events).map((name) =>
-      on(document.documentElement, name, events[name], {
+      on(window, name, events[name], {
         passive: false,
         scope: this,
       })

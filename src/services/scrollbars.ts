@@ -3,14 +3,14 @@ import { getScrollLeft } from '../utils/dom/window/getScrollLeft';
 import { getScrollTop } from '../utils/dom/window/getScrollTop';
 
 const origins: Array<any> = [];
-let hasScrollbars: boolean = true;
-let scrollBarSize: number = Number.NaN;
-let scrollLeft: number = 0;
-let scrollTop: number = 0;
+let _hasScrollbars: boolean = true;
+let _scrollBarSize: number = Number.NaN;
+let _scrollLeft: number = 0;
+let _scrollTop: number = 0;
 
 function setScrollbars(value: boolean) {
-  if (hasScrollbars === value) return;
-  hasScrollbars = value;
+  if (_hasScrollbars === value) return;
+  _hasScrollbars = value;
   const { body } = document;
 
   if (value) {
@@ -22,34 +22,38 @@ function setScrollbars(value: boolean) {
       top: null,
     });
 
-    window.scrollTo(scrollLeft, scrollTop);
+    window.scrollTo(_scrollLeft, _scrollTop);
   } else {
-    scrollLeft = getScrollLeft();
-    scrollTop = getScrollTop();
+    _scrollLeft = getScrollLeft();
+    _scrollTop = getScrollTop();
 
-    if (isNaN(scrollBarSize)) {
+    if (isNaN(_scrollBarSize)) {
       const { offsetWidth } = body;
       css(body, { position: 'fixed', width: '100%' });
-      scrollBarSize = body.offsetWidth - offsetWidth;
+      _scrollBarSize = body.offsetWidth - offsetWidth;
     }
 
     css(body, {
       position: 'fixed',
-      paddingRight: `${scrollBarSize}px`,
+      paddingRight: `${_scrollBarSize}px`,
       width: '100%',
-      left: `${-scrollLeft}px`,
-      top: `${-scrollTop}px`,
+      left: `${-_scrollLeft}px`,
+      top: `${-_scrollTop}px`,
     });
   }
 }
 
 export function getScrollBarSize(): number {
-  if (isNaN(scrollBarSize)) {
+  if (isNaN(_scrollBarSize)) {
     setScrollbars(false);
     setScrollbars(true);
   }
 
-  return scrollBarSize;
+  return _scrollBarSize;
+}
+
+export function hasScrollbars(): boolean {
+  return _hasScrollbars;
 }
 
 export function toggleScrollbars(origin: any, enabled: boolean) {

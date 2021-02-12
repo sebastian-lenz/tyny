@@ -1,3 +1,4 @@
+import { trigger } from '../utils/dom/event';
 import { css } from '../utils/dom/style/css';
 import { getScrollLeft } from '../utils/dom/window/getScrollLeft';
 import { getScrollTop } from '../utils/dom/window/getScrollTop';
@@ -7,6 +8,13 @@ let _hasScrollbars: boolean = true;
 let _scrollBarSize: number = Number.NaN;
 let _scrollLeft: number = 0;
 let _scrollTop: number = 0;
+
+export const scrollbarsChangeEvent = 'tyny:scrollbarsChange';
+
+export interface ScrollbarsEventArgs {
+  hasScrollbars: boolean;
+  scrollBarSize: number;
+}
 
 function setScrollbars(value: boolean) {
   if (_hasScrollbars === value) return;
@@ -41,6 +49,11 @@ function setScrollbars(value: boolean) {
       top: `${-_scrollTop}px`,
     });
   }
+
+  trigger(body, scrollbarsChangeEvent, {
+    hasScrollbars: _hasScrollbars,
+    scrollBarSize: _scrollBarSize,
+  });
 }
 
 export function getScrollBarSize(): number {

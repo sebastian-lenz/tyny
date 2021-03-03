@@ -167,6 +167,7 @@ export abstract class Lifecycle {
 
     for (let index = 0; index < properties.length; index++) {
       const { immediate, immutable, name, watch } = properties[index];
+      if (isInitital && immediate && !watch) this[name];
       if (immutable) continue;
       if (!watch) {
         delete values[name];

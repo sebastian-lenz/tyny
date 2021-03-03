@@ -23,7 +23,7 @@ export function timelineAnimation<
 ): Animation<any> & TExtraProps {
   let children: TTimeline[] = [];
 
-  const promise = new Promise((resolve, reject) => {
+  const promise = new Promise<void>((resolve, reject) => {
     const propertyNames = Object.keys(properties);
     let numFinished = 0;
 

@@ -1,6 +1,7 @@
 import { Timeline } from './timelines/Timeline';
 
 const callbacks: Function[] = [];
+const hooks: Function[] = [];
 const timelines: Timeline[] = [];
 let isFrameRequested = false;
 
@@ -25,13 +26,16 @@ function handleFrame(timeStep: number) {
     }
   }
 
+  for (let index = 0; index < hooks.length; index++) {
+    hooks[index](timeStep);
+  }
+
   for (let index = 0; index < callbacks.length; index++) {
     callbacks[index]();
   }
 
   callbacks.length = 0;
-
-  if (timelines.length) {
+  if (hooks.length || timelines.length) {
     requestFrame();
   }
 }
@@ -81,4 +85,19 @@ export function stop(context?: any, property?: string) {
 export function setFrameCallback(callback: Function) {
   callbacks.push(callback);
   requestFrame();
+}
+
+export function addFrameHook(hook: Function) {
+  const index = hooks.findIndex((existing) => existing === hook);
+  if (index === -1) {
+    hooks.push(hook);
+    requestFrame();
+  }
+}
+
+export function removeFrameHook(hook: Function) {
+  const index = hooks.findIndex((existing) => existing === hook);
+  if (index !== -1) {
+    hooks.splice(index, 1);
+  }
 }

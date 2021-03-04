@@ -15,6 +15,8 @@ function onTouchChange(event: Event) {
 }
 
 export type DragDirection = 'horizontal' | 'vertical' | 'both';
+export type DragAxis = 'x' | 'y';
+export type DragDimension = 'width' | 'height';
 
 export type DragWatchMode = 'idle' | 'listening' | 'draging';
 
@@ -24,9 +26,17 @@ export interface DragBehaviourOptions extends PointerBehaviourOptions {
   threshold?: number;
 }
 
-export class DragBehaviour<TView extends View = View> extends PointerBehaviour<
-  TView
-> {
+export function toAxis(direction: DragDirection): DragAxis {
+  return direction === 'horizontal' ? 'x' : 'y';
+}
+
+export function toDimension(direction: DragDirection): DragDimension {
+  return direction === 'horizontal' ? 'width' : 'height';
+}
+
+export class DragBehaviour<
+  TView extends View = View
+> extends PointerBehaviour<TView> {
   //
   direction: DragDirection;
   isDisabled: boolean;

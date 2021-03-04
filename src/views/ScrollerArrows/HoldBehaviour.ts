@@ -4,6 +4,7 @@ import { Pointer } from '../../core/pointers/Pointer';
 import { parentsAndSelf } from '../../utils/dom/node';
 import { ScrollerArrows } from './index';
 import { Spring, spring } from '../../fx/spring';
+import { toAxis, toDimension } from '../../core/pointers/DragBehaviour';
 import {
   HoldBehaviour as HoldBehaviourBase,
   HoldStage,
@@ -46,7 +47,7 @@ export class HoldBehaviour extends HoldBehaviourBase<ScrollerArrows> {
       return;
     }
 
-    const axis = direction === 'horizontal' ? 'x' : 'y';
+    const axis = toAxis(direction);
     position[axis] += forward * multiplier * speed;
     position = this.position = target.clampPosition(position);
 
@@ -63,8 +64,8 @@ export class HoldBehaviour extends HoldBehaviourBase<ScrollerArrows> {
 
     if (index === 0 && target) {
       const { position } = target;
-      const axis = direction === 'horizontal' ? 'x' : 'y';
-      const dimension = direction === 'horizontal' ? 'width' : 'height';
+      const axis = toAxis(direction);
+      const dimension = toDimension(direction);
       const size = target.viewportSize[dimension];
 
       position[axis] = Math.round(position[axis] / size + forward) * size;

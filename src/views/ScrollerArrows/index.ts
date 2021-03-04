@@ -3,7 +3,7 @@ import { HoldBehaviour } from './HoldBehaviour';
 import { on } from '../../utils/dom/event';
 import { property, View, ViewOptions } from '../../core';
 import { Scroller, scrollerScrollEvent } from '../Scroller';
-import { DragDirection } from '../../core/pointers/DragBehaviour';
+import { DragDirection, toAxis } from '../../core/pointers/DragBehaviour';
 
 const buttonParam = (name: string) => ({
   className: `${process.env.TYNY_PREFIX}ScrollerArrows--button ${name}`,
@@ -49,7 +49,18 @@ export class ScrollerArrows extends View {
     }
   }
 
-  protected onScrollerChanged() {}
+  protected onScrollerChanged() {
+    const { backward, forward, target } = this;
+    const axis = toAxis(this.direction);
+
+    if (target) {
+      const { position, positionBounds } = target;
+      backward.disabled =
+        position[axis] <= positionBounds[`${axis}Min` as 'xMin' | 'yMin'];
+      forward.disabled =
+        position[axis] >= positionBounds[`${axis}Max` as 'xMax' | 'yMax'];
+    }
+  }
 
   protected onTargetChanged(target: Scroller | null) {
     const { _targetListeners } = this;

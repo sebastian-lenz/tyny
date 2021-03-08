@@ -1,8 +1,8 @@
 import { AutoPlay, AutoPlayOptions } from '../CycleableView/AutoPlay';
+import { BrowseBehaviour, BrowseBehaviourOptions } from './BrowseBehaviour';
 import { CycleableView, CycleableViewOptions } from '../CycleableView';
 import { Sequencer, SequenceOptions } from './Sequencer';
 import { Transition } from '../../fx/transitions';
-import { BrowseBehaviour, BrowseBehaviourOptions } from './BrowseBehaviour';
 export declare const slideshowDismissEvent = "tyny:slideshowDismiss";
 export declare const slideshowEndEvent = "tyny:slideshowEnd";
 export declare const slideshowStartEvent = "tyny:slideshowStart";
@@ -30,6 +30,7 @@ export declare class Slideshow extends CycleableView<SlideshowTransitionOptions>
     immediate(value: HTMLElement | null): void;
     onBrowseBegin(): boolean;
     onBrowseEnd(): void;
+    protected onConnected(): void;
     protected onTransition(from: HTMLElement | null, to: HTMLElement | null, options?: SlideshowTransitionOptions): void;
     protected onTransitionDismiss({ from, to }: SequenceOptions): void;
     protected onTransitionEnd({ from, to }: SequenceOptions): void;

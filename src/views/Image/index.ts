@@ -1,21 +1,23 @@
-import { property, update, View, ViewOptions } from '../../core';
-import { once } from '../../utils/dom/event/once';
-import { SourceSet } from './SourceSet';
-import { visibility, VisibilityTarget } from '../../services/visibility';
 import { attr } from '../../utils/dom/attr';
+import { LoadMode, LoadModeView } from '../../utils/views/loadMode';
+import { once } from '../../utils/dom/event/once';
+import { property, update, View, ViewOptions } from '../../core';
+import { SourceSet } from './SourceSet';
 import { toInt } from '../../utils/lang/number/toInt';
+import { visibility, VisibilityTarget } from '../../services/visibility';
 
 export interface ImageOptions extends ViewOptions {
   sourceSet?: SourceSet | string;
 }
 
-export class Image extends View implements VisibilityTarget {
+export class Image extends View implements LoadModeView, VisibilityTarget {
   readonly el!: HTMLImageElement;
   currentSource: string = '';
   displayHeight: number = 0;
   displayWidth: number = 0;
   isLoaded: boolean = false;
   isVisible: boolean = false;
+  loadMode: LoadMode = LoadMode.Visibility;
   naturalHeight: number = 0;
   naturalWidth: number = 0;
 
@@ -50,10 +52,19 @@ export class Image extends View implements VisibilityTarget {
   }
 
   load(): Promise<void> {
-    this.isVisible = true;
+    this.loadMode = LoadMode.Always;
     this.update();
 
     return this.promise;
+  }
+
+  setLoadMode(value: LoadMode) {
+    if (this.loadMode === value) return;
+    this.loadMode = value;
+
+    if (value === LoadMode.Visibility) {
+      this.update();
+    }
   }
 
   setSource(value: string) {
@@ -70,10 +81,18 @@ export class Image extends View implements VisibilityTarget {
   }
 
   update() {
-    const { displayWidth, isVisible, sourceSet } = this;
-    if (isVisible) {
+    const { displayWidth, sourceSet } = this;
+    if (this.allowLoad()) {
       sourceSet.get(displayWidth).then((source) => this.setSource(source));
     }
+  }
+
+  protected allowLoad() {
+    if (this.loadMode === LoadMode.Visibility) {
+      return this.isVisible;
+    }
+
+    return this.loadMode === LoadMode.Always;
   }
 
   protected onConnected() {

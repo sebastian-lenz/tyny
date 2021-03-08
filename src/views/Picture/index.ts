@@ -4,6 +4,8 @@ import { property, update, View, ViewOptions } from '../../core';
 import { Source } from './Source';
 import { tween } from '../../fx/tween';
 import { visibility, VisibilityTarget } from '../../services/visibility';
+import { LoadMode, LoadModeView } from '../../utils/views/loadMode';
+import { once } from '../../utils/dom/event';
 
 function renderImage(
   ctx: CanvasRenderingContext2D,
@@ -26,15 +28,16 @@ export interface PictureOptions extends ViewOptions, Partial<CropOptions> {
   crop?: Crop | CropOptions;
 }
 
-export class Picture extends View implements VisibilityTarget {
-  protected currentImage: PictureImage | null = null;
-  protected displayHeight: number = 0;
-  protected displayWidth: number = 0;
-  protected images: tyny.Map<PictureImage> = {};
-  protected isVisible: boolean = false;
-  protected nextImage: PictureImage | null = null;
-  protected sources: Source[];
-  protected progress: number = 0;
+export class Picture extends View implements LoadModeView, VisibilityTarget {
+  currentImage: PictureImage | null = null;
+  displayHeight: number = 0;
+  displayWidth: number = 0;
+  images: tyny.Map<PictureImage> = {};
+  isVisible: boolean = false;
+  loadMode: LoadMode = LoadMode.Visibility;
+  nextImage: PictureImage | null = null;
+  sources: Source[];
+  progress: number = 0;
 
   @property({
     immutable: true,
@@ -57,6 +60,34 @@ export class Picture extends View implements VisibilityTarget {
     );
   }
 
+  load(): Promise<void> {
+    this.loadMode = LoadMode.Always;
+    const result = this.updateImage();
+    if (!result) {
+      return Promise.resolve();
+    }
+
+    return result.then(() => {
+      const { currentImage } = this;
+      if (!currentImage || currentImage.isLoaded) {
+        return;
+      }
+
+      return new Promise((resolve) =>
+        once(currentImage.image, 'load', resolve)
+      );
+    });
+  }
+
+  setLoadMode(value: LoadMode) {
+    if (this.loadMode === value) return;
+    this.loadMode = value;
+
+    if (value === LoadMode.Visibility) {
+      this.updateImage();
+    }
+  }
+
   setVisible(value: boolean) {
     if (this.isVisible === value) return;
     this.isVisible = value;
@@ -66,6 +97,14 @@ export class Picture extends View implements VisibilityTarget {
     } else {
       this.updateImage();
     }
+  }
+
+  protected allowLoad() {
+    if (this.loadMode === LoadMode.Visibility) {
+      return this.isVisible;
+    }
+
+    return this.loadMode === LoadMode.Always;
   }
 
   protected findSource(
@@ -198,13 +237,21 @@ export class Picture extends View implements VisibilityTarget {
   }
 
   protected updateImage() {
-    const { currentImage, isVisible, nextImage, progress } = this;
-    const source = this.findSource();
-    if (!source || !isVisible || (nextImage && progress)) return;
+    if (!this.allowLoad()) {
+      return null;
+    }
 
-    source.sourceSet.get(this.displayWidth).then((url) => {
+    const { currentImage, nextImage, progress } = this;
+    const source = this.findSource();
+    if (!source || (nextImage && progress)) {
+      return null;
+    }
+
+    return source.sourceSet.get(this.displayWidth).then((url) => {
       const image = this.getImage(source, url);
-      if ((currentImage === image && !nextImage) || nextImage === image) return;
+      if ((currentImage === image && !nextImage) || nextImage === image) {
+        return;
+      }
 
       this.nextImage = image;
       this.tryTransist();

@@ -1,9 +1,10 @@
 import { AutoPlay, AutoPlayOptions } from '../CycleableView/AutoPlay';
+import { BrowseBehaviour, BrowseBehaviourOptions } from './BrowseBehaviour';
 import { CycleableView, CycleableViewOptions } from '../CycleableView';
 import { dissolve } from '../../fx/transitions/dissolve';
+import { LoadMode, setChildLoadMode } from '../../utils/views/loadMode';
 import { Sequencer, SequenceOptions } from './Sequencer';
 import { Transition } from '../../fx/transitions';
-import { BrowseBehaviour, BrowseBehaviourOptions } from './BrowseBehaviour';
 
 export const slideshowDismissEvent = 'tyny:slideshowDismiss';
 export const slideshowEndEvent = 'tyny:slideshowEnd';
@@ -75,6 +76,15 @@ export class Slideshow extends CycleableView<SlideshowTransitionOptions> {
     }
   }
 
+  protected onConnected() {
+    const { current, items } = this;
+    items.forEach((item) => {
+      if (item !== current) setChildLoadMode(item, LoadMode.Explicit);
+    });
+
+    super.onConnected();
+  }
+
   protected onTransition(
     from: HTMLElement | null,
     to: HTMLElement | null,
@@ -105,6 +115,16 @@ export class Slideshow extends CycleableView<SlideshowTransitionOptions> {
       target: this,
       to,
     });
+
+    const { currentIndex, items } = this;
+    for (let index = 0; index < items.length; index++) {
+      setChildLoadMode(
+        items[index],
+        Math.abs(index - currentIndex) < 2
+          ? LoadMode.Visibility
+          : LoadMode.Explicit
+      );
+    }
   }
 
   protected onTransitionStart({ from, to }: SequenceOptions) {

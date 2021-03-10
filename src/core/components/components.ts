@@ -17,6 +17,7 @@ const components: tyny.Map<ViewComponent> = {};
 let hasActiveScrollEvent: boolean | null = null;
 let isInitialized = false;
 let unbindScrollEvent: Function | null = null;
+let rootCache: Array<HTMLElement> | null = null;
 
 function addGlobalEvents() {
   on(window, 'load resize', emitThrottled('resize'));
@@ -140,7 +141,6 @@ function createView<T extends View = View>(
   options?: {}
 ): T {
   const instance = getView<T>(element, name);
-
   if (instance) {
     if (!options) {
       return instance;
@@ -149,6 +149,7 @@ function createView<T extends View = View>(
     }
   }
 
+  rootCache = null;
   return new ctor({ ...options, el: element });
 }
 
@@ -159,17 +160,23 @@ function disconnect(element: Element) {
       views[name]._callDisconnected();
     }
   }
+
+  rootCache = null;
 }
 
 function emitLocalUpdate(element: Element, type?: string) {
   const views = element.__tynyViews as tyny.ViewApiMap;
-  if (!views) return;
+  if (!views) {
+    return false;
+  }
 
   for (const name in views) {
     if (views[name]._isConnected) {
       views[name].callUpdate(type);
     }
   }
+
+  return true;
 }
 
 function emitThrottled(event: string) {
@@ -205,9 +212,23 @@ function setActiveScrollEvent(value: boolean) {
   });
 }
 
-export function emitUpdate(target?: tyny.ElementLike, type?: string) {
-  const element = target ? toElement(target) : document.body;
+function emitRootUpdate(type?: string) {
+  if (rootCache) {
+    return rootCache.forEach((el) => emitLocalUpdate(el, type));
+  }
 
+  const cache = (rootCache = [] as Array<HTMLElement>);
+  apply(document.body, (el) =>
+    emitLocalUpdate(el, type) ? cache.push(el) : null
+  );
+}
+
+export function emitUpdate(target?: tyny.ElementLike, type?: string) {
+  if (!target || target === document.body) {
+    return emitRootUpdate(type);
+  }
+
+  const element = toElement(target);
   parents(element)
     .reverse()
     .forEach((element) => emitLocalUpdate(element, type));

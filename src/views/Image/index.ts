@@ -25,7 +25,12 @@ export class Image extends View implements LoadModeView, VisibilityTarget {
   get promise(): Promise<void> {
     return new Promise<void>((resolve) => {
       const { el } = this;
-      el.complete ? resolve() : once(el, 'load', () => resolve());
+      const hasSrc = el.hasAttribute('src') || el.hasAttribute('srcset');
+      if (hasSrc && el.complete) {
+        resolve();
+      } else {
+        once(el, 'load', resolve);
+      }
     }).then(() => {
       const { el } = this;
       el.classList.add('loaded');

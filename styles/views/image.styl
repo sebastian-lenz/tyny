@@ -1,9 +1,11 @@
 image(
+  $base = {},
   $baseClass = "." + $viewPrefix + "Image",
   $wrapClass = $baseClass + "--wrap",
 )
   {$baseClass}
     opacity: 0
+    {$base}
     
     &.loaded
       opacity: 1

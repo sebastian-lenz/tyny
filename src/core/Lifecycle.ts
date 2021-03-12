@@ -25,8 +25,8 @@ export abstract class Lifecycle {
     return this._isConnected;
   }
 
-  callUpdate(type: string = 'update') {
-    if (type === 'update' || type === 'resize') {
+  callUpdate(type?: string) {
+    if (!type || type === 'update' || type === 'resize') {
       this._watch();
     }
 
@@ -37,7 +37,7 @@ export abstract class Lifecycle {
 
     const tasks = this._updatesTasks || (this._updatesTasks = []);
     updates.forEach(({ events, handler, mode }, index) => {
-      if (tasks[index] || !events.includes(type)) {
+      if (tasks[index] || (type && !events.includes(type))) {
         return;
       }
 

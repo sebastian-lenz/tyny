@@ -63,21 +63,22 @@ function applyAttribute({ target }: MutationRecord): boolean {
 }
 
 function applyChildList({ addedNodes, removedNodes }: MutationRecord): boolean {
+  let hasChanged = false;
   for (let index = 0; index < addedNodes.length; index++) {
     const element = addedNodes[index] as HTMLElement;
     if (element instanceof Element) {
-      apply(element, connect);
+      apply(element, (el) => (hasChanged = connect(el) || hasChanged));
     }
   }
 
   for (let index = 0; index < removedNodes.length; index++) {
     const element = removedNodes[index] as HTMLElement;
     if (element instanceof Element) {
-      apply(element, disconnect);
+      apply(element, (el) => (hasChanged = disconnect(el) || hasChanged));
     }
   }
 
-  return true;
+  return hasChanged;
 }
 
 function applyMutation(mutation: MutationRecord, updates: Array<Element>) {
@@ -97,10 +98,11 @@ function applyMutation(mutation: MutationRecord, updates: Array<Element>) {
 function connect(element: HTMLElement) {
   // IE has no classlist on svg elements
   if (!('classList' in element)) {
-    return;
+    return false;
   }
 
   const views = element.__tynyViews as tyny.ViewApiMap;
+  let hasChanged = false;
   if (views) {
     for (const name in views) {
       views[name]._callConnected();
@@ -113,6 +115,9 @@ function connect(element: HTMLElement) {
       createView(components[className], element);
     }
   }
+
+  if (hasChanged) rootCache = null;
+  return hasChanged;
 }
 
 function createObserver() {
@@ -139,29 +144,33 @@ function createView<T extends View = View>(
   { ctor, name }: ViewComponent<T>,
   element: HTMLElement,
   options?: {}
-): T {
+): boolean {
   const instance = getView<T>(element, name);
   if (instance) {
     if (!options) {
-      return instance;
+      return false;
     } else {
       instance.destroy();
     }
   }
 
-  rootCache = null;
-  return new ctor({ ...options, el: element });
+  new ctor({ ...options, el: element });
+  return true;
 }
 
 function disconnect(element: Element) {
   const views = element.__tynyViews as tyny.ViewApiMap;
+  let hasChanged = false;
+
   if (views) {
     for (const name in views) {
       views[name]._callDisconnected();
+      hasChanged = true;
     }
   }
 
-  rootCache = null;
+  if (hasChanged) rootCache = null;
+  return hasChanged;
 }
 
 function emitLocalUpdate(element: Element, type?: string) {

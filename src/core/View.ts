@@ -72,7 +72,7 @@ export class View extends Lifecycle {
     return this._component;
   }
 
-  callUpdate(type: string = 'update') {
+  callUpdate(type?: string) {
     super.callUpdate(type);
 
     (this._behaviours as any).forEach((api: tyny.ViewApi) =>

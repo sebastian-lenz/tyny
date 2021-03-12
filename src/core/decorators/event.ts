@@ -15,14 +15,14 @@ export interface EventHandler extends EventHandlerOptions {
 }
 
 export function event(options: EventHandlerOptions): MethodDecorator {
-  return function (target: any, name: any) {
+  return function (target: any, handler: any) {
     const events: tyny.Map<EventHandler> = target.hasOwnProperty('_events')
       ? target._events
       : (target._events = { ...target._events });
 
-    events[name] = {
+    events[handler] = {
       ...options,
-      handler: name,
+      handler,
     };
   };
 }

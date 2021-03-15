@@ -11,6 +11,7 @@ import { ucFirst } from '../../utils/lang/string/ucFirst';
 import type { View, ViewClass, ViewComponent } from '../View';
 import { isString } from '../../utils/lang/string';
 import { noop } from '../../utils/lang/function';
+import { once } from '../../utils/dom/event';
 
 const activeScrollEventOrigins: Array<any> = [];
 const components: tyny.Map<ViewComponent> = {};
@@ -339,5 +340,9 @@ export function toggleActiveScrollEvent(origin: any, active: boolean) {
 }
 
 if (window && window.MutationObserver) {
-  fastDom.read(createObserver);
+  if (document.readyState == 'loading') {
+    once(document, 'DOMContentLoaded', () => fastDom.read(createObserver));
+  } else {
+    fastDom.read(createObserver);
+  }
 }

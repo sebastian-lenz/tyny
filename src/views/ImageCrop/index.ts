@@ -68,5 +68,9 @@ export class ImageCrop extends View {
       this.displayWidth,
       this.displayHeight
     );
+
+    if (image) {
+      image.callUpdate('update');
+    }
   }
 }

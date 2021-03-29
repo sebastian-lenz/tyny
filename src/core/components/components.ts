@@ -113,7 +113,7 @@ function connect(element: HTMLElement) {
   for (let index = 0; index < element.classList.length; index++) {
     const className = element.classList[index];
     if (className in components) {
-      createView(components[className], element);
+      hasChanged = createView(components[className], element) || hasChanged;
     }
   }
 

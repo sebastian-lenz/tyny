@@ -1,11 +1,12 @@
 import { Crop, CropOptions } from '../ImageCrop/Crop';
 import { data } from '../../utils/dom/attr';
-import { property, update, View, ViewOptions } from '../../core';
-import { Source } from './Source';
-import { tween } from '../../fx/tween';
-import { visibility, VisibilityTarget } from '../../services/visibility';
 import { LoadMode, LoadModeView } from '../../utils/views/loadMode';
 import { once } from '../../utils/dom/event';
+import { property, update, View, ViewOptions } from '../../core';
+import { Source } from './Source';
+import { SourceSetMode } from '../Image/SourceSet';
+import { tween } from '../../fx/tween';
+import { visibility, VisibilityTarget } from '../../services/visibility';
 
 function renderImage(
   ctx: CanvasRenderingContext2D,
@@ -119,9 +120,14 @@ export class Picture extends View implements LoadModeView, VisibilityTarget {
     for (let index = 0; index < sources.length; index++) {
       const source = sources[index];
       const sourceAspect = source.height / source.width;
-      const score =
-        Math.abs(aspect - sourceAspect) +
-        (source.height < height || source.width < width ? 10 : 0);
+      const aspectDif = Math.abs(aspect - sourceAspect);
+
+      const crop = source.getCrop(width, height);
+      const src = source.sourceSet.getSourceSync(crop.width);
+      const scale =
+        src && src.mode === SourceSetMode.Width ? crop.width / src.bias : 1;
+
+      const score = aspectDif + Math.pow(1 - Math.max(1, scale), 2);
 
       if (score < bestScore) {
         bestSource = source;

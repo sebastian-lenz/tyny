@@ -68,27 +68,33 @@ export class SourceSet {
   }
 
   get(width: number): Promise<string> {
-    return this.webpCheck.then(() => {
-      const { mode, sources } = this;
-      const count = sources.length;
-      if (count === 0) {
-        return '';
-      }
+    return this.getSource(width).then((source) => (source ? source.src : ''));
+  }
 
-      let threshold = window.devicePixelRatio ? window.devicePixelRatio : 1;
-      if (mode === SourceSetMode.Width) {
-        threshold = width * threshold;
-      }
+  getSource(width: number): Promise<SafeSource | null> {
+    return this.webpCheck.then(() => this.getSourceSync(width));
+  }
 
-      for (let index = 0; index < sources.length; index++) {
-        const source = sources[index];
-        if (source.bias >= threshold) {
-          return source.src;
-        }
-      }
+  getSourceSync(width: number): SafeSource | null {
+    const { mode, sources } = this;
+    const count = sources.length;
+    if (count === 0) {
+      return null;
+    }
 
-      return sources[count - 1].src;
-    });
+    let threshold = window.devicePixelRatio ? window.devicePixelRatio : 1;
+    if (mode === SourceSetMode.Width) {
+      threshold = width * threshold;
+    }
+
+    for (let index = 0; index < sources.length; index++) {
+      const source = sources[index];
+      if (source.bias >= threshold) {
+        return source;
+      }
+    }
+
+    return sources[count - 1];
   }
 
   parse(rawValue: string) {

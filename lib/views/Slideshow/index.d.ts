@@ -23,6 +23,7 @@ export declare class Slideshow extends CycleableView<SlideshowTransitionOptions>
     autoPlay: AutoPlay;
     browseBehaviour: BrowseBehaviour;
     defaultTransition: Transition;
+    isBrowsing: boolean;
     protected wasAutoPlaying: boolean;
     protected sequencer: Sequencer<SequenceOptions>;
     constructor(options: SlideshowOptions);

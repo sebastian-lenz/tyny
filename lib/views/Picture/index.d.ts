@@ -1,8 +1,8 @@
 import { Crop, CropOptions } from '../ImageCrop/Crop';
+import { LoadMode, LoadModeView } from '../../utils/views/loadMode';
 import { View, ViewOptions } from '../../core';
 import { Source } from './Source';
 import { VisibilityTarget } from '../../services/visibility';
-import { LoadMode, LoadModeView } from '../../utils/views/loadMode';
 export interface PictureImage {
     image: HTMLImageElement;
     isLoaded: boolean;

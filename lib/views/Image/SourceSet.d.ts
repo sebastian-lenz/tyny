@@ -19,5 +19,7 @@ export declare class SourceSet {
     constructor(data?: SourceSetSource);
     add(source: Source): void;
     get(width: number): Promise<string>;
+    getSource(width: number): Promise<SafeSource | null>;
+    getSourceSync(width: number): SafeSource | null;
     parse(rawValue: string): void;
 }

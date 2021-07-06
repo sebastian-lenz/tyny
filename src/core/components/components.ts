@@ -306,25 +306,39 @@ export function getView<TView extends View = View>(
   return null;
 }
 
+export function getViewClassName(name: string): string {
+  return process.env.TYNY_PREFIX + ucFirst(name);
+}
+
 export function getViews(element: any): tyny.ViewMap {
   return (element && element.__tynyViews) || {};
 }
 
+export function registerView(name: string, ctor: ViewClass) {
+  const className = getViewClassName(name);
+  if (className in components) {
+    return;
+  }
+
+  const component = {
+    className,
+    ctor,
+    name,
+  };
+
+  ctor.prototype._component = component;
+  components[className] = component;
+
+  if (isInitialized) {
+    findAll(`.${className}`).forEach((element) =>
+      createView(component, element)
+    );
+  }
+}
+
 export function registerViews(ctors: tyny.Map<ViewClass>) {
   for (const name in ctors) {
-    const className = process.env.TYNY_PREFIX + ucFirst(name);
-    const ctor = ctors[name];
-    const component = (components[className] = ctor.prototype._component = {
-      className,
-      ctor,
-      name,
-    });
-
-    if (isInitialized) {
-      findAll(`.${className}`).forEach((element) =>
-        createView(component, element)
-      );
-    }
+    registerView(name, ctors[name]);
   }
 }
 

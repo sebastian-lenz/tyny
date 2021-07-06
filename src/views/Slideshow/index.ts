@@ -30,6 +30,7 @@ export class Slideshow extends CycleableView<SlideshowTransitionOptions> {
   public autoPlay: AutoPlay;
   public browseBehaviour: BrowseBehaviour;
   public defaultTransition: Transition;
+  public isBrowsing: boolean = false;
   protected wasAutoPlaying: boolean = false;
   protected sequencer!: Sequencer<SequenceOptions>;
 
@@ -65,12 +66,17 @@ export class Slideshow extends CycleableView<SlideshowTransitionOptions> {
       return false;
     }
 
-    this.wasAutoPlaying = this.autoPlay.isStarted;
-    this.autoPlay.pause();
+    if (!this.isBrowsing) {
+      this.isBrowsing = true;
+      this.wasAutoPlaying = this.autoPlay.isStarted;
+      this.autoPlay.pause();
+    }
+
     return true;
   }
 
   onBrowseEnd(): void {
+    this.isBrowsing = false;
     if (this.wasAutoPlaying) {
       this.autoPlay.start();
     }

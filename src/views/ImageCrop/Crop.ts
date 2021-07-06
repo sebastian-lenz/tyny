@@ -95,8 +95,8 @@ export class Crop {
     style.height = `${Math.ceil(height)}px`;
 
     if (!this.disableMaskResize) {
-      mask.style.width = forcedWidth == null ? '' : `${forcedWidth}px`;
-      mask.style.height = forcedHeight == null ? '' : `${forcedHeight}px`;
+      if (forcedWidth !== null) mask.style.width = `${forcedWidth}px`;
+      if (forcedHeight !== null) mask.style.height = `${forcedHeight}px`;
     }
 
     return result;

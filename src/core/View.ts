@@ -159,6 +159,13 @@ export class View extends Lifecycle {
     this.callUpdate();
   }
 
+  protected _callDestroyed() {
+    super._callDestroyed();
+    (this._behaviours as any).forEach((api: tyny.ViewApi) =>
+      api._callDestroyed()
+    );
+  }
+
   protected _callDisconnected() {
     super._callDisconnected();
     (this._behaviours as any).forEach((api: tyny.ViewApi) =>

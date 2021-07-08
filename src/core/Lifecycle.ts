@@ -56,7 +56,7 @@ export abstract class Lifecycle {
 
   destroy() {
     this._callDisconnected();
-    this.onDestroyed();
+    this._callDestroyed();
   }
 
   // Abstract memebers
@@ -82,6 +82,10 @@ export abstract class Lifecycle {
 
     this._bindEvents();
     this.onConnected();
+  }
+
+  protected _callDestroyed() {
+    this.onDestroyed();
   }
 
   protected _callDisconnected() {

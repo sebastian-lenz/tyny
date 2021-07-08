@@ -15,6 +15,7 @@ export declare abstract class Lifecycle {
     protected onDestroyed(): void;
     protected onDisconnected(): void;
     protected _callConnected(): void;
+    protected _callDestroyed(): void;
     protected _callDisconnected(): void;
     private _bindEvent;
     protected _bindEvents(): void;

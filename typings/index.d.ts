@@ -66,6 +66,7 @@ declare namespace tyny {
   interface ViewApi extends View {
     readonly _isConnected: boolean;
     _callConnected(): void;
+    _callDestroyed(): void;
     _callDisconnected(): void;
   }
 

@@ -36,5 +36,6 @@ export declare class View extends Lifecycle {
     triggerUpdate(type: string): void;
     protected addBehaviour<TBehaviour extends Behaviour, TOptions extends BehaviourOptions>(ctor: BehaviourClass<TBehaviour, TOptions>, options?: TOptions): TBehaviour;
     protected _callConnected(): void;
+    protected _callDestroyed(): void;
     protected _callDisconnected(): void;
 }

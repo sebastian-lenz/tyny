@@ -15,7 +15,7 @@ export class SlideEffect extends Effect {
 
   constructor({
     translation = 'translateX',
-    useOpacity = true,
+    useOpacity = false,
   }: SlideEffectOptions = {}) {
     super();
 

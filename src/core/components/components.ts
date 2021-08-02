@@ -353,7 +353,7 @@ export function toggleActiveScrollEvent(origin: any, active: boolean) {
   setActiveScrollEvent(activeScrollEventOrigins.length > 0);
 }
 
-if (window && window.MutationObserver) {
+if (typeof window !== 'undefined' && window.MutationObserver) {
   if (document.readyState == 'loading') {
     once(document, 'DOMContentLoaded', () => fastDom.read(createObserver));
   } else {

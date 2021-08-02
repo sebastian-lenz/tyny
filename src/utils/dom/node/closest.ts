@@ -4,7 +4,7 @@ import { notNullified } from '../../lang/misc/notNullified';
 import { parent } from './parent';
 import { startsWith } from '../../lang/string/startsWith';
 
-const elProto: any = Element ? Element.prototype : {};
+const elProto: any = typeof Element !== 'undefined' ? Element.prototype : {};
 
 const closestFn =
   elProto.closest ||

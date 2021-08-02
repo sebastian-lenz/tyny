@@ -13,14 +13,24 @@ export interface PictureSource {
 }
 
 export interface Props extends JSX.HTMLAttributes<HTMLPictureElement> {
+  focusX?: number;
+  focusY?: number;
   sources: Array<PictureSource>;
 }
 
-export function Picture({ className, sources, ...props }: Props) {
+export function Picture({
+  className,
+  focusX,
+  focusY,
+  sources,
+  ...props
+}: Props) {
   return (
     <picture
       {...props}
       className={cx(PictureView.prototype.component.className, className)}
+      data-focus-x={focusX}
+      data-focus-y={focusY}
     >
       <canvas />
       {sources.map((source, index) => (

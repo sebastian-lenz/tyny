@@ -1,6 +1,7 @@
 import { ucFirst } from '../lang/string/ucFirst';
+import { inBrowser } from './browser';
 
-const isNative = !('WebkitAnimation' in document.body.style);
+const isNative = !inBrowser || !('WebkitAnimation' in document.body.style);
 
 const eventName = isNative
   ? (value: string) => value.toLowerCase()

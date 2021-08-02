@@ -26,7 +26,7 @@ export const breakpoints: Breakpoint[] = [
   { index: 5, name: 'xxl', width: 1400 },
 ];
 
-let currentIndex: number = findCurrentIndex();
+let currentIndex: number = 0;
 
 function findCurrentIndex(): number {
   const length = breakpoints.length;
@@ -72,4 +72,7 @@ export function isBelowBreakpoint(name: BreakpointName): boolean {
   return findNameIndex(name) > currentIndex;
 }
 
-on(window, 'resize', onResize);
+if (typeof window !== 'undefined') {
+  currentIndex = findCurrentIndex();
+  on(window, 'resize', onResize);
+}

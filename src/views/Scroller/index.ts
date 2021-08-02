@@ -41,7 +41,7 @@ export class Scroller extends View implements ScrollableView {
   @property({ param: { type: 'element' } })
   content!: HTMLElement | null;
 
-  @property({ param: { defaultValue: '> *', type: 'string' } })
+  @property()
   get items() {
     return findAll(this.itemSelector, this.content || this.el);
   }

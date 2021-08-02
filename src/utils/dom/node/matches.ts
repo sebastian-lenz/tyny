@@ -1,7 +1,7 @@
 import { noop } from '../../lang/function/noop';
 import { toElements } from '../misc';
 
-const elProto: any = Element ? Element.prototype : {};
+const elProto: any = typeof Element !== 'undefined' ? Element.prototype : {};
 
 const matchesFn =
   elProto.matches ||

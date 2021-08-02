@@ -9,7 +9,7 @@ export class IntersectionObserverClass implements IntersectionObserver {
   readonly thresholds: ReadonlyArray<number>;
 
   private apply: { (): void };
-  private off: Function;
+  private off?: Function;
   private offsetTop: number;
   private offsetLeft: number;
   private targets: IntersectionObserverEntry[];
@@ -48,15 +48,19 @@ export class IntersectionObserverClass implements IntersectionObserver {
       );
     };
 
-    this.off = on(window, 'scroll resize load', this.apply, {
-      passive: true,
-      capture: true,
-    });
+    if (inBrowser) {
+      this.off = on(window, 'scroll resize load', this.apply, {
+        passive: true,
+        capture: true,
+      });
+    }
   }
 
   disconnect() {
     this.targets = [];
-    this.off();
+    if (this.off) {
+      this.off();
+    }
   }
 
   observe(target: HTMLElement) {

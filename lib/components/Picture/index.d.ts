@@ -5,6 +5,8 @@ export interface PictureSource {
     width: number;
 }
 export interface Props extends JSX.HTMLAttributes<HTMLPictureElement> {
+    focusX?: number;
+    focusY?: number;
     sources: Array<PictureSource>;
 }
-export declare function Picture({ className, sources, ...props }: Props): JSX.Element;
+export declare function Picture({ className, focusX, focusY, sources, ...props }: Props): JSX.Element;

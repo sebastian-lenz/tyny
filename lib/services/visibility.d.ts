@@ -3,7 +3,7 @@ export declare class IntersectionObserverClass implements IntersectionObserver {
     readonly rootMargin: string;
     readonly thresholds: ReadonlyArray<number>;
     private apply;
-    private off;
+    private off?;
     private offsetTop;
     private offsetLeft;
     private targets;

@@ -1,0 +1,10 @@
+@mixin slideshowSlide() {
+  visibility: hidden;
+
+  &.effect,
+  &.selected,
+  &.sequenceFrom,
+  &.sequenceTo {
+    visibility: inherit;
+  }
+}

@@ -1,0 +1,5 @@
+@mixin writeRules($rules: ()) {
+  @each $key, $value in $rules {
+    #{$key}: $value;
+  }
+}

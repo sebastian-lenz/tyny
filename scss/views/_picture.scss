@@ -1,0 +1,13 @@
+@mixin picture($baseClass: '.' + $tyny-view-prefix + 'Picture') {
+  #{$baseClass} {
+    @include relative();
+    @include writeRules($tyny-image-wrapper);
+    display: block;
+  }
+
+  #{$baseClass} > canvas {
+    @include absolute(0, false, false, 0);
+    width: 100%;
+    height: 100%;
+  }
+}

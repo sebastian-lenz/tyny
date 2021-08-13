@@ -38,7 +38,7 @@ export class ImageCrop extends View {
   }
 
   @update({ events: ['resize', 'update'], mode: 'read' })
-  protected onMeasure() {
+  onMeasure() {
     const { height, width } = this.getDisplaySize();
 
     if (this.displayHeight !== height || this.displayWidth !== width) {
@@ -48,7 +48,7 @@ export class ImageCrop extends View {
     }
   }
 
-  protected onSizeChanged() {
+  onSizeChanged() {
     const { crop, target } = this;
     if (!target) {
       return;

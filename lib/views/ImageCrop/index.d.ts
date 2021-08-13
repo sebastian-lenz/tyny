@@ -16,6 +16,6 @@ export declare class ImageCrop extends View {
         height: number;
         width: number;
     };
-    protected onMeasure(): (() => void) | undefined;
-    protected onSizeChanged(): void;
+    onMeasure(): (() => void) | undefined;
+    onSizeChanged(): void;
 }

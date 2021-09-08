@@ -36,7 +36,7 @@ function applyAttribute({ target }: MutationRecord): boolean {
   let hasChanged = false;
 
   for (let index = 0; index < target.classList.length; index++) {
-    const className = target.classList[index];
+    const className: string = target.classList[index];
     if (!(className in components)) {
       continue;
     }

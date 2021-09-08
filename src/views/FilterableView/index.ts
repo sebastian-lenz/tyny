@@ -117,6 +117,10 @@ export class FilterableView<
       .then((html) => (responseCache[url] = html));
   }
 
+  protected findContent(doc: Document): HTMLElement | null {
+    return doc.body.firstElementChild as HTMLElement | null;
+  }
+
   protected load() {
     const request = (this._request = this.createRequest().then((result) => {
       if (this._request !== request) return;
@@ -127,7 +131,7 @@ export class FilterableView<
       } else if (result !== false) {
         const parser = new DOMParser();
         const document = parser.parseFromString(result, 'text/html');
-        this.setContent(document.body.firstElementChild as any);
+        this.setContent(this.findContent(document));
       }
     }));
   }

@@ -89,7 +89,7 @@ function query(selector: Selector, context: SelectorContext, first?: boolean) {
         } else if (selector[0] === '-') {
           const selectors = selector.substr(1).trim().split(' ');
           const prev = (ctx || context).previousElementSibling;
-          ctx = matches(prev, selector.substr(1)) ? prev : null;
+          ctx = matches(prev, selectors[0]) ? prev : null;
           selector = selectors.slice(1).join(' ');
         }
 

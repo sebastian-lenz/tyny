@@ -53,7 +53,7 @@ export class DragScrollBehaviour<
   // Drag API
   // --------
 
-  protected onDragBegin(event: NativeEvent, pointer: Pointer): boolean {
+  onDragBegin(event: NativeEvent, pointer: Pointer): boolean {
     const { direction, view } = this;
     stop(view);
 
@@ -75,7 +75,7 @@ export class DragScrollBehaviour<
     return true;
   }
 
-  protected onDrag(event: NativeEvent, pointer: Pointer): boolean {
+  onDrag(event: NativeEvent, pointer: Pointer): boolean {
     const { direction, initialPosition, view } = this;
     event.preventDefault();
 
@@ -99,12 +99,15 @@ export class DragScrollBehaviour<
     return true;
   }
 
-  protected onDragEnd(event: MaybeNativeEvent, pointer: Pointer) {
+  onDragEnd(event: MaybeNativeEvent, pointer: Pointer) {
     const { view } = this;
     const velocity = this.getVelocity(pointer);
 
-    this._preventNextClick = true;
     this.isDraging = false;
+    this._preventNextClick = true;
+    setTimeout(() => {
+      this._preventNextClick = false;
+    }, 200);
 
     if (view.isPositionPaged) {
       const position = view.position;

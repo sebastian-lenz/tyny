@@ -20,9 +20,9 @@ export declare class DragScrollBehaviour<TView extends ScrollableView = Scrollab
     protected _preventNextClick: boolean;
     protected _listeners: Array<Function> | null;
     constructor(view: TView, options: DragScrollBehaviourOptions);
-    protected onDragBegin(event: NativeEvent, pointer: Pointer): boolean;
-    protected onDrag(event: NativeEvent, pointer: Pointer): boolean;
-    protected onDragEnd(event: MaybeNativeEvent, pointer: Pointer): void;
+    onDragBegin(event: NativeEvent, pointer: Pointer): boolean;
+    onDrag(event: NativeEvent, pointer: Pointer): boolean;
+    onDragEnd(event: MaybeNativeEvent, pointer: Pointer): void;
     protected getVelocity(pointer: Pointer): tyny.Point;
     protected onDestroyed(): void;
     protected onViewClick(event: Event): void;

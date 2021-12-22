@@ -11,17 +11,33 @@ let _scrollTop: number = 0;
 
 export const scrollbarsChangeEvent = 'tyny:scrollbarsChange';
 
+export const scrollbarOptions = {
+  bodyClass: '',
+  scrollbarProp: '',
+};
+
 export interface ScrollbarsEventArgs {
   hasScrollbars: boolean;
   scrollBarSize: number;
+}
+
+function disable() {
+  const { body } = document;
+  const { bodyClass } = scrollbarOptions;
+
+  bodyClass
+    ? body.classList.add(bodyClass)
+    : css(body, { position: 'fixed', width: '100%' });
 }
 
 function setScrollbars(value: boolean) {
   if (_hasScrollbars === value) return;
   _hasScrollbars = value;
   const { body } = document;
+  const { bodyClass, scrollbarProp } = scrollbarOptions;
 
   if (value) {
+    if (bodyClass) body.classList.remove(bodyClass);
     css(body, {
       position: null,
       paddingRight: null,
@@ -37,14 +53,17 @@ function setScrollbars(value: boolean) {
 
     if (isNaN(_scrollBarSize)) {
       const { offsetWidth } = body;
-      css(body, { position: 'fixed', width: '100%' });
+      disable();
       _scrollBarSize = body.offsetWidth - offsetWidth;
+      if (scrollbarProp) {
+        body.style.setProperty(scrollbarProp, `${_scrollBarSize}px`);
+      }
+    } else {
+      disable();
     }
 
     css(body, {
-      position: 'fixed',
       paddingRight: `${_scrollBarSize}px`,
-      width: '100%',
       left: `${-_scrollLeft}px`,
       top: `${-_scrollTop}px`,
     });

@@ -1,5 +1,5 @@
 export interface FetchOptions {
-  body?: Document | BodyInit | null;
+  body?: Document | XMLHttpRequestBodyInit | null;
   credentials?: string;
   headers?: tyny.Map<string>;
   method?: string;

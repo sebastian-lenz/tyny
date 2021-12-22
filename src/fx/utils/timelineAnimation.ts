@@ -10,8 +10,21 @@ export interface TimelineAnimationOptions {
 export function timelineAnimation<
   TProperty,
   TOptions extends TimelineAnimationOptions,
+  TTimeline extends Timeline
+>(
+  context: any,
+  properties: PropertyMap<TProperty>,
+  options: TOptions,
+  timelineClass: {
+    new (options: TimelineOptions & TOptions & TProperty): TTimeline;
+  }
+): Animation<any>;
+
+export function timelineAnimation<
+  TProperty,
+  TOptions extends TimelineAnimationOptions,
   TTimeline extends Timeline,
-  TExtraProps
+  TExtraProps extends {}
 >(
   context: any,
   properties: PropertyMap<TProperty>,
@@ -20,10 +33,24 @@ export function timelineAnimation<
     new (options: TimelineOptions & TOptions & TProperty): TTimeline;
   },
   extraProps: (timelines: TTimeline[]) => TExtraProps
-): Animation<any> & TExtraProps {
-  let children: TTimeline[] = [];
+): Animation<any> & TExtraProps;
 
-  const promise = new Promise<void>((resolve, reject) => {
+export function timelineAnimation<
+  TProperty,
+  TOptions extends TimelineAnimationOptions,
+  TTimeline extends Timeline,
+  TExtraProps = {}
+>(
+  context: any,
+  properties: PropertyMap<TProperty>,
+  options: TOptions,
+  timelineClass: {
+    new (options: TimelineOptions & TOptions & TProperty): TTimeline;
+  },
+  extraProps?: (timelines: TTimeline[]) => TExtraProps
+): Animation<any> {
+  let children: TTimeline[] = [];
+  let promise = new Promise<void>((resolve, reject) => {
     const propertyNames = Object.keys(properties);
     let numFinished = 0;
 
@@ -56,6 +83,12 @@ export function timelineAnimation<
       return props;
     }, {} as any);
   });
+
+  if (!extraProps) {
+    return Object.assign(promise, {
+      stop: () => children.forEach((child) => child.stop()),
+    });
+  }
 
   return Object.assign(promise, extraProps(children), {
     stop: () => children.forEach((child) => child.stop()),

@@ -1,5 +1,6 @@
 import { event, property } from '../../../core';
 import { SyncOptions } from '../Modifier';
+import { UrlParamValue } from '../../../utils/types/Url';
 import { ViewModifier, ViewModifierOptions } from '../ViewModifier';
 
 export interface SelectModifierOptions extends ViewModifierOptions {
@@ -41,7 +42,7 @@ export class SelectModifier extends ViewModifier {
     return result.length ? result.sort().join(',') : null;
   }
 
-  getParams(): tyny.Map<string | null> {
+  getParams(): tyny.Map<UrlParamValue> {
     return {
       [this.paramName]: this.getValue(),
     };

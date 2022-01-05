@@ -3,7 +3,7 @@ import { event } from '../../../core/decorators/event';
 import { FilterableView } from '../index';
 import { SyncOptions } from '../Modifier';
 import { toInt } from '../../../utils/lang/number/toInt';
-import { Url } from '../../../utils/types/Url';
+import { Url, UrlParamValue } from '../../../utils/types/Url';
 
 import {
   BehaviourModifier,
@@ -25,7 +25,7 @@ export class PageModifier extends BehaviourModifier {
     this.paramName = paramName;
   }
 
-  getParams(): tyny.Map<string | null> {
+  getParams(): tyny.Map<UrlParamValue> {
     const { paramName, value } = this;
     return {
       [paramName]: value > 1 ? `${value}` : null,

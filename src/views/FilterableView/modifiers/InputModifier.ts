@@ -1,6 +1,7 @@
 import { event, property } from '../../../core';
 import { debounce } from '../../../utils/lang/function';
 import { SyncOptions } from '../Modifier';
+import { UrlParamValue } from '../../../utils/types/Url';
 import { ViewModifier, ViewModifierOptions } from '../ViewModifier';
 
 export interface InputModifierOptions extends ViewModifierOptions {
@@ -36,7 +37,7 @@ export class InputModifier extends ViewModifier {
     return this.el.value;
   }
 
-  getParams(): tyny.Map<string | null> {
+  getParams(): tyny.Map<UrlParamValue> {
     return {
       [this.paramName]: this.getValue(),
     };

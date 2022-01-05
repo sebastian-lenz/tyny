@@ -1,7 +1,22 @@
+function isSafe(value: any): value is UrlParamSafeValue {
+  return (
+    value &&
+    typeof value === 'object' &&
+    '__param' in value &&
+    typeof value.__param === 'string'
+  );
+}
+
+export type UrlParamValue = string | UrlParamSafeValue | null | undefined;
+
+export interface UrlParamSafeValue {
+  __param: string;
+}
+
 export interface UrlParts {
   fragment?: string;
   path: string;
-  query: tyny.Map<string | null | undefined>;
+  query: tyny.Map<UrlParamValue>;
 }
 
 export class Url {
@@ -75,6 +90,8 @@ export class Url {
       const value = query[name];
       if (typeof value === 'string' && value) {
         search.push(`${name}=${encodeURIComponent(value)}`);
+      } else if (isSafe(value) && value.__param) {
+        search.push(`${name}=${value.__param}`);
       }
     }
 
@@ -89,5 +106,9 @@ export class Url {
 
   static create(value: string): Url {
     return new Url(value);
+  }
+
+  static safeParam(value: string): UrlParamSafeValue {
+    return { __param: value };
   }
 }

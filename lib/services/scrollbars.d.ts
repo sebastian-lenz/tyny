@@ -1,4 +1,8 @@
 export declare const scrollbarsChangeEvent = "tyny:scrollbarsChange";
+export declare const scrollbarOptions: {
+    bodyClass: string;
+    scrollbarProp: string;
+};
 export interface ScrollbarsEventArgs {
     hasScrollbars: boolean;
     scrollBarSize: number;

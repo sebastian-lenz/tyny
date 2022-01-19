@@ -1,7 +1,11 @@
+export declare type UrlParamValue = string | UrlParamSafeValue | null | undefined;
+export interface UrlParamSafeValue {
+    __param: string;
+}
 export interface UrlParts {
     fragment?: string;
     path: string;
-    query: tyny.Map<string | null | undefined>;
+    query: tyny.Map<UrlParamValue>;
 }
 export declare class Url {
     fragment: string;
@@ -18,4 +22,5 @@ export declare class Url {
     toString(): string;
     static compose({ fragment, path, query }: UrlParts): string;
     static create(value: string): Url;
+    static safeParam(value: string): UrlParamSafeValue;
 }

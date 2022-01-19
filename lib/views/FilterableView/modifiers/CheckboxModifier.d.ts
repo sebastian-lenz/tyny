@@ -1,4 +1,5 @@
 import { SyncOptions } from '../Modifier';
+import { UrlParamValue } from '../../../utils/types/Url';
 import { ViewModifier, ViewModifierOptions } from '../ViewModifier';
 export interface CheckboxModifierOptions extends ViewModifierOptions {
     defaultValue?: boolean;
@@ -13,7 +14,7 @@ export declare class CheckboxModifier extends ViewModifier {
     get paramName(): string;
     constructor(options?: CheckboxModifierOptions);
     getValue(): boolean;
-    getParams(): tyny.Map<string | null>;
+    getParams(): tyny.Map<UrlParamValue>;
     getParamValue(): string;
     setValue(value: boolean, silent?: boolean): void;
     sync({ url }: SyncOptions): boolean;

@@ -39,12 +39,17 @@ export function Swap(props: Props) {
   let useStateChild = false;
   if (props.uri !== state.uri && !state.transition) {
     useStateChild = true;
+    const children = {
+      child: props.children || null,
+      lastChild: state.child,
+    };
+
     setState({
       ...state,
-      child: props.children || null,
+      ...children,
       index: state.index + 1,
-      lastChild: state.child,
       transition: createTransition({
+        ...children,
         childRef: props.children ? createRef() : null,
         effect: props.effect || defaultEffect,
         lastChildRef: state.child ? createRef() : null,

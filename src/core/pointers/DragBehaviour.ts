@@ -70,7 +70,7 @@ export class DragBehaviour<
   // Behaviour API
   // -------------
 
-  protected onAdd(): boolean {
+  protected onAdd(event: NativeEvent, pointer: Pointer): boolean {
     if (this.isDisabled || this._watchMode !== 'idle') {
       return false;
     }

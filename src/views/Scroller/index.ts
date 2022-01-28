@@ -20,6 +20,10 @@ export interface ScrollerEventArgs {
   position: tyny.Point;
 }
 
+export interface ScrollerItem {
+  el: HTMLElement;
+}
+
 export interface ScrollerOptions extends ViewOptions {
   content?: HTMLElement | string;
   direction?: DragDirection;
@@ -29,7 +33,10 @@ export interface ScrollerOptions extends ViewOptions {
   viewport?: HTMLElement | string;
 }
 
-export class Scroller extends View implements ScrollableView {
+export class Scroller<TItem extends ScrollerItem = ScrollerItem>
+  extends View
+  implements ScrollableView
+{
   currentTarget: tyny.Point | null = null;
   currentTween: Tween | null = null;
   readonly direction: DragDirection;
@@ -43,7 +50,9 @@ export class Scroller extends View implements ScrollableView {
 
   @property()
   get items() {
-    return findAll(this.itemSelector, this.content || this.el);
+    return findAll(this.itemSelector, this.content || this.el).map(
+      this.createItem
+    );
   }
 
   @property({ param: { defaultValue: '> *', type: 'string' } })
@@ -91,6 +100,10 @@ export class Scroller extends View implements ScrollableView {
     if (y < yMin) y = yMin;
 
     return { x, y };
+  }
+
+  createItem(el: HTMLElement): TItem {
+    return { el } as any;
   }
 
   gotoPosition(value: tyny.Point) {

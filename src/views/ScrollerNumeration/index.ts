@@ -44,7 +44,7 @@ export class ScrollerNumeration extends AbstractNumeration {
     const { left: boundsX, top: boundsY } = bounds;
 
     const rects = items.map((item) => {
-      let { height, width, left: x, top: y } = item.getBoundingClientRect();
+      let { height, width, left: x, top: y } = item.el.getBoundingClientRect();
       x = x - boundsX + scrollX;
       y = y - boundsY + scrollY;
 

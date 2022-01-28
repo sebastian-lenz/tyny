@@ -22,7 +22,7 @@ export declare class DragBehaviour<TView extends View = View> extends PointerBeh
     protected onDragBegin(event: NativeEvent, pointer: Pointer): boolean;
     protected onDragClick(event: MaybeNativeEvent, pointer: Pointer): void;
     protected onDragEnd(event: MaybeNativeEvent, pointer: Pointer): void;
-    protected onAdd(): boolean;
+    protected onAdd(event: NativeEvent, pointer: Pointer): boolean;
     protected onMove(event: NativeEvent, pointer: Pointer): boolean;
     protected onRemove(event: MaybeNativeEvent, pointer: Pointer): void;
     private setWatchMode;

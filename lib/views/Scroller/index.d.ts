@@ -7,6 +7,9 @@ export interface ScrollerEventArgs {
     target: Scroller;
     position: tyny.Point;
 }
+export interface ScrollerItem {
+    el: HTMLElement;
+}
 export interface ScrollerOptions extends ViewOptions {
     content?: HTMLElement | string;
     direction?: DragDirection;
@@ -15,7 +18,7 @@ export interface ScrollerOptions extends ViewOptions {
     useContentMargins?: boolean;
     viewport?: HTMLElement | string;
 }
-export declare class Scroller extends View implements ScrollableView {
+export declare class Scroller<TItem extends ScrollerItem = ScrollerItem> extends View implements ScrollableView {
     currentTarget: tyny.Point | null;
     currentTween: Tween | null;
     readonly direction: DragDirection;
@@ -24,7 +27,7 @@ export declare class Scroller extends View implements ScrollableView {
     readonly viewportSize: tyny.Dimensions;
     protected _position: tyny.Point;
     content: HTMLElement | null;
-    get items(): HTMLElement[];
+    get items(): TItem[];
     itemSelector: string;
     useContentMargins: boolean;
     viewport: HTMLElement | null;
@@ -33,6 +36,7 @@ export declare class Scroller extends View implements ScrollableView {
     get position(): tyny.Point;
     set position(value: tyny.Point);
     clampPosition(value: tyny.Point): tyny.Point;
+    createItem(el: HTMLElement): TItem;
     gotoPosition(value: tyny.Point): void;
     setPosition(value: tyny.Point): void;
     toDisplayOffset(value: tyny.Point): tyny.Point;

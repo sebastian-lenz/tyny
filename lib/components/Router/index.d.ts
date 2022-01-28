@@ -1,14 +1,15 @@
-import { Component, RenderableProps } from 'preact';
+import { Component } from 'preact';
 import type { RouteMatch, RouterOnChangeArgs, RouterProps, RouterState, UrlInfo } from './types';
+export declare const RouterContext: import("preact").Context<{} | RouterOnChangeArgs<Record<string, string | undefined> | null>>;
 export declare function getCurrentUrl(): string;
 export declare function route(url: string | UrlInfo, replace?: string | boolean): boolean;
 export declare function useRouter(): {}[];
-export declare class Router extends Component<RouterProps, RouterState> {
+export declare class Router<Props extends RouterProps = RouterProps> extends Component<Props, RouterState> {
     contextValue: RouterOnChangeArgs | {};
     previousUrl?: string;
     unlisten?: Function;
     updating: boolean;
-    constructor(props: RouterProps);
+    constructor(props: Props);
     shouldComponentUpdate(props: RouterProps): boolean;
     /** Check if the given URL can be matched against any children */
     canRoute(url: string): boolean;
@@ -19,6 +20,7 @@ export declare class Router extends Component<RouterProps, RouterState> {
     componentWillUnmount(): void;
     componentWillUpdate(): void;
     componentDidUpdate(): void;
+    getCurrent(): import("preact").VNode<import("./types").RoutableProps>;
     getMatchingChildren(children: Array<any>, url: string, invoke?: boolean): RouteMatch[];
-    render({ children, onChange }: RenderableProps<RouterProps>, { url }: RouterState): import("preact").JSX.Element;
+    render(): import("preact").JSX.Element;
 }

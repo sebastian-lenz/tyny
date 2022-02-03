@@ -1,6 +1,8 @@
 import { TransitionEffect } from '../createTransition';
 export interface DissolveOptions {
     fadeIn?: number;
+    fadeInKeyFrames?: string;
     fadeOut?: number;
+    fadeOutKeyFrames?: string;
 }
-export default function dissolve({ fadeIn, fadeOut, }?: DissolveOptions): TransitionEffect;
+export declare function dissolve({ fadeIn, fadeInKeyFrames, fadeOut, fadeOutKeyFrames, }?: DissolveOptions): TransitionEffect;

@@ -14,5 +14,6 @@ export interface TransitionOptions {
     lastChild: JSX.Element | null;
     lastChildRef: RefObject<HTMLElement> | null;
     effect: TransitionEffect;
+    rootRef: RefObject<HTMLElement>;
 }
-export default function createTransition(options: TransitionOptions): Transition;
+export declare function createTransition(options: TransitionOptions): Transition;

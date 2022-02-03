@@ -2,8 +2,9 @@ import cx from 'classnames';
 import { useState } from 'preact/hooks';
 import { cloneElement, createRef, JSX } from 'preact';
 
-import dissolve from './effects/dissolve';
-import createTransition, {
+import { dissolve } from './effects/dissolve';
+import {
+  createTransition,
   Transition,
   TransitionEffect,
 } from './createTransition';
@@ -28,6 +29,7 @@ export interface State {
 }
 
 export function Swap(props: Props) {
+  const rootRef = createRef();
   const [state, setState] = useState<State>({
     child: props.children || null,
     index: 0,
@@ -53,6 +55,7 @@ export function Swap(props: Props) {
         childRef: props.children ? createRef() : null,
         effect: props.effect || defaultEffect,
         lastChildRef: state.child ? createRef() : null,
+        rootRef,
       }),
       uri: props.uri,
     });
@@ -121,7 +124,7 @@ export function Swap(props: Props) {
   });
 
   return (
-    <div className={className} style={style}>
+    <div className={className} ref={rootRef} style={style}>
       {elements}
     </div>
   );

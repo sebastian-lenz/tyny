@@ -1,6 +1,6 @@
 import cx from 'classnames';
 import { useState } from 'preact/hooks';
-import { cloneElement, createRef, JSX } from 'preact';
+import { cloneElement, createRef, JSX, RefObject } from 'preact';
 
 import { dissolve } from './effects/dissolve';
 import {
@@ -24,16 +24,17 @@ export interface State {
   child: JSX.Element | null;
   index: number;
   lastChild: JSX.Element | null;
+  rootRef: RefObject<HTMLDivElement>;
   transition: Transition | null;
   uri: string;
 }
 
 export function Swap(props: Props) {
-  const rootRef = createRef();
   const [state, setState] = useState<State>({
     child: props.children || null,
     index: 0,
     lastChild: null,
+    rootRef: createRef(),
     transition: null,
     uri: props.uri,
   });
@@ -55,7 +56,7 @@ export function Swap(props: Props) {
         childRef: props.children ? createRef() : null,
         effect: props.effect || defaultEffect,
         lastChildRef: state.child ? createRef() : null,
-        rootRef,
+        rootRef: state.rootRef,
       }),
       uri: props.uri,
     });
@@ -124,7 +125,7 @@ export function Swap(props: Props) {
   });
 
   return (
-    <div className={className} ref={rootRef} style={style}>
+    <div className={className} ref={state.rootRef} style={style}>
       {elements}
     </div>
   );

@@ -81,10 +81,6 @@ export class DragBehaviour<
 
   protected onMove(event: NativeEvent, pointer: Pointer): boolean {
     const { _watchMode } = this;
-    if (event) {
-      event.preventDefault();
-    }
-
     if (_watchMode === 'listening') {
       const { direction, threshold } = this;
       if (pointer.deltaLength < threshold) {
@@ -130,19 +126,5 @@ export class DragBehaviour<
     const { _watchMode } = this;
     if (_watchMode === value) return;
     this._watchMode = value;
-
-    if (value === 'draging') {
-      dragCounter += 1;
-      if (dragCounter == 1) {
-        document.addEventListener('touchforcechange', onTouchChange, {
-          passive: false,
-        });
-      }
-    } else if (_watchMode === 'draging') {
-      dragCounter -= 1;
-      if (dragCounter == 0) {
-        document.removeEventListener('touchforcechange', onTouchChange);
-      }
-    }
   }
 }

@@ -70,14 +70,18 @@ export class DragScrollBehaviour<
 
     this.isDraging = true;
     this.initialPosition = view.position;
+    if (!this.usePassiveEvents) {
+      event.preventDefault();
+    }
 
-    event.preventDefault();
     return true;
   }
 
   onDrag(event: NativeEvent, pointer: Pointer): boolean {
     const { direction, initialPosition, view } = this;
-    event.preventDefault();
+    if (!this.usePassiveEvents) {
+      event.preventDefault();
+    }
 
     const delta = view.toLocalOffset(pointer.delta);
     const { xMin, xMax, yMin, yMax } = view.positionBounds;

@@ -3,7 +3,7 @@ import { MouseAdapter } from './MouseAdapter';
 
 import type { PointerBehaviour } from '../PointerBehaviour';
 
-let iIOSFix = false;
+export let isIOSFix = false;
 
 const id = (touch: Touch) => `touch-${touch.identifier}`;
 
@@ -18,6 +18,8 @@ export class TouchAdapter extends AbstractAdapter {
 
   constructor(element: HTMLElement, pointerList: PointerBehaviour) {
     super(element, pointerList);
+
+    this.usePassiveEvents = false;
     this.mouseAdapter = new MouseAdapter(element, pointerList);
   }
 
@@ -64,13 +66,13 @@ export class TouchAdapter extends AbstractAdapter {
   }
 
   static isSupported(): boolean {
-    if (iIOSFix) {
+    if (isIOSFix) {
       return true;
     }
 
     let isSupported = 'ontouchstart' in window;
     if (isSupported) {
-      iIOSFix = true;
+      isIOSFix = true;
       window.addEventListener('touchmove', function () {}, { passive: false });
     }
 

@@ -2,6 +2,7 @@ import { on } from '../../../utils/dom/event/on';
 import { PointerBehaviour } from '../PointerBehaviour';
 
 export abstract class AbstractAdapter {
+  usePassiveEvents = true;
   readonly element: HTMLElement;
   readonly pointerList: PointerBehaviour;
   private _isTracking: boolean = false;
@@ -49,7 +50,7 @@ export abstract class AbstractAdapter {
     this._isTracking = true;
     this._trackingListeners = Object.keys(events).map((name) =>
       on(window, name, events[name], {
-        passive: false,
+        passive: this.usePassiveEvents,
         scope: this,
       })
     );

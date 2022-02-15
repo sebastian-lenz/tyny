@@ -71,6 +71,10 @@ export class PointerBehaviour<
     );
   }
 
+  get hasPointers(): boolean {
+    return !!this.pointers.length;
+  }
+
   get transform(): Transform2D {
     const { initialCenter, initialTransform, pointers } = this;
     if (pointers.length === 0) {
@@ -110,8 +114,8 @@ export class PointerBehaviour<
     return result;
   }
 
-  get hasPointers(): boolean {
-    return !!this.pointers.length;
+  get usePassiveEvents(): boolean {
+    return !!(this.adapter && this.adapter.usePassiveEvents);
   }
 
   addPointer(event: NativeEvent, options: PointerOptions) {

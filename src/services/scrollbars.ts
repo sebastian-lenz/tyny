@@ -12,7 +12,7 @@ let _scrollTop: number = 0;
 export const scrollbarsChangeEvent = 'tyny:scrollbarsChange';
 
 export const scrollbarOptions = {
-  bodyClass: '',
+  classOptions: null as { className: string; target: HTMLElement } | null,
   scrollbarProp: '',
 };
 
@@ -23,10 +23,10 @@ export interface ScrollbarsEventArgs {
 
 function disable() {
   const { body } = document;
-  const { bodyClass } = scrollbarOptions;
+  const { classOptions } = scrollbarOptions;
 
-  bodyClass
-    ? body.classList.add(bodyClass)
+  classOptions
+    ? classOptions.target.classList.add(classOptions.className)
     : css(body, { position: 'fixed', width: '100%' });
 }
 
@@ -34,10 +34,13 @@ function setScrollbars(value: boolean) {
   if (_hasScrollbars === value) return;
   _hasScrollbars = value;
   const { body } = document;
-  const { bodyClass, scrollbarProp } = scrollbarOptions;
+  const { classOptions, scrollbarProp } = scrollbarOptions;
 
   if (value) {
-    if (bodyClass) body.classList.remove(bodyClass);
+    if (classOptions) {
+      classOptions.target.classList.remove(classOptions.className);
+    }
+
     css(body, {
       position: null,
       paddingRight: null,

@@ -1,6 +1,9 @@
 export declare const scrollbarsChangeEvent = "tyny:scrollbarsChange";
 export declare const scrollbarOptions: {
-    bodyClass: string;
+    classOptions: {
+        className: string;
+        target: HTMLElement;
+    } | null;
     scrollbarProp: string;
 };
 export interface ScrollbarsEventArgs {

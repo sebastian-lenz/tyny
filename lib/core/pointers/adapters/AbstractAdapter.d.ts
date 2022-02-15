@@ -1,5 +1,6 @@
 import { PointerBehaviour } from '../PointerBehaviour';
 export declare abstract class AbstractAdapter {
+    usePassiveEvents: boolean;
     readonly element: HTMLElement;
     readonly pointerList: PointerBehaviour;
     private _isTracking;

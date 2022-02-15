@@ -24,8 +24,9 @@ export declare class PointerBehaviour<TView extends View = View> extends Behavio
     protected adapter: AbstractAdapter | null;
     constructor(view: TView, options?: PointerBehaviourOptions);
     get center(): tyny.Point;
-    get transform(): Transform2D;
     get hasPointers(): boolean;
+    get transform(): Transform2D;
+    get usePassiveEvents(): boolean;
     addPointer(event: NativeEvent, options: PointerOptions): void;
     hasPointersOfAdapter(adapter: AbstractAdapter): boolean;
     removePointer(event: NativeEvent | undefined, id: string): void;

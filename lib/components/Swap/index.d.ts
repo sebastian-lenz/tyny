@@ -1,4 +1,4 @@
-import { JSX } from 'preact';
+import { JSX, RefObject } from 'preact';
 import { Transition, TransitionEffect } from './createTransition';
 export interface Props {
     children: JSX.Element | null;
@@ -12,6 +12,7 @@ export interface State {
     child: JSX.Element | null;
     index: number;
     lastChild: JSX.Element | null;
+    rootRef: RefObject<HTMLDivElement>;
     transition: Transition | null;
     uri: string;
 }

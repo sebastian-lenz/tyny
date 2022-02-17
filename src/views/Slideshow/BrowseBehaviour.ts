@@ -93,14 +93,14 @@ export class BrowseBehaviour<
     stop(this);
     view.immediate(null);
 
-    event.preventDefault();
+    if (!this.usePassiveEvents) event.preventDefault();
     return true;
   }
 
   protected onDrag(event: NativeEvent, pointer: Pointer): boolean {
     const { direction, initialOffset, view } = this;
     const { viewport = view.el } = view;
-    event.preventDefault();
+    if (!this.usePassiveEvents) event.preventDefault();
 
     const delta = pointer.delta;
     let offset = initialOffset;

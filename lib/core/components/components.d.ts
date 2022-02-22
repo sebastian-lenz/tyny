@@ -6,6 +6,6 @@ export declare function getParentView<TView extends View = View>(element: any, c
 export declare function getView<TView extends View = View>(element: any, ctor: ViewClass<TView> | string): TView | null;
 export declare function getViewClassName(name: string): string;
 export declare function getViews(element: any): tyny.ViewMap;
-export declare function registerView(name: string, ctor: ViewClass): void;
-export declare function registerViews(ctors: tyny.Map<ViewClass>): void;
+export declare function registerView(name: string, ctor: ViewClass, upgrade?: boolean): void;
+export declare function registerViews(ctors: tyny.Map<ViewClass>, upgrade?: boolean): void;
 export declare function toggleActiveScrollEvent(origin: any, active: boolean): void;

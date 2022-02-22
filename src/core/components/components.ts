@@ -3,15 +3,14 @@ import { breakpointEvent } from '../../services/breakpoints';
 import { fastDom } from './fastdom';
 import { findAll } from '../../utils/dom/node/find';
 import { isElement } from '../../utils/dom/misc/isElement';
+import { isString } from '../../utils/lang/string';
+import { noop } from '../../utils/lang/function';
 import { on } from '../../utils/dom/event/on';
+import { once } from '../../utils/dom/event';
 import { parents } from '../../utils/dom/node/parents';
 import { toElement } from '../../utils/dom/misc/toElement';
 import { ucFirst } from '../../utils/lang/string/ucFirst';
-
 import type { View, ViewClass, ViewComponent } from '../View';
-import { isString } from '../../utils/lang/string';
-import { noop } from '../../utils/lang/function';
-import { once } from '../../utils/dom/event';
 
 const activeScrollEventOrigins: Array<any> = [];
 const components: tyny.Map<ViewComponent> = {};
@@ -314,10 +313,31 @@ export function getViews(element: any): tyny.ViewMap {
   return (element && element.__tynyViews) || {};
 }
 
-export function registerView(name: string, ctor: ViewClass) {
+function unregisterView(className: string) {
+  const { name } = components[className];
+  delete components[className];
+
+  apply(document.body, (el) => {
+    if (el.__tynyViews && name in el.__tynyViews) {
+      const view = el.__tynyViews[name] as tyny.ViewApi;
+      delete el.__tynyViews[name];
+      view.destroy();
+    }
+  });
+}
+
+export function registerView(
+  name: string,
+  ctor: ViewClass,
+  upgrade: boolean = false
+) {
   const className = getViewClassName(name);
   if (className in components) {
-    return;
+    if (upgrade) {
+      unregisterView(className);
+    } else {
+      return;
+    }
   }
 
   const component = {
@@ -336,9 +356,12 @@ export function registerView(name: string, ctor: ViewClass) {
   }
 }
 
-export function registerViews(ctors: tyny.Map<ViewClass>) {
+export function registerViews(
+  ctors: tyny.Map<ViewClass>,
+  upgrade: boolean = false
+) {
   for (const name in ctors) {
-    registerView(name, ctors[name]);
+    registerView(name, ctors[name], upgrade);
   }
 }
 

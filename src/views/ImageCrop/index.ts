@@ -29,11 +29,9 @@ export class ImageCrop extends View {
   }
 
   getDisplaySize() {
-    const { height, width } = this.el.getBoundingClientRect();
-
     return {
-      height,
-      width,
+      height: this.el.clientHeight,
+      width: this.el.clientWidth,
     };
   }
 

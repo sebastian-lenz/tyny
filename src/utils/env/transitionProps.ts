@@ -12,5 +12,5 @@ const styleName = isNative
   : (value: string) => `webkit${ucFirst(value)}`;
 
 export const onTransitionEnd = eventName('transitionend');
-
+export const onTransitionCancel = eventName('transitioncancel');
 export const transition = styleName('transition');

@@ -1,6 +1,10 @@
 import { EasingFunction } from './index';
-import { onTransitionEnd, transition } from '../utils/env/transitionProps';
 import { withoutTransition } from './withoutTransition';
+import {
+  onTransitionCancel,
+  onTransitionEnd,
+  transition,
+} from '../utils/env/transitionProps';
 
 export interface TransistOptions {
   delay: number;
@@ -73,7 +77,9 @@ function transist(
     function handleEnd(event: Event | TransitionEvent) {
       if (event.target !== element) return;
       if ('propertyName' in event && --numProperties > 0) return;
+
       element.removeEventListener(onTransitionEnd, handleEnd);
+      element.removeEventListener(onTransitionCancel, handleEnd);
       clearProps.forEach((key) => (style[key] = ''));
       resolve();
     }
@@ -85,6 +91,7 @@ function transist(
     }
 
     element.addEventListener(onTransitionEnd, handleEnd);
+    element.addEventListener(onTransitionCancel, handleEnd);
     toProps.forEach(([key, value]) => (style[key] = value));
   });
 }

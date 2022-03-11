@@ -1,6 +1,6 @@
 import cx from 'classnames';
-import { useState } from 'preact/hooks';
 import { cloneElement, createRef, JSX, RefObject } from 'preact';
+import { useLayoutEffect, useState } from 'preact/hooks';
 
 import { dissolve } from './effects/dissolve';
 import {
@@ -116,13 +116,17 @@ export function Swap(props: Props) {
     }
   }
 
-  transition?.begin(() => {
-    setState({
-      ...state,
-      lastChild: null,
-      transition: null,
-    });
-  });
+  useLayoutEffect(() => {
+    if (transition) {
+      transition.begin(() => {
+        setState({
+          ...state,
+          lastChild: null,
+          transition: null,
+        });
+      });
+    }
+  }, [transition]);
 
   return (
     <div className={className} ref={state.rootRef} style={style}>

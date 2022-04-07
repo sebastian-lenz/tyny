@@ -19,11 +19,11 @@ export declare class HoldBehaviour<TView extends View = View, TStage extends Hol
     stages: Array<TStage>;
     timeout: number | null;
     constructor(view: TView, options: HoldBehaviourOptions<TStage>);
-    protected abortStage(): void;
-    protected advanceStage(): boolean;
-    protected finishedStage(index: number, stage: TStage): void;
-    protected onAdd(event: NativeEvent, pointer: Pointer): boolean;
-    protected onRemove(event: MaybeNativeEvent, pointer: Pointer): void;
+    abortStage(): void;
+    advanceStage(): boolean;
+    finishedStage(index: number, stage: TStage): void;
+    onAdd(event: NativeEvent, pointer: Pointer): boolean;
+    onRemove(event: MaybeNativeEvent, pointer: Pointer): void;
     onBeginHold(event: NativeEvent, pointer: Pointer): boolean;
     onEndHold(stage: TStage | null, index: number): void;
     onStageAbort(stage: TStage, index: number): void;

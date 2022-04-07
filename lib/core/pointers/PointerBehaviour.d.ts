@@ -21,7 +21,7 @@ export declare class PointerBehaviour<TView extends View = View> extends Behavio
     readonly initialTransform: Transform2D;
     readonly pointers: Pointer[];
     readonly velocity: Velocity<PointerBehaviourVelocity>;
-    protected adapter: AbstractAdapter | null;
+    adapter: AbstractAdapter | null;
     constructor(view: TView, options?: PointerBehaviourOptions);
     get center(): tyny.Point;
     get hasPointers(): boolean;
@@ -37,10 +37,10 @@ export declare class PointerBehaviour<TView extends View = View> extends Behavio
      * we control mouse events on. Fixes drag behviour in firefox.
      */
     onNativeDragStart(event: Event): void;
-    protected onAdd(event: NativeEvent, pointer: Pointer): boolean;
-    protected onChanged(event: MaybeNativeEvent, pointer: Pointer): void;
-    protected onMove(event: NativeEvent, pointer: Pointer): boolean;
-    protected onRemove(event: MaybeNativeEvent, pointer: Pointer): void;
-    protected onDestroyed(): void;
-    protected commit(event: NativeEvent | undefined, pointer: Pointer, callback: Function): void;
+    onAdd(event: NativeEvent, pointer: Pointer): boolean;
+    onChanged(event: MaybeNativeEvent, pointer: Pointer): void;
+    onMove(event: NativeEvent, pointer: Pointer): boolean;
+    onRemove(event: MaybeNativeEvent, pointer: Pointer): void;
+    onDestroyed(): void;
+    commit(event: NativeEvent | undefined, pointer: Pointer, callback: Function): void;
 }

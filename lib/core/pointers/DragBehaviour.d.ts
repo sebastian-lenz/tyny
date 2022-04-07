@@ -16,14 +16,14 @@ export declare class DragBehaviour<TView extends View = View> extends PointerBeh
     direction: DragDirection;
     isDisabled: boolean;
     threshold: number;
-    private _watchMode;
+    watchMode: DragWatchMode;
     constructor(view: TView, options?: DragBehaviourOptions);
-    protected onDrag(event: NativeEvent, pointer: Pointer): boolean;
-    protected onDragBegin(event: NativeEvent, pointer: Pointer): boolean;
-    protected onDragClick(event: MaybeNativeEvent, pointer: Pointer): void;
-    protected onDragEnd(event: MaybeNativeEvent, pointer: Pointer): void;
-    protected onAdd(event: NativeEvent, pointer: Pointer): boolean;
-    protected onMove(event: NativeEvent, pointer: Pointer): boolean;
-    protected onRemove(event: MaybeNativeEvent, pointer: Pointer): void;
-    private setWatchMode;
+    onDrag(event: NativeEvent, pointer: Pointer): boolean;
+    onDragBegin(event: NativeEvent, pointer: Pointer): boolean;
+    onDragClick(event: MaybeNativeEvent, pointer: Pointer): void;
+    onDragEnd(event: MaybeNativeEvent, pointer: Pointer): void;
+    onAdd(event: NativeEvent, pointer: Pointer): boolean;
+    onMove(event: NativeEvent, pointer: Pointer): boolean;
+    onRemove(event: MaybeNativeEvent, pointer: Pointer): void;
+    setWatchMode(value: DragWatchMode): void;
 }

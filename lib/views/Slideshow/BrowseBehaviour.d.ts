@@ -16,16 +16,16 @@ export declare class BrowseBehaviour<TView extends BrowsableView = BrowsableView
     effect: Effect;
     enabled: boolean;
     initialOffset: number;
+    listeners: Array<Function> | null;
     offset: number | null;
-    protected _preventNextClick: boolean;
-    protected _listeners: Array<Function> | null;
+    preventNextClick: boolean;
     constructor(view: TView, { enabled, effect, ...options }: BrowseBehaviourOptions);
     setOffset(value: number | null): void;
-    protected onDragBegin(event: NativeEvent, pointer: Pointer): boolean;
-    protected onDrag(event: NativeEvent, pointer: Pointer): boolean;
-    protected onDragEnd(event: MaybeNativeEvent, pointer: Pointer): void;
-    protected getForce(pointer: Pointer): number;
-    protected getOffsetTarget(force: number): number;
-    protected onDestroyed(): void;
-    protected onViewClick(event: Event): void;
+    onDragBegin(event: NativeEvent, pointer: Pointer): boolean;
+    onDrag(event: NativeEvent, pointer: Pointer): boolean;
+    onDragEnd(event: MaybeNativeEvent, pointer: Pointer): void;
+    getForce(pointer: Pointer): number;
+    getOffsetTarget(force: number): number;
+    onDestroyed(): void;
+    onViewClick(event: Event): void;
 }

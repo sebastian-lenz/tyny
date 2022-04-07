@@ -6,7 +6,7 @@ export declare class ZoomBehaviour extends TransformBehaviour<ZoomPanel> {
     initialPosition: tyny.Point;
     initialScale: number;
     isActive: boolean;
-    protected onTransformBegin(event: NativeEvent, pointer: Pointer): boolean;
-    protected onTransform(event: MaybeNativeEvent, pointer: Pointer): boolean;
-    protected onTransformEnd(event: MaybeNativeEvent, pointer: Pointer): void;
+    onTransformBegin(event: NativeEvent, pointer: Pointer): boolean;
+    onTransform(event: MaybeNativeEvent, pointer: Pointer): boolean;
+    onTransformEnd(event: MaybeNativeEvent, pointer: Pointer): void;
 }

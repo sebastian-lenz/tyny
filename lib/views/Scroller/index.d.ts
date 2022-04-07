@@ -42,6 +42,6 @@ export declare class Scroller<TItem extends ScrollerItem = ScrollerItem> extends
     toDisplayOffset(value: tyny.Point): tyny.Point;
     toLocalOffset(value: tyny.Point): tyny.Point;
     tweenTo(position: tyny.Point, options?: Partial<TweenOptions>): void;
-    protected onMeasure(): void;
-    protected onResize(): void;
+    onMeasure(): void;
+    onResize(): void;
 }

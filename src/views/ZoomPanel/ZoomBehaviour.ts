@@ -15,7 +15,7 @@ export class ZoomBehaviour extends TransformBehaviour<ZoomPanel> {
   initialScale: number = 0;
   isActive: boolean = false;
 
-  protected onTransformBegin(event: NativeEvent, pointer: Pointer): boolean {
+  onTransformBegin(event: NativeEvent, pointer: Pointer): boolean {
     const { view } = this;
     const {
       position: { x, y },
@@ -29,7 +29,7 @@ export class ZoomBehaviour extends TransformBehaviour<ZoomPanel> {
     return true;
   }
 
-  protected onTransform(event: MaybeNativeEvent, pointer: Pointer): boolean {
+  onTransform(event: MaybeNativeEvent, pointer: Pointer): boolean {
     const { center, initialPosition, initialScale, transform, view } = this;
     const { max, min } = view.getScaleBounds();
     let scale = initialScale;
@@ -56,7 +56,7 @@ export class ZoomBehaviour extends TransformBehaviour<ZoomPanel> {
     return true;
   }
 
-  protected onTransformEnd(event: MaybeNativeEvent, pointer: Pointer) {
+  onTransformEnd(event: MaybeNativeEvent, pointer: Pointer) {
     const { view } = this;
     const { position, scale: initialScale } = view;
     const scale = view.limitScale(initialScale);

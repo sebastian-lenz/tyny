@@ -35,9 +35,9 @@ export class BrowseBehaviour<
   effect: Effect;
   enabled: boolean;
   initialOffset: number = 0;
+  listeners: Array<Function> | null;
   offset: number | null = null;
-  protected _preventNextClick: boolean = false;
-  protected _listeners: Array<Function> | null;
+  preventNextClick: boolean = false;
 
   constructor(
     view: TView,
@@ -54,7 +54,7 @@ export class BrowseBehaviour<
 
     this.enabled = enabled;
     this.effect = effect;
-    this._listeners = [
+    this.listeners = [
       on(view.el, 'click', this.onViewClick, { capture: true, scope: this }),
     ];
   }
@@ -80,7 +80,7 @@ export class BrowseBehaviour<
   // Drag API
   // --------
 
-  protected onDragBegin(event: NativeEvent, pointer: Pointer): boolean {
+  onDragBegin(event: NativeEvent, pointer: Pointer): boolean {
     const { offset, view } = this;
     if (view.length < 2 || !view.onBrowseBegin() || !this.enabled) {
       return false;
@@ -97,7 +97,7 @@ export class BrowseBehaviour<
     return true;
   }
 
-  protected onDrag(event: NativeEvent, pointer: Pointer): boolean {
+  onDrag(event: NativeEvent, pointer: Pointer): boolean {
     const { direction, initialOffset, view } = this;
     const { viewport = view.el } = view;
     if (!this.usePassiveEvents) event.preventDefault();
@@ -115,9 +115,9 @@ export class BrowseBehaviour<
     return true;
   }
 
-  protected onDragEnd(event: MaybeNativeEvent, pointer: Pointer) {
+  onDragEnd(event: MaybeNativeEvent, pointer: Pointer) {
     const { view } = this;
-    this._preventNextClick = true;
+    this.preventNextClick = true;
 
     const force = this.getForce(pointer);
     const offset = this.getOffsetTarget(force);
@@ -132,15 +132,15 @@ export class BrowseBehaviour<
     });
   }
 
-  // Protected methods
+  // methods
   // -----------------
 
-  protected getForce(pointer: Pointer): number {
+  getForce(pointer: Pointer): number {
     const { clientX, clientY } = pointer.velocity.get();
     return this.direction === 'horizontal' ? clientX : clientY;
   }
 
-  protected getOffsetTarget(force: number): number {
+  getOffsetTarget(force: number): number {
     const offset = this.offset || 0;
 
     if (force < -5) {
@@ -152,18 +152,18 @@ export class BrowseBehaviour<
     return Math.round(offset);
   }
 
-  protected onDestroyed() {
+  onDestroyed() {
     super.onDestroyed();
 
-    if (this._listeners) {
-      this._listeners.forEach((off) => off());
-      this._listeners = null;
+    if (this.listeners) {
+      this.listeners.forEach((off) => off());
+      this.listeners = null;
     }
   }
 
-  protected onViewClick(event: Event) {
-    if (this._preventNextClick) {
-      this._preventNextClick = false;
+  onViewClick(event: Event) {
+    if (this.preventNextClick) {
+      this.preventNextClick = false;
       event.preventDefault();
       event.stopPropagation();
     }

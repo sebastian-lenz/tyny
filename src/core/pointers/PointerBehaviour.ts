@@ -49,7 +49,7 @@ export class PointerBehaviour<
   readonly pointers: Pointer[] = [];
   readonly velocity = new Velocity(createVelocity);
 
-  protected adapter: AbstractAdapter | null = null;
+  adapter: AbstractAdapter | null = null;
 
   constructor(view: TView, options: PointerBehaviourOptions = {}) {
     super(view, options);
@@ -180,22 +180,22 @@ export class PointerBehaviour<
   // Behaviour API
   // -------------
 
-  protected onAdd(event: NativeEvent, pointer: Pointer): boolean {
+  onAdd(event: NativeEvent, pointer: Pointer): boolean {
     return true;
   }
 
-  protected onChanged(event: MaybeNativeEvent, pointer: Pointer): void {}
+  onChanged(event: MaybeNativeEvent, pointer: Pointer): void {}
 
-  protected onMove(event: NativeEvent, pointer: Pointer): boolean {
+  onMove(event: NativeEvent, pointer: Pointer): boolean {
     return true;
   }
 
-  protected onRemove(event: MaybeNativeEvent, pointer: Pointer): void {}
+  onRemove(event: MaybeNativeEvent, pointer: Pointer): void {}
 
   // Private methods
   // ---------------
 
-  protected onDestroyed() {
+  onDestroyed() {
     super.onDestroyed();
 
     if (this.adapter) {
@@ -204,11 +204,7 @@ export class PointerBehaviour<
     }
   }
 
-  protected commit(
-    event: NativeEvent | undefined,
-    pointer: Pointer,
-    callback: Function
-  ) {
+  commit(event: NativeEvent | undefined, pointer: Pointer, callback: Function) {
     const { adapter, initialCenter, initialTransform, pointers } = this;
     initialTransform.copyFrom(this.transform);
 

@@ -31,17 +31,17 @@ export interface DragScrollBehaviourOptions extends DragBehaviourOptions {
 export class DragScrollBehaviour<
   TView extends ScrollableView = ScrollableView
 > extends DragBehaviour<TView> {
-  //
+  clickCallback: ((event: Event) => void) | null = null;
   initialPosition: tyny.Point;
   isDraging: boolean = false;
-  protected _preventNextClick: boolean = false;
-  protected _listeners: Array<Function> | null;
+  listeners: Array<Function> | null;
+  preventNextClick: boolean = false;
 
   constructor(view: TView, options: DragScrollBehaviourOptions) {
     super(view, options);
     this.initialPosition = view.position;
 
-    const listeners = (this._listeners = [
+    const listeners = (this.listeners = [
       on(view.el, 'click', this.onViewClick, { capture: true, scope: this }),
     ]);
 
@@ -108,9 +108,9 @@ export class DragScrollBehaviour<
     const velocity = this.getVelocity(pointer);
 
     this.isDraging = false;
-    this._preventNextClick = true;
+    this.preventNextClick = true;
     setTimeout(() => {
-      this._preventNextClick = false;
+      this.preventNextClick = false;
     }, 200);
 
     if (view.isPositionPaged) {
@@ -130,10 +130,10 @@ export class DragScrollBehaviour<
     }
   }
 
-  // Protected methods
+  // methods
   // -----------------
 
-  protected getVelocity(pointer: Pointer): tyny.Point {
+  getVelocity(pointer: Pointer): tyny.Point {
     const { direction, view } = this;
     const { clientX, clientY } = pointer.velocity.get();
     const velocity = { x: 0, y: 0 };
@@ -149,24 +149,26 @@ export class DragScrollBehaviour<
     return view.toLocalOffset(velocity);
   }
 
-  protected onDestroyed() {
+  onDestroyed() {
     super.onDestroyed();
 
-    if (this._listeners) {
-      this._listeners.forEach((off) => off());
-      this._listeners = null;
+    if (this.listeners) {
+      this.listeners.forEach((off) => off());
+      this.listeners = null;
     }
   }
 
-  protected onViewClick(event: Event) {
-    if (this._preventNextClick) {
-      this._preventNextClick = false;
+  onViewClick(event: Event) {
+    if (this.preventNextClick) {
+      this.preventNextClick = false;
       event.preventDefault();
       event.stopPropagation();
+    } else if (this.clickCallback) {
+      this.clickCallback(event);
     }
   }
 
-  protected onWheel(event: WheelEvent) {
+  onWheel(event: WheelEvent) {
     if (this.isDraging || this.isDisabled) {
       return;
     }

@@ -153,11 +153,8 @@ export class Scroller<TItem extends ScrollerItem = ScrollerItem>
     }
   }
 
-  // Protected methods
-  // -----------------
-
   @update({ mode: 'read', events: ['resize', 'update'] })
-  protected onMeasure() {
+  onMeasure() {
     const { content, useContentMargins, viewport, viewportSize } = this;
     const bounds = this.positionBounds;
 
@@ -183,7 +180,7 @@ export class Scroller<TItem extends ScrollerItem = ScrollerItem>
   }
 
   @update({ mode: 'write', events: 'resize' })
-  protected onResize() {
+  onResize() {
     stop(this);
     this.position = this.clampPosition(this.position);
   }

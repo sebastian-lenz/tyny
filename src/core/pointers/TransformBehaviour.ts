@@ -18,25 +18,25 @@ export class TransformBehaviour<
   maxPointers: number | undefined;
   minPointers: number = 1;
 
-  protected isActive: boolean = false;
+  isActive: boolean = false;
 
   // Transform API
   // -------------
 
-  protected onTransform(event: MaybeNativeEvent, pointer: Pointer): boolean {
+  onTransform(event: MaybeNativeEvent, pointer: Pointer): boolean {
     return true;
   }
 
-  protected onTransformBegin(event: NativeEvent, pointer: Pointer): boolean {
+  onTransformBegin(event: NativeEvent, pointer: Pointer): boolean {
     return true;
   }
 
-  protected onTransformEnd(event: MaybeNativeEvent, pointer: Pointer) {}
+  onTransformEnd(event: MaybeNativeEvent, pointer: Pointer) {}
 
   // Behaviour API
   // -------------
 
-  protected onAdd(event: NativeEvent, pointer: Pointer): boolean {
+  onAdd(event: NativeEvent, pointer: Pointer): boolean {
     const { isActive: _isActive, maxPointers, minPointers } = this;
     const numPointers = this.pointers.length + 1;
 
@@ -49,13 +49,13 @@ export class TransformBehaviour<
     return (this.isActive = this.onTransformBegin(event, pointer));
   }
 
-  protected onChanged(event: MaybeNativeEvent, pointer: Pointer): void {
+  onChanged(event: MaybeNativeEvent, pointer: Pointer): void {
     if (this.isActive && !this.onTransform(event, pointer)) {
       this.removeAllPointers();
     }
   }
 
-  protected onRemove(event: MaybeNativeEvent, pointer: Pointer): void {
+  onRemove(event: MaybeNativeEvent, pointer: Pointer): void {
     const { isActive: _isActive, minPointers, pointers } = this;
     const numPointers = pointers.length - 1;
 

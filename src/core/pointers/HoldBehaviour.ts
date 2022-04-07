@@ -40,7 +40,7 @@ export class HoldBehaviour<
     this.stages = options.stages;
   }
 
-  protected abortStage() {
+  abortStage() {
     const { currentIndex, stages, timeout } = this;
     if (timeout) {
       this.onStageAbort(stages[currentIndex], currentIndex);
@@ -51,7 +51,7 @@ export class HoldBehaviour<
     this.timeout = null;
   }
 
-  protected advanceStage(): boolean {
+  advanceStage(): boolean {
     const { currentIndex, stages } = this;
     const index = currentIndex + 1;
     if (index >= stages.length || this.timeout) {
@@ -68,12 +68,12 @@ export class HoldBehaviour<
     return true;
   }
 
-  protected finishedStage(index: number, stage: TStage) {
+  finishedStage(index: number, stage: TStage) {
     this.onStageEnter(stage, index);
     this.advanceStage();
   }
 
-  protected onAdd(event: NativeEvent, pointer: Pointer): boolean {
+  onAdd(event: NativeEvent, pointer: Pointer): boolean {
     if (this.isHolding || !this.onBeginHold(event, pointer)) {
       return false;
     }
@@ -83,7 +83,7 @@ export class HoldBehaviour<
     return true;
   }
 
-  protected onRemove(event: MaybeNativeEvent, pointer: Pointer): void {
+  onRemove(event: MaybeNativeEvent, pointer: Pointer): void {
     const { currentIndex, stages } = this;
 
     this.isHolding = false;

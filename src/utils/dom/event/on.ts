@@ -12,6 +12,8 @@ export interface OnOptions extends AddEventListenerOptions {
   scope?: any;
 }
 
+type VoidCallback = () => void;
+
 function delegate(
   delegates: EventTarget[],
   selector: string,
@@ -62,7 +64,7 @@ export function on(
   type: string,
   listener: Function,
   { selector, self, scope, ...options }: OnOptions = {}
-): Function {
+): VoidCallback {
   const targets = toEventTargets(target);
 
   if (scope) {

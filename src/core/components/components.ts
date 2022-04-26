@@ -350,6 +350,7 @@ export function registerView(
   components[className] = component;
 
   if (isInitialized) {
+    rootCache = null;
     findAll(`.${className}`).forEach((element) =>
       createView(component, element)
     );

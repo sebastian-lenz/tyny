@@ -1,8 +1,11 @@
+export declare type FillMode = 'none' | 'forwards' | 'backwards' | 'both';
+export declare type Direction = 'inherit' | 'normal' | 'reverse' | 'alternate' | 'alternate-reverse';
 export interface AnimateOptions {
-    duration: number;
     delay: number;
+    direction: Direction;
+    duration: number;
+    fillMode: FillMode;
     timingFunction: string;
-    fillMode: string | 'none' | 'forwards' | 'backwards' | 'both';
 }
 declare function animate(element: HTMLElement, name: string, options?: Partial<AnimateOptions>): Promise<void>;
 declare namespace animate {

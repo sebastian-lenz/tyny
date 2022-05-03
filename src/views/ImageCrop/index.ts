@@ -1,8 +1,7 @@
-import { Crop, CropMode, CropOptions, CropResult } from './Crop';
+import { Crop, CropOptions, CropResult } from './Crop';
 import { data } from '../../utils/dom/attr/data';
+import { Image } from '../Image';
 import { View, ViewOptions, update, property, getView } from '../../core';
-
-import type { Image } from '../Image';
 
 export interface ImageCropOptions extends ViewOptions, Partial<CropOptions> {
   crop?: Crop | CropOptions;
@@ -10,7 +9,6 @@ export interface ImageCropOptions extends ViewOptions, Partial<CropOptions> {
 }
 
 export class ImageCrop extends View {
-  //
   currentCrop: CropResult | null = null;
   crop: Crop;
   displayHeight: number = Number.NaN;
@@ -52,7 +50,7 @@ export class ImageCrop extends View {
       return;
     }
 
-    const image = getView<Image>(target, 'Image');
+    const image = getView<Image>(target, Image);
     if (image) {
       crop.height = image.naturalHeight;
       crop.width = image.naturalWidth;

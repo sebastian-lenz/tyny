@@ -1,7 +1,7 @@
 import { inBrowser } from './browser';
 import { ucFirst } from '../lang/string/ucFirst';
 
-const isNative = !inBrowser || 'ontransitionend' in document.body;
+const isNative = !inBrowser || 'ontransitionend' in document.documentElement;
 
 const eventName = isNative
   ? (value: string) => value.toLowerCase()

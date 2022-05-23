@@ -30,8 +30,10 @@ export type PropertyHandlerMap = tyny.Map<PropertyHandler>;
 
 export function property(options: PropertyOptions = {}): PropertyDecorator {
   return function (target: any, name: any) {
+    const descriptor = arguments[2];
     const { param } = options;
-    const property = Object.getOwnPropertyDescriptor(target, name) || {};
+    let property =
+      descriptor || Object.getOwnPropertyDescriptor(target, name) || {};
 
     const { get, ...desc } = property;
     const properties: PropertyHandlerMap = target.hasOwnProperty('_properties')
@@ -43,25 +45,31 @@ export function property(options: PropertyOptions = {}): PropertyDecorator {
       name,
     };
 
-    Object.defineProperty(target, name, {
-      ...desc,
-      get: function (this: PropertyScope): any {
-        const values = this._watchValues || (this._watchValues = {});
-        if (name in values) {
-          return values[name];
-        }
+    function customGetter(this: PropertyScope): any {
+      const values = this._watchValues || (this._watchValues = {});
+      if (name in values) {
+        return values[name];
+      }
 
-        if (param) {
-          const { type, ...options } = param;
-          return (values[name] = this.params[type]({
-            defaultValue: get,
-            ...options,
-            name,
-          }));
-        }
+      if (param) {
+        const { type, ...options } = param;
+        return (values[name] = this.params[type]({
+          defaultValue: get,
+          ...options,
+          name,
+        }));
+      }
 
-        return (values[name] = get ? get() : undefined);
-      },
-    });
+      return (values[name] = get ? get.apply(this) : undefined);
+    }
+
+    if (descriptor) {
+      descriptor.get = customGetter;
+    } else {
+      Object.defineProperty(target, name, {
+        ...desc,
+        get: customGetter,
+      });
+    }
   };
 }

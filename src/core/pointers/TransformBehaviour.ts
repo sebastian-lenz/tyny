@@ -50,8 +50,15 @@ export class TransformBehaviour<
   }
 
   onChanged(event: MaybeNativeEvent, pointer: Pointer): void {
-    if (this.isActive && !this.onTransform(event, pointer)) {
+    this.onMove(event, pointer);
+  }
+
+  onMove(event: MaybeNativeEvent, pointer: Pointer): boolean {
+    if (this.isActive && this.onTransform(event, pointer)) {
+      return true;
+    } else {
       this.removeAllPointers();
+      return false;
     }
   }
 

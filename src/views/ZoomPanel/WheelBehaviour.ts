@@ -8,8 +8,22 @@ import { ZoomPanel } from './index';
 const power = 1;
 
 export class WheelBehaviour extends Behaviour<ZoomPanel> {
+  enabled: boolean = true;
+  requireCtrlKey: boolean = false;
+
   @event({ name: onWheel })
   handleWheel(event: WheelEvent) {
+    if (!this.enabled) {
+      return;
+    }
+
+    if (this.requireCtrlKey && !this.hasCtrlKey(event)) {
+      this.onCtrlAbort();
+      return;
+    }
+
+    event.preventDefault();
+
     const data = normalizeWheel(event);
     const { view } = this;
     const {
@@ -46,4 +60,10 @@ export class WheelBehaviour extends Behaviour<ZoomPanel> {
       }
     );
   }
+
+  hasCtrlKey(event: WheelEvent) {
+    return event.ctrlKey || event.metaKey;
+  }
+
+  onCtrlAbort() {}
 }

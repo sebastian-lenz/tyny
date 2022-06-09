@@ -12,5 +12,6 @@ export declare class TransformBehaviour<TView extends View = View> extends Point
     onTransformEnd(event: MaybeNativeEvent, pointer: Pointer): void;
     onAdd(event: NativeEvent, pointer: Pointer): boolean;
     onChanged(event: MaybeNativeEvent, pointer: Pointer): void;
+    onMove(event: MaybeNativeEvent, pointer: Pointer): boolean;
     onRemove(event: MaybeNativeEvent, pointer: Pointer): void;
 }

@@ -162,7 +162,7 @@ export class Scroller<TItem extends ScrollerItem = ScrollerItem>
       return;
     }
 
-    const height = (viewportSize.width = viewport.offsetHeight);
+    const height = (viewportSize.height = viewport.offsetHeight);
     const width = (viewportSize.width = viewport.offsetWidth);
 
     bounds.xMin = 0;

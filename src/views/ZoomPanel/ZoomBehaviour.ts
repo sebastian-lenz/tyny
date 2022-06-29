@@ -11,6 +11,9 @@ import {
 } from '../../core/pointers/PointerBehaviour';
 
 export class ZoomBehaviour extends TransformBehaviour<ZoomPanel> {
+  allowMoveX: boolean = true;
+  allowMoveY: boolean = true;
+  allowScale: boolean = true;
   initialPosition: tyny.Point = { x: 0, y: 0 };
   initialScale: number = 0;
   isActive: boolean = false;
@@ -33,7 +36,7 @@ export class ZoomBehaviour extends TransformBehaviour<ZoomPanel> {
     const { center, initialPosition, initialScale, transform, view } = this;
     const { max, min } = view.getScaleBounds();
     let scale = initialScale;
-    scale *= transform.scale;
+    if (this.allowScale) scale *= transform.scale;
 
     if (!isFinite(scale)) scale = initialScale;
     if (scale < min) scale = min + (scale - min) * 0.25;
@@ -43,8 +46,10 @@ export class ZoomBehaviour extends TransformBehaviour<ZoomPanel> {
     const { left, top } = view.el.getBoundingClientRect();
     let x = center.x - left;
     let y = center.y - top;
-    x += ((initialPosition.x - x) / initialScale) * scale + transform.x;
-    y += ((initialPosition.y - y) / initialScale) * scale + transform.y;
+    x += ((initialPosition.x - x) / initialScale) * scale;
+    y += ((initialPosition.y - y) / initialScale) * scale;
+    if (this.allowMoveX) x += transform.x;
+    if (this.allowMoveY) y += transform.y;
 
     if (x < xMin) x = xMin + (x - xMin) * 0.5;
     if (x > xMax) x = xMax + (x - xMax) * 0.5;
@@ -82,6 +87,8 @@ export class ZoomBehaviour extends TransformBehaviour<ZoomPanel> {
     } else {
       const bounds = view.getPositionBounds(scale);
       const velocity = this.velocity.get();
+      if (!this.allowMoveX) velocity.x = 0;
+      if (!this.allowMoveY) velocity.y = 0;
 
       momentum(view, {
         position: {

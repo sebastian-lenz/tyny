@@ -18,17 +18,20 @@ const closestFn =
     } while ((ancestor = parent(ancestor)));
   };
 
-export function closest(
+export function closest<T extends HTMLElement = HTMLElement>(
   element: Element | EventTarget | undefined | null,
   selector: string
-): Element | null;
+): T | null;
 
-export function closest(element: tyny.ElementLike, selector: string): Element[];
-
-export function closest(
+export function closest<T extends HTMLElement = HTMLElement>(
   element: tyny.ElementLike,
   selector: string
-): Element | Array<Element> | null {
+): T[];
+
+export function closest<T extends HTMLElement = HTMLElement>(
+  element: tyny.ElementLike,
+  selector: string
+): T | Array<T> | null {
   if (startsWith(selector, '>')) {
     selector = selector.slice(1);
   }

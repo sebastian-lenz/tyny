@@ -5,10 +5,13 @@ import { ZoomBehaviour } from './ZoomBehaviour';
 
 export interface ZoomPanelOptions extends ViewOptions {}
 
+export type ResizeMode = 'fit' | 'clamp' | 'none';
+
 export abstract class ZoomPanel extends View {
   fitPadding: number = 0;
   height: number = 0;
   position: tyny.Point = { x: 0, y: 0 };
+  resizeMode: ResizeMode = 'fit';
   scale: number = 1;
   width: number = 0;
   readonly wheelBehaviour: WheelBehaviour;
@@ -27,6 +30,18 @@ export abstract class ZoomPanel extends View {
 
   abstract getNativeWidth(): number;
 
+  clampView() {
+    const scale = this.limitScale(this.scale);
+    const { x, y } = this.limitPosition(this.position, scale);
+
+    stop(this);
+
+    this.scale = scale;
+    this.position.x = x;
+    this.position.y = y;
+    this.draw();
+  }
+
   fitToView() {
     const { height, fitPadding, width } = this;
     const nativeHeight = this.getNativeHeight();
@@ -43,8 +58,11 @@ export abstract class ZoomPanel extends View {
     const y = (height - displayHeight) * 0.5;
 
     stop(this);
-    this.setPosition({ x, y });
-    this.setScale(scale);
+
+    this.scale = scale;
+    this.position.x = x;
+    this.position.y = y;
+    this.draw();
   }
 
   getPositionBounds(scale: number = this.scale): tyny.BoundingBox {
@@ -115,12 +133,18 @@ export abstract class ZoomPanel extends View {
 
   @update({ events: 'resize', mode: 'read' })
   protected onMeasure() {
-    const { el } = this;
+    const { el, resizeMode } = this;
     this.height = el.offsetHeight;
     this.width = el.offsetWidth;
 
-    return () => {
-      this.fitToView();
-    };
+    if (resizeMode === 'fit') {
+      return () => {
+        this.fitToView();
+      };
+    } else if (resizeMode === 'clamp') {
+      return () => {
+        this.clampView();
+      };
+    }
   }
 }

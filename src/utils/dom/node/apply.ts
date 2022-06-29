@@ -1,14 +1,30 @@
+export interface ApplyCallback {
+  (element: HTMLElement): void;
+}
+
+export interface LateApplyCallback {
+  (element: HTMLElement): void;
+}
+
 export function apply(
   element: HTMLElement | null | undefined,
-  callback: { (element: HTMLElement): void }
+  preCallback: ApplyCallback,
+  postCallback?: ApplyCallback
 ) {
-  if (!element) return;
-  callback(element);
+  if (!element) {
+    return;
+  }
 
-  element = element.firstElementChild as HTMLElement | null;
-  while (element) {
-    const next = element.nextElementSibling as HTMLElement | null;
-    apply(element, callback);
-    element = next;
+  preCallback(element);
+
+  let child = element.firstElementChild as HTMLElement | null;
+  while (child) {
+    const next = child.nextElementSibling as HTMLElement | null;
+    apply(child, preCallback);
+    child = next;
+  }
+
+  if (postCallback) {
+    postCallback(element);
   }
 }

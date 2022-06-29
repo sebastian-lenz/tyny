@@ -1,4 +1,4 @@
-import { emitUpdate } from './components/components';
+import { clearViewCache, emitUpdate } from './components/components';
 import { fastDom } from './components';
 import { find, findAll, Selector } from '../utils/dom/node/find';
 import { isEmpty } from '../utils/lang/misc/isEmpty';
@@ -59,6 +59,7 @@ export class View extends Lifecycle {
     this.params = new Params(this, options);
     this.uid = uid++;
 
+    clearViewCache();
     if (within(el, document)) {
       fastDom.read(this._callConnected.bind(this));
     }
@@ -100,7 +101,10 @@ export class View extends Lifecycle {
     return find<T>(selector, this.el);
   }
 
-  findView<T extends View>(selector: Selector, ctor: ViewClass<T>): T | null {
+  findView<T extends View>(
+    selector: Selector,
+    ctor?: string | ViewClass<T>
+  ): T | null {
     return this.findAllViews(selector, ctor)[0] || null;
   }
 
@@ -108,15 +112,26 @@ export class View extends Lifecycle {
     return findAll<T>(selector, this.el);
   }
 
-  findAllViews<T extends View>(selector: Selector, ctor: ViewClass<T>): T[] {
+  findAllViews<T extends View>(
+    selector: Selector,
+    ctor?: string | ViewClass<T>
+  ): T[] {
     return findAll(selector, this.el).reduce((result, element) => {
       const views = element.__tynyViews;
       if (!views) return result;
 
-      for (const name in views) {
-        const view = views[name];
-        if (view instanceof ctor) {
-          result.push(view);
+      if (!ctor) {
+        result.push(...(Object.values(views) as Array<T>));
+      } else if (typeof ctor === 'string') {
+        if (ctor in views) {
+          result.push(views[ctor] as T);
+        }
+      } else {
+        for (const name in views) {
+          const view = views[name];
+          if (view instanceof ctor) {
+            result.push(view);
+          }
         }
       }
 

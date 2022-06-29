@@ -12,6 +12,11 @@ import { toElement } from '../../utils/dom/misc/toElement';
 import { ucFirst } from '../../utils/lang/string/ucFirst';
 import type { View, ViewClass, ViewComponent } from '../View';
 
+export interface RegisterViewOptions {
+  className?: string;
+  upgrade?: boolean;
+}
+
 const activeScrollEventOrigins: Array<any> = [];
 const components: tyny.Map<ViewComponent> = {};
 let hasActiveScrollEvent: boolean | null = null;
@@ -67,14 +72,14 @@ function applyChildList({ addedNodes, removedNodes }: MutationRecord): boolean {
   for (let index = 0; index < addedNodes.length; index++) {
     const element = addedNodes[index] as HTMLElement;
     if (element instanceof Element) {
-      apply(element, (el) => (hasChanged = connect(el) || hasChanged));
+      hasChanged = connect(element) || hasChanged;
     }
   }
 
   for (let index = 0; index < removedNodes.length; index++) {
     const element = removedNodes[index] as HTMLElement;
     if (element instanceof Element) {
-      apply(element, (el) => (hasChanged = disconnect(el) || hasChanged));
+      hasChanged = disconnect(element) || hasChanged;
     }
   }
 
@@ -95,26 +100,33 @@ function applyMutation(mutation: MutationRecord, updates: Array<Element>) {
   }
 }
 
-function connect(element: HTMLElement) {
-  // IE has no classlist on svg elements
-  if (!('classList' in element)) {
-    return false;
-  }
-
-  const views = element.__tynyViews as tyny.ViewApiMap;
+function connect(root: HTMLElement): boolean {
   let hasChanged = false;
-  if (views) {
-    for (const name in views) {
-      views[name]._callConnected();
+
+  function preCallback(element: HTMLElement) {
+    // IE has no classlist on svg elements
+    if (!('classList' in element)) {
+      return;
+    }
+
+    for (let index = 0; index < element.classList.length; index++) {
+      const className = element.classList[index];
+      if (className in components) {
+        hasChanged = createView(components[className], element) || hasChanged;
+      }
     }
   }
 
-  for (let index = 0; index < element.classList.length; index++) {
-    const className = element.classList[index];
-    if (className in components) {
-      hasChanged = createView(components[className], element) || hasChanged;
+  function postCallback(element: HTMLElement) {
+    const views = element.__tynyViews as tyny.ViewApiMap;
+    if (views) {
+      for (const name in views) {
+        views[name]._callConnected();
+      }
     }
   }
+
+  apply(root, preCallback, postCallback);
 
   if (hasChanged) rootCache = null;
   return hasChanged;
@@ -122,7 +134,7 @@ function connect(element: HTMLElement) {
 
 function createObserver() {
   if (document.body) {
-    apply(document.body, connect);
+    connect(document.body);
   }
 
   addGlobalEvents();
@@ -158,16 +170,21 @@ function createView<T extends View = View>(
   return true;
 }
 
-function disconnect(element: Element) {
-  const views = element.__tynyViews as tyny.ViewApiMap;
+function disconnect(root: HTMLElement) {
   let hasChanged = false;
 
-  if (views) {
-    for (const name in views) {
-      views[name]._callDisconnected();
-      hasChanged = true;
+  function preCallback(element: Element) {
+    const views = element.__tynyViews as tyny.ViewApiMap;
+
+    if (views) {
+      for (const name in views) {
+        views[name]._callDisconnected();
+        hasChanged = true;
+      }
     }
   }
+
+  apply(root, preCallback);
 
   if (hasChanged) rootCache = null;
   return hasChanged;
@@ -230,6 +247,14 @@ function emitRootUpdate(type?: string) {
   apply(document.body, (el) =>
     emitLocalUpdate(el, type) ? cache.push(el) : null
   );
+}
+
+export function clearViewCache() {
+  rootCache = null;
+}
+
+export function createViews(element: HTMLElement) {
+  connect(element);
 }
 
 export function emitUpdate(target?: tyny.ElementLike, type?: string) {
@@ -329,9 +354,17 @@ function unregisterView(className: string) {
 export function registerView(
   name: string,
   ctor: ViewClass,
-  upgrade: boolean = false
+  {
+    className = getViewClassName(name),
+    upgrade = false,
+  }: RegisterViewOptions = {}
 ) {
-  const className = getViewClassName(name);
+  const component = (ctor.prototype._component = {
+    className,
+    name,
+    ctor,
+  });
+
   if (className in components) {
     if (upgrade) {
       unregisterView(className);
@@ -340,13 +373,6 @@ export function registerView(
     }
   }
 
-  const component = {
-    className,
-    ctor,
-    name,
-  };
-
-  ctor.prototype._component = component;
   components[className] = component;
 
   if (isInitialized) {
@@ -359,10 +385,10 @@ export function registerView(
 
 export function registerViews(
   ctors: tyny.Map<ViewClass>,
-  upgrade: boolean = false
+  options: RegisterViewOptions = {}
 ) {
   for (const name in ctors) {
-    registerView(name, ctors[name], upgrade);
+    registerView(name, ctors[name], options);
   }
 }
 

@@ -5,10 +5,9 @@ import { onWheel } from '../../utils/env';
 import { spring } from '../../fx/spring';
 import { ZoomPanel } from './index';
 
-const power = 1;
-
 export class WheelBehaviour extends Behaviour<ZoomPanel> {
   enabled: boolean = true;
+  power: number = 1;
   requireCtrlKey: boolean = false;
 
   @event({ name: onWheel })
@@ -33,9 +32,9 @@ export class WheelBehaviour extends Behaviour<ZoomPanel> {
 
     let scale = currentScale;
     if (data.spinY < -0.01) {
-      scale /= 1 - data.spinY * power;
+      scale /= 1 - data.spinY * this.power;
     } else if (data.spinY > 0.01) {
-      scale *= 1 + data.spinY * power;
+      scale *= 1 + data.spinY * this.power;
     }
 
     scale = view.limitScale(scale);

@@ -3,6 +3,9 @@ import { TransformBehaviour } from '../../core/pointers/TransformBehaviour';
 import { ZoomPanel } from './index';
 import { MaybeNativeEvent, NativeEvent } from '../../core/pointers/PointerBehaviour';
 export declare class ZoomBehaviour extends TransformBehaviour<ZoomPanel> {
+    allowMoveX: boolean;
+    allowMoveY: boolean;
+    allowScale: boolean;
     initialPosition: tyny.Point;
     initialScale: number;
     isActive: boolean;

@@ -29,9 +29,9 @@ export declare class View extends Lifecycle {
     callUpdate(type?: string): void;
     destroy(options?: ViewDestroyOptions): void;
     find<T extends HTMLElement = HTMLElement>(selector: Selector): T | null;
-    findView<T extends View>(selector: Selector, ctor: ViewClass<T>): T | null;
+    findView<T extends View>(selector: Selector, ctor?: string | ViewClass<T>): T | null;
     findAll<T extends HTMLElement = HTMLElement>(selector: Selector): T[];
-    findAllViews<T extends View>(selector: Selector, ctor: ViewClass<T>): T[];
+    findAllViews<T extends View>(selector: Selector, ctor?: string | ViewClass<T>): T[];
     trigger(event: string | Event, detail?: any): void;
     triggerUpdate(type: string): void;
     protected addBehaviour<TBehaviour extends Behaviour, TOptions extends BehaviourOptions>(ctor: BehaviourClass<TBehaviour, TOptions>, options?: TOptions): TBehaviour;

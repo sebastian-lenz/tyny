@@ -105,7 +105,9 @@ export abstract class Lifecycle {
     event: EventHandler
   ): Array<Function> {
     let { name, target, handler, selector, filter, ...args } = event;
-    target = isFunction(target) ? target.call(this) : target || this.el;
+    target = isFunction(target)
+      ? target.call(this, this as any)
+      : target || this.el;
 
     if (Array.isArray(target)) {
       return target.reduce(
@@ -114,11 +116,13 @@ export abstract class Lifecycle {
       );
     }
 
-    if (target && (!filter || filter.call(this))) {
+    if (target && (!filter || filter.call(this, this as any))) {
       listeners.push(
         on(target, name, this[handler], {
           ...args,
-          selector: isFunction(selector) ? selector.call(this) : selector,
+          selector: isFunction(selector)
+            ? selector.call(this, this as any)
+            : selector,
           scope: this,
         })
       );

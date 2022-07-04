@@ -1,22 +1,27 @@
+import type { View } from '../View';
+
 export type EventHandlerTarget = EventTarget | EventTarget[] | null | undefined;
 
-export interface EventHandlerOptions {
+export interface EventHandlerOptions<T extends View = View> {
   capture?: boolean;
-  filter?: { (): boolean };
+  filter?: { (view: T): boolean };
   name: string;
   passive?: boolean;
-  selector?: string | { (): string };
+  selector?: string | { (view: T): string };
   self?: boolean;
-  target?: EventHandlerTarget | { (): EventHandlerTarget };
+  target?: EventHandlerTarget | { (view: View): EventHandlerTarget };
 }
 
-export interface EventHandler extends EventHandlerOptions {
+export interface EventHandler<T extends View = View>
+  extends EventHandlerOptions<T> {
   handler: string;
 }
 
-export function event(options: EventHandlerOptions): MethodDecorator {
+export function event<T extends View = View>(
+  options: EventHandlerOptions<T>
+): MethodDecorator {
   return function (target: any, handler: any) {
-    const events: tyny.Map<EventHandler> = target.hasOwnProperty('_events')
+    const events: tyny.Map<EventHandler<T>> = target.hasOwnProperty('_events')
       ? target._events
       : (target._events = { ...target._events });
 

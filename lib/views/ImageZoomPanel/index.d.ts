@@ -4,7 +4,7 @@ export interface ImageZoomPanelOptions extends ZoomPanelOptions {
     border?: number;
     image?: string;
 }
-export default class ImageZoomPanel extends ZoomPanel {
+export declare class ImageZoomPanel extends ZoomPanel {
     border: number;
     readonly image: Image | null;
     constructor(options: ImageZoomPanelOptions);

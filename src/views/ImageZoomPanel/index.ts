@@ -1,4 +1,4 @@
-import { property } from '../../core';
+import { createViews } from '../../core';
 import { Image } from '../Image';
 import { ZoomPanel, ZoomPanelOptions } from '../ZoomPanel';
 
@@ -7,12 +7,14 @@ export interface ImageZoomPanelOptions extends ZoomPanelOptions {
   image?: string;
 }
 
-export default class ImageZoomPanel extends ZoomPanel {
+export class ImageZoomPanel extends ZoomPanel {
   border: number = 50;
   readonly image: Image | null;
 
   constructor(options: ImageZoomPanelOptions) {
     super(options);
+
+    createViews(this.el);
 
     const { border = 50, image = '> *' } = options;
     this.border = border;

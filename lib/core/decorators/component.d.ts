@@ -1,4 +1,4 @@
-export declare function component(options?: {
+export declare function component(options: {
     className?: string;
-    name?: string;
+    name: string;
 }): ClassDecorator;

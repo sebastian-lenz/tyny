@@ -1,4 +1,5 @@
-import { DragBehaviour, DragBehaviourOptions } from '../../core/pointers/DragBehaviour';
+import { DragBehaviour } from '../../core/pointers/DragBehaviour';
+import type { DragBehaviourOptions } from '../../core/pointers/DragBehaviour';
 import type { Pointer } from '../../core/pointers/Pointer';
 import type { TweenOptions } from '../../fx/tween';
 import type { View } from '../../core';
@@ -15,17 +16,14 @@ export interface DragScrollBehaviourOptions extends DragBehaviourOptions {
     disableWheel?: boolean;
 }
 export declare class DragScrollBehaviour<TView extends ScrollableView = ScrollableView> extends DragBehaviour<TView> {
-    clickCallback: ((event: Event) => void) | null;
     initialPosition: tyny.Point;
     isDraging: boolean;
     listeners: Array<Function> | null;
-    preventNextClick: boolean;
     constructor(view: TView, options: DragScrollBehaviourOptions);
     onDragBegin(event: NativeEvent, pointer: Pointer): boolean;
     onDrag(event: NativeEvent, pointer: Pointer): boolean;
     onDragEnd(event: MaybeNativeEvent, pointer: Pointer): void;
     getVelocity(pointer: Pointer): tyny.Point;
     onDestroyed(): void;
-    onViewClick(event: Event): void;
     onWheel(event: WheelEvent): void;
 }

@@ -1,3 +1,4 @@
+import { ClickBehaviour } from '../../core/pointers/ClickBehaviour';
 import { easeOutExpo } from '../../fx/easings/easeOutExpo';
 import { momentum } from '../../fx/momentum';
 import { Pointer } from '../../core/pointers/Pointer';
@@ -5,7 +6,8 @@ import { stop } from '../../fx/dispatcher';
 import { TransformBehaviour } from '../../core/pointers/TransformBehaviour';
 import { tween } from '../../fx/tween';
 import { ZoomPanel } from './index';
-import {
+
+import type {
   MaybeNativeEvent,
   NativeEvent,
 } from '../../core/pointers/PointerBehaviour';
@@ -17,6 +19,16 @@ export class ZoomBehaviour extends TransformBehaviour<ZoomPanel> {
   initialPosition: tyny.Point = { x: 0, y: 0 };
   initialScale: number = 0;
   isActive: boolean = false;
+
+  didTransformChange(positionEpsilon = 2, scaleEpsilon = 0.001) {
+    const { initialPosition, initialScale, view } = this;
+
+    return (
+      Math.abs(initialPosition.x - view.position.x) > positionEpsilon ||
+      Math.abs(initialPosition.y - view.position.y) > positionEpsilon ||
+      Math.abs(initialScale - view.scale) > scaleEpsilon
+    );
+  }
 
   onTransformBegin(event: NativeEvent, pointer: Pointer): boolean {
     const { view } = this;
@@ -65,6 +77,12 @@ export class ZoomBehaviour extends TransformBehaviour<ZoomPanel> {
     const { view } = this;
     const { position, scale: initialScale } = view;
     const scale = view.limitScale(initialScale);
+
+    if (!this.didTransformChange()) {
+      return;
+    } else {
+      ClickBehaviour.tryPreventNextClick(view);
+    }
 
     if (this.pointers.length > 1) {
       const { left, top } = view.el.getBoundingClientRect();

@@ -1,12 +1,11 @@
+import { ClickBehaviour } from '../../core/pointers/ClickBehaviour';
 import { easeOutExpo } from '../../fx/easings/easeOutExpo';
 import { momentum } from '../../fx/momentum';
 import { on } from '../../utils/dom/event/on';
 import { stop } from '../../fx/dispatcher';
-import {
-  DragBehaviour,
-  DragBehaviourOptions,
-} from '../../core/pointers/DragBehaviour';
+import { DragBehaviour } from '../../core/pointers/DragBehaviour';
 
+import type { DragBehaviourOptions } from '../../core/pointers/DragBehaviour';
 import type { Pointer } from '../../core/pointers/Pointer';
 import type { TweenOptions } from '../../fx/tween';
 import type { View } from '../../core';
@@ -31,22 +30,17 @@ export interface DragScrollBehaviourOptions extends DragBehaviourOptions {
 export class DragScrollBehaviour<
   TView extends ScrollableView = ScrollableView
 > extends DragBehaviour<TView> {
-  clickCallback: ((event: Event) => void) | null = null;
   initialPosition: tyny.Point;
   isDraging: boolean = false;
-  listeners: Array<Function> | null;
-  preventNextClick: boolean = false;
+  listeners: Array<Function> | null = null;
 
   constructor(view: TView, options: DragScrollBehaviourOptions) {
     super(view, options);
+
     this.initialPosition = view.position;
 
-    const listeners = (this.listeners = [
-      on(view.el, 'click', this.onViewClick, { capture: true, scope: this }),
-    ]);
-
     if (!options.disableWheel) {
-      listeners.push(on(view.el, 'wheel', this.onWheel, { scope: this }));
+      this.listeners = [on(view.el, 'wheel', this.onWheel, { scope: this })];
     }
   }
 
@@ -106,12 +100,9 @@ export class DragScrollBehaviour<
   onDragEnd(event: MaybeNativeEvent, pointer: Pointer) {
     const { view } = this;
     const velocity = this.getVelocity(pointer);
-
     this.isDraging = false;
-    this.preventNextClick = true;
-    setTimeout(() => {
-      this.preventNextClick = false;
-    }, 200);
+
+    ClickBehaviour.tryPreventNextClick(this.view);
 
     if (view.isPositionPaged) {
       const position = view.position;
@@ -155,16 +146,6 @@ export class DragScrollBehaviour<
     if (this.listeners) {
       this.listeners.forEach((off) => off());
       this.listeners = null;
-    }
-  }
-
-  onViewClick(event: Event) {
-    if (this.preventNextClick) {
-      this.preventNextClick = false;
-      event.preventDefault();
-      event.stopPropagation();
-    } else if (this.clickCallback) {
-      this.clickCallback(event);
     }
   }
 

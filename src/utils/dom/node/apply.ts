@@ -20,7 +20,7 @@ export function apply(
   let child = element.firstElementChild as HTMLElement | null;
   while (child) {
     const next = child.nextElementSibling as HTMLElement | null;
-    apply(child, preCallback);
+    apply(child, preCallback, postCallback);
     child = next;
   }
 

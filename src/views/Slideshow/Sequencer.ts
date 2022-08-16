@@ -32,35 +32,20 @@ export class Sequencer<TOptions extends SequenceOptions = SequenceOptions> {
     Object.assign(this, options);
   }
 
+  createSequence(options: TOptions): Promise<void> {
+    const { transition, from, to } = options;
+
+    return whenLoaded(to)
+      .then(() => this.onTransitionStart(options))
+      .then(() => transition(from, to))
+      .then(() => this.onTransitionEnd(options));
+  }
+
   inTransition(): boolean {
     return !!this.sequence;
   }
 
-  transist(options: TOptions) {
-    const { callbackContext, dismissCallback, sequence } = this;
-
-    if (sequence) {
-      if (this.shelved && dismissCallback) {
-        dismissCallback.call(callbackContext, this.shelved);
-      }
-      this.shelved = options;
-    } else {
-      this.sequence = this.createSequence(options);
-    }
-  }
-
-  protected createSequence(options: TOptions): Promise<any> {
-    const { transition, from, to } = options;
-
-    return whenLoaded(to)
-      .then(() => {
-        this.onTransitionStart(options);
-        return transition(from, to);
-      })
-      .then(() => this.onTransitionEnd(options));
-  }
-
-  protected onTransitionEnd(options: TOptions) {
+  onTransitionEnd(options: TOptions): void | Promise<void> {
     const { callbackContext, shelved, endCallback } = this;
     const { from, to } = options;
     this.shelved = null;
@@ -85,7 +70,7 @@ export class Sequencer<TOptions extends SequenceOptions = SequenceOptions> {
     }
   }
 
-  protected onTransitionStart(options: TOptions) {
+  onTransitionStart(options: TOptions): void | Promise<void> {
     const { from, to } = options;
     const { callbackContext, startCallback } = this;
     if (startCallback) {
@@ -98,6 +83,19 @@ export class Sequencer<TOptions extends SequenceOptions = SequenceOptions> {
 
     if (to) {
       to.classList.add('sequenceTo');
+    }
+  }
+
+  transist(options: TOptions) {
+    const { callbackContext, dismissCallback, sequence } = this;
+
+    if (sequence) {
+      if (this.shelved && dismissCallback) {
+        dismissCallback.call(callbackContext, this.shelved);
+      }
+      this.shelved = options;
+    } else {
+      this.sequence = this.createSequence(options);
     }
   }
 }

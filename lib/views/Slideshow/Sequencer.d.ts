@@ -19,9 +19,9 @@ export declare class Sequencer<TOptions extends SequenceOptions = SequenceOption
     protected sequence: Promise<any> | null;
     protected shelved: TOptions | null;
     constructor(options?: SequencerOptions<TOptions>);
+    createSequence(options: TOptions): Promise<void>;
     inTransition(): boolean;
+    onTransitionEnd(options: TOptions): void | Promise<void>;
+    onTransitionStart(options: TOptions): void | Promise<void>;
     transist(options: TOptions): void;
-    protected createSequence(options: TOptions): Promise<any>;
-    protected onTransitionEnd(options: TOptions): void;
-    protected onTransitionStart(options: TOptions): void;
 }

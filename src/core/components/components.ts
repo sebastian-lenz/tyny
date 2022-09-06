@@ -366,7 +366,7 @@ export function registerView(
   });
 
   if (className in components) {
-    if (upgrade) {
+    if (upgrade && ctor !== components[className].ctor) {
       unregisterView(className);
     } else {
       return;

@@ -3,6 +3,7 @@ import { TransistOptions, TransistPropertyMap } from './transist';
 
 export interface TransistHeightOptions extends Partial<TransistOptions> {
   extraProperties?: TransistPropertyMap;
+  throwErrorOnSkip?: boolean;
 }
 
 export function transistHeight(

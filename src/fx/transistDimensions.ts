@@ -4,6 +4,7 @@ import { withoutTransition } from './withoutTransition';
 
 export interface TransistDimensionsOptions extends Partial<TransistOptions> {
   extraProperties?: TransistPropertyMap;
+  throwErrorOnSkip?: boolean;
   transistHeight?: boolean;
   transistWidth?: boolean;
 }
@@ -18,7 +19,9 @@ export function transistDimensions(
     return Promise.resolve();
   }
 
-  const { extraProperties, transistHeight, transistWidth } = options;
+  const { extraProperties, throwErrorOnSkip, transistHeight, transistWidth } =
+    options;
+
   const fromHeight = element.offsetHeight;
   const fromWidth = element.offsetWidth;
   const style = <any>element.style;
@@ -56,7 +59,11 @@ export function transistDimensions(
   }
 
   if (!hasChanged && !extraProperties) {
-    return Promise.resolve();
+    if (throwErrorOnSkip) {
+      throw new Error();
+    } else {
+      return Promise.resolve();
+    }
   }
 
   return transist(element, properties, options);

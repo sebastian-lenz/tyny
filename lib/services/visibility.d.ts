@@ -17,16 +17,24 @@ export declare const IntersectionObserver: {
     new (callback: IntersectionObserverCallback, options?: IntersectionObserverInit | undefined): IntersectionObserver;
     prototype: IntersectionObserver;
 };
+export interface VisibilityCallback {
+    (value: boolean): void;
+    isIntersecting?: boolean;
+}
 export interface VisibilityTarget {
     el: Element;
-    setVisible(value: boolean): void;
+    setVisible: VisibilityCallback;
 }
 export declare class VisibilityObserver {
-    private observer;
-    private targets;
+    isPrinting: boolean;
+    observer: IntersectionObserver;
+    targets: VisibilityTarget[];
     constructor();
     hasTargets(el: Element): boolean;
     observe(target: VisibilityTarget): void;
+    onAfterPrint(): void;
+    onBeforePrint(): void;
     unobserve(target: VisibilityTarget): void;
+    updateTargets(): void;
 }
 export declare const visibility: VisibilityObserver;

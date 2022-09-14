@@ -52,8 +52,8 @@ export declare class Params {
         tagName: string;
     }): T;
     element<T extends HTMLElement>(options: Param<string | T> & CreateElementOptions): T | null;
-    enum<T>(options: SafeParam<EnumParam<T>>): T[keyof T];
-    enum<T>(options: EnumParam<T>): T[keyof T] | null;
+    enum<T extends Object>(options: SafeParam<EnumParam<T>>): T[keyof T];
+    enum<T extends Object>(options: EnumParam<T>): T[keyof T] | null;
     instance<T>(options: InstanceParam<T>): T;
     int(options: SafeParam<Param<number>>): number;
     int(options: Param<number>): number | null;

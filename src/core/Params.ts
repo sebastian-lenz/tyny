@@ -148,9 +148,9 @@ export class Params {
     return null;
   }
 
-  enum<T>(options: SafeParam<EnumParam<T>>): T[keyof T];
-  enum<T>(options: EnumParam<T>): T[keyof T] | null;
-  enum<T>(options: EnumParam<T>): T[keyof T] | null {
+  enum<T extends Object>(options: SafeParam<EnumParam<T>>): T[keyof T];
+  enum<T extends Object>(options: EnumParam<T>): T[keyof T] | null;
+  enum<T extends Object>(options: EnumParam<T>): T[keyof T] | null {
     const result = this.read(options);
     return result === null ? result : toEnum(options.enum, result);
   }

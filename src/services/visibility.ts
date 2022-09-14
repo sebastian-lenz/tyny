@@ -95,24 +95,38 @@ export class IntersectionObserverClass implements IntersectionObserver {
 export const IntersectionObserver =
   (inBrowser && window.IntersectionObserver) || IntersectionObserverClass;
 
+export interface VisibilityCallback {
+  (value: boolean): void;
+  isIntersecting?: boolean;
+}
+
 export interface VisibilityTarget {
   el: Element;
-  setVisible(value: boolean): void;
+  setVisible: VisibilityCallback;
 }
 
 export class VisibilityObserver {
-  private observer: IntersectionObserver;
-  private targets: VisibilityTarget[] = [];
+  isPrinting: boolean = false;
+  observer: IntersectionObserver;
+  targets: VisibilityTarget[] = [];
 
   constructor() {
     const callback = (entries: IntersectionObserverEntry[]) => {
-      const { targets } = this;
-      entries.forEach((entry) => {
-        targets
-          .filter((target) => target.el === entry.target)
-          .forEach((target) => target.setVisible(entry.isIntersecting));
-      });
+      const { isPrinting, targets } = this;
+
+      for (const target of targets) {
+        for (const entry of entries) {
+          if (target.el === entry.target) {
+            target.setVisible(entry.isIntersecting || isPrinting);
+            target.setVisible.isIntersecting = entry.isIntersecting;
+            break;
+          }
+        }
+      }
     };
+
+    on(window, 'afterprint', this.onAfterPrint, { scope: this });
+    on(window, 'beforeprint', this.onBeforePrint, { scope: this });
 
     this.observer = new IntersectionObserver(callback, {
       rootMargin: '500px 0px',
@@ -132,11 +146,29 @@ export class VisibilityObserver {
     }
   }
 
+  onAfterPrint() {
+    this.isPrinting = false;
+    this.updateTargets();
+  }
+
+  onBeforePrint() {
+    this.isPrinting = true;
+    this.updateTargets();
+  }
+
   unobserve(target: VisibilityTarget) {
     this.targets = this.targets.filter((value) => value !== target);
 
     if (!this.hasTargets(target.el)) {
       this.observer.unobserve(target.el);
+    }
+  }
+
+  updateTargets() {
+    const { isPrinting, targets } = this;
+
+    for (const target of targets) {
+      target.setVisible(target.setVisible.isIntersecting || isPrinting);
     }
   }
 }

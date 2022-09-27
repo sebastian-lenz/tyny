@@ -1,5 +1,5 @@
 import { isString } from '../../utils/lang/string';
-import { HoldBehaviour } from './HoldBehaviour';
+import { HoldBehaviour, HoldBehaviourOptions } from './HoldBehaviour';
 import { on } from '../../utils/dom/event';
 import { property, View, ViewOptions } from '../../core';
 import { Scroller, scrollerScrollEvent } from '../Scroller';
@@ -16,6 +16,7 @@ export interface ScrollerArrowsOptions extends ViewOptions {
   backward?: string | HTMLElement;
   direction?: DragDirection;
   forward?: string | HTMLElement;
+  hold?: HoldBehaviourOptions;
   target?: Scroller | string;
 }
 
@@ -31,10 +32,10 @@ export class ScrollerArrows extends View {
   @property({ immediate: true, param: buttonParam('forward') })
   forward!: HTMLButtonElement;
 
-  constructor(options: ViewOptions) {
+  constructor(options: ScrollerArrowsOptions) {
     super(options);
 
-    this.addBehaviour(HoldBehaviour);
+    this.addBehaviour(HoldBehaviour, options.hold);
   }
 
   @property({ immediate: true, watch: 'onTargetChanged' })

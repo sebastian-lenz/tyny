@@ -10,6 +10,10 @@ import {
   HoldStage,
 } from '../../core/pointers/HoldBehaviour';
 
+export interface HoldBehaviourOptions {
+  onClick?: (forward: number) => void;
+}
+
 export class HoldBehaviour extends HoldBehaviourBase<ScrollerArrows> {
   animation: Spring | null = null;
   forward: number = 0;
@@ -17,10 +21,12 @@ export class HoldBehaviour extends HoldBehaviourBase<ScrollerArrows> {
   position: tyny.Point = { x: 0, y: 0 };
   speed: number = 10;
 
-  constructor(view: ScrollerArrows) {
+  constructor(view: ScrollerArrows, options: HoldBehaviourOptions) {
     super(view, {
       stages: [{ delay: 250 }, { delay: 1000 }, { delay: 1000 }],
     });
+
+    if (options.onClick) this.onClick = options.onClick;
   }
 
   onBeginHold(event: NativeEvent, _pointer: Pointer): boolean {
@@ -32,6 +38,21 @@ export class HoldBehaviour extends HoldBehaviourBase<ScrollerArrows> {
     }, 0);
 
     return this.forward !== 0;
+  }
+
+  onClick(forward: number) {
+    const { direction, target } = this.view;
+    if (!target) {
+      return;
+    }
+
+    const { position } = target;
+    const axis = toAxis(direction);
+    const dimension = toDimension(direction);
+    const size = target.viewportSize[dimension];
+
+    position[axis] = Math.round(position[axis] / size + forward) * size;
+    target.tweenTo(target.clampPosition(position));
   }
 
   onEndHold() {
@@ -59,17 +80,8 @@ export class HoldBehaviour extends HoldBehaviourBase<ScrollerArrows> {
   };
 
   onStageAbort(_stage: HoldStage, index: number) {
-    const { forward } = this;
-    const { direction, target } = this.view;
-
-    if (index === 0 && target) {
-      const { position } = target;
-      const axis = toAxis(direction);
-      const dimension = toDimension(direction);
-      const size = target.viewportSize[dimension];
-
-      position[axis] = Math.round(position[axis] / size + forward) * size;
-      target.tweenTo(target.clampPosition(position));
+    if (index === 0) {
+      this.onClick(this.forward);
     }
   }
 

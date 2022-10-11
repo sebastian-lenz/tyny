@@ -125,8 +125,10 @@ export class VisibilityObserver {
       }
     };
 
-    on(window, 'afterprint', this.onAfterPrint, { scope: this });
-    on(window, 'beforeprint', this.onBeforePrint, { scope: this });
+    if (typeof window !== 'undefined') {
+      on(window, 'afterprint', this.onAfterPrint, { scope: this });
+      on(window, 'beforeprint', this.onBeforePrint, { scope: this });
+    }
 
     this.observer = new IntersectionObserver(callback, {
       rootMargin: '500px 0px',

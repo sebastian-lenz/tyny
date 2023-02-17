@@ -73,6 +73,11 @@ export class View extends Lifecycle {
     return this._component;
   }
 
+  addClass(...tokens: string[]): this {
+    this.el.classList.add(...tokens);
+    return this;
+  }
+
   callUpdate(type?: string) {
     super.callUpdate(type);
 
@@ -137,6 +142,20 @@ export class View extends Lifecycle {
 
       return result;
     }, [] as T[]);
+  }
+
+  hasClass(token: string): boolean {
+    return this.el.classList.contains(token);
+  }
+
+  removeClass(...tokens: string[]): this {
+    this.el.classList.remove(...tokens);
+    return this;
+  }
+
+  toggleClass(token: string, force?: boolean): this {
+    this.el.classList.toggle(token, force);
+    return this;
   }
 
   trigger(event: string | Event, detail?: any) {

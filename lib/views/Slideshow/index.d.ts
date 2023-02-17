@@ -31,7 +31,7 @@ export declare class Slideshow extends CycleableView<SlideshowTransitionOptions>
     immediate(value: HTMLElement | null): void;
     onBrowseBegin(): boolean;
     onBrowseEnd(): void;
-    protected onConnected(): void;
+    onConnected(): void;
     protected onTransition(from: HTMLElement | null, to: HTMLElement | null, options?: SlideshowTransitionOptions): void;
     protected onTransitionDismiss({ from, to }: SequenceOptions): void;
     protected onTransitionEnd({ from, to }: SequenceOptions): void;

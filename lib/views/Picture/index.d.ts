@@ -30,8 +30,8 @@ export declare class Picture extends View implements LoadModeView, VisibilityTar
     protected allowLoad(): boolean;
     protected findSource(width?: number, height?: number): Source | null;
     protected getImage(source: Source, url: string): PictureImage;
-    protected onConnected(): void;
-    protected onDisconnected(): void;
+    onConnected(): void;
+    onDisconnected(): void;
     protected onMeasure(): (() => void) | undefined;
     protected onSizeChanged(): void;
     protected onTransitionEnd(): void;

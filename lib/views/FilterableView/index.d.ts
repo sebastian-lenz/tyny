@@ -26,6 +26,6 @@ export declare class FilterableView<TParams extends FilterableViewParams = Filte
     protected createRequest(): Promise<string | null | false>;
     protected findContent(doc: Document): HTMLElement | null;
     protected load(): void;
-    protected onConnected(): void;
+    onConnected(): void;
     protected onPopState(): void;
 }

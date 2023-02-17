@@ -15,7 +15,7 @@ export declare class DropDown extends View {
     label: HTMLElement;
     select: HTMLSelectElement | null;
     constructor({ groupLabel, optionLabel, selectedLabel, ...options }?: DropDownOptions);
-    protected onConnected(): void;
+    onConnected(): void;
     protected onElementChanged(): void;
     protected onOptionClick(event: tyny.DelegateEvent): void;
     onUpdate(): () => void;

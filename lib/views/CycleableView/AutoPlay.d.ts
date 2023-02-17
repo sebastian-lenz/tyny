@@ -12,7 +12,7 @@ export declare class AutoPlay extends Behaviour<CycleableView> {
     constructor(view: CycleableView, options?: AutoPlayOptions);
     pause(): void;
     start(): void;
-    protected onDisconnected(): void;
+    onDisconnected(): void;
     protected onTimeout: () => void;
     protected onTransist: () => void;
 }

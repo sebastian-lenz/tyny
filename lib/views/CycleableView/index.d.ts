@@ -17,6 +17,6 @@ export declare class CycleableView<TTransitionOptions = any, TItem extends HTMLE
     immediate(value: TItem | null): void;
     normalizeIndex(index: number): number;
     transist(value: TItem | number | null, options?: TTransitionOptions): void;
-    protected onConnected(): void;
+    onConnected(): void;
     protected onTransition(from: TItem | null, to: TItem | null, options?: TTransitionOptions): void;
 }

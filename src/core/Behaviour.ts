@@ -23,9 +23,9 @@ export class Behaviour<TView extends View = View> extends Lifecycle {
     return this.view.el;
   }
 
-  protected onConnected() {}
+  onConnected() {}
 
-  protected onDestroyed() {}
+  onDestroyed() {}
 
-  protected onDisconnected() {}
+  onDisconnected() {}
 }

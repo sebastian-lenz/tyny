@@ -67,11 +67,11 @@ export abstract class Lifecycle {
   // Internal hooks
   // --------------
 
-  protected onConnected() {}
+  onConnected() {}
 
-  protected onDestroyed() {}
+  onDestroyed() {}
 
-  protected onDisconnected() {}
+  onDisconnected() {}
 
   // View API
   // --------

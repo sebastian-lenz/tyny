@@ -1,6 +1,7 @@
 import { clearViewCache, emitUpdate } from './components/components';
 import { fastDom } from './components';
 import { find, findAll, Selector } from '../utils/dom/node/find';
+import { findAllViews, findView } from '../utils/dom/node/findView';
 import { isEmpty } from '../utils/lang/misc/isEmpty';
 import { Lifecycle } from './Lifecycle';
 import { Params } from './Params';
@@ -110,7 +111,7 @@ export class View extends Lifecycle {
     selector: Selector,
     ctor?: string | ViewClass<T>
   ): T | null {
-    return this.findAllViews(selector, ctor)[0] || null;
+    return findView(selector, this.el, ctor);
   }
 
   findAll<T extends HTMLElement = HTMLElement>(selector: Selector): T[] {
@@ -121,27 +122,7 @@ export class View extends Lifecycle {
     selector: Selector,
     ctor?: string | ViewClass<T>
   ): T[] {
-    return findAll(selector, this.el).reduce((result, element) => {
-      const views = element.__tynyViews;
-      if (!views) return result;
-
-      if (!ctor) {
-        result.push(...(Object.values(views) as Array<T>));
-      } else if (typeof ctor === 'string') {
-        if (ctor in views) {
-          result.push(views[ctor] as T);
-        }
-      } else {
-        for (const name in views) {
-          const view = views[name];
-          if (view instanceof ctor) {
-            result.push(view);
-          }
-        }
-      }
-
-      return result;
-    }, [] as T[]);
+    return findAllViews(selector, this.el, ctor);
   }
 
   hasClass(token: string): boolean {

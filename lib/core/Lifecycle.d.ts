@@ -11,9 +11,9 @@ export declare abstract class Lifecycle {
     callUpdate(type?: string): void;
     destroy(): void;
     abstract get el(): HTMLElement;
-    protected onConnected(): void;
-    protected onDestroyed(): void;
-    protected onDisconnected(): void;
+    onConnected(): void;
+    onDestroyed(): void;
+    onDisconnected(): void;
     protected _callConnected(): void;
     protected _callDestroyed(): void;
     protected _callDisconnected(): void;

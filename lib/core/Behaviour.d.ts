@@ -9,7 +9,7 @@ export declare class Behaviour<TView extends View = View> extends Lifecycle {
     readonly view: TView;
     constructor(view: TView, options?: BehaviourOptions);
     get el(): HTMLElement;
-    protected onConnected(): void;
-    protected onDestroyed(): void;
-    protected onDisconnected(): void;
+    onConnected(): void;
+    onDestroyed(): void;
+    onDisconnected(): void;
 }

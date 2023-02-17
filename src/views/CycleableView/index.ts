@@ -87,7 +87,7 @@ export class CycleableView<
     });
   }
 
-  protected onConnected() {
+  onConnected() {
     const initialIndex = this.params.int({ name: 'initialIndex' });
     if (!isUndefined(initialIndex)) {
       this.transist(initialIndex);

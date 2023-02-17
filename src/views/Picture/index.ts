@@ -160,12 +160,12 @@ export class Picture extends View implements LoadModeView, VisibilityTarget {
     return images[url];
   }
 
-  protected onConnected() {
+  onConnected() {
     super.onConnected();
     visibility.observe(this);
   }
 
-  protected onDisconnected() {
+  onDisconnected() {
     super.onDisconnected();
     visibility.unobserve(this);
   }

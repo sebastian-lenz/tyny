@@ -100,12 +100,12 @@ export class Image extends View implements LoadModeView, VisibilityTarget {
     return this.loadMode === LoadMode.Always;
   }
 
-  protected onConnected() {
+  onConnected() {
     super.onConnected();
     visibility.observe(this);
   }
 
-  protected onDisconnected() {
+  onDisconnected() {
     super.onDisconnected();
     visibility.unobserve(this);
   }

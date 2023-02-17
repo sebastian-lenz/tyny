@@ -49,7 +49,7 @@ export class AutoPlay extends Behaviour<CycleableView> {
     this._timeout = window.setTimeout(onTimeout, interval);
   }
 
-  protected onDisconnected() {
+  onDisconnected() {
     off(this.el, transistEvent, this.onTransist);
 
     const { _timeout } = this;

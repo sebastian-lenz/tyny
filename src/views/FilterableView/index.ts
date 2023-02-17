@@ -136,7 +136,7 @@ export class FilterableView<
     }));
   }
 
-  protected onConnected() {
+  onConnected() {
     this.sync(true);
   }
 

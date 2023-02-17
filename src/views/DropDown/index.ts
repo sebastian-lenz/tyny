@@ -58,7 +58,7 @@ export class DropDown extends View {
     this.selectedLabel = selectedLabel;
   }
 
-  protected onConnected() {
+  onConnected() {
     this.renderFlyout();
   }
 

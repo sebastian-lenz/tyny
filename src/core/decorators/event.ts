@@ -9,7 +9,7 @@ export interface EventHandlerOptions<T extends View = View> {
   passive?: boolean;
   selector?: string | { (view: T): string };
   self?: boolean;
-  target?: EventHandlerTarget | { (view: View): EventHandlerTarget };
+  target?: EventHandlerTarget | string | { (view: View): EventHandlerTarget };
 }
 
 export interface EventHandler<T extends View = View>

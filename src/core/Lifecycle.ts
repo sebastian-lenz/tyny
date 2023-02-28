@@ -1,4 +1,5 @@
 import { fastDom, FastDomTask } from './components';
+import { find } from '../utils/dom/node';
 import { isEqual } from '../utils/lang/object/isEqual';
 import { isFunction } from '../utils/lang/function/isFunction';
 import { isString } from '../utils/lang/string';
@@ -105,9 +106,13 @@ export abstract class Lifecycle {
     event: EventHandler
   ): Array<Function> {
     let { name, target, handler, selector, filter, ...args } = event;
-    target = isFunction(target)
-      ? target.call(this, this as any)
-      : target || this.el;
+    if (isFunction(target)) {
+      target = target.call(this, this as any);
+    } else if (typeof target === 'string') {
+      target = find(target, this.el) || this.el;
+    } else {
+      target = target || this.el;
+    }
 
     if (Array.isArray(target)) {
       return target.reduce(

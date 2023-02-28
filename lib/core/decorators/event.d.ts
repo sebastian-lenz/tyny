@@ -11,7 +11,7 @@ export interface EventHandlerOptions<T extends View = View> {
         (view: T): string;
     };
     self?: boolean;
-    target?: EventHandlerTarget | {
+    target?: EventHandlerTarget | string | {
         (view: View): EventHandlerTarget;
     };
 }

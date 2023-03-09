@@ -4,7 +4,7 @@ export declare const scrollbarOptions: {
         className: string;
         target: HTMLElement;
     } | null;
-    scrollbarProp: string;
+    scrollbarProp: string | ((value: number) => void);
 };
 export interface ScrollbarsEventArgs {
     hasScrollbars: boolean;

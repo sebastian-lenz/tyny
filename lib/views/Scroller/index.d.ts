@@ -1,7 +1,7 @@
 import { DragDirection } from '../../core/pointers/DragBehaviour';
-import { DragScrollBehaviour, ScrollableView } from './DragScrollBehaviour';
 import { Tween, TweenOptions } from '../../fx/tween';
 import { View, ViewOptions } from '../../core';
+import { DragScrollBehaviour, DragScrollBehaviourOptions, ScrollableView } from './DragScrollBehaviour';
 export declare const scrollerScrollEvent = "tyny:scrollerScroll";
 export interface ScrollerEventArgs {
     target: Scroller;
@@ -12,6 +12,7 @@ export interface ScrollerItem {
 }
 export interface ScrollerOptions extends ViewOptions {
     content?: HTMLElement | string;
+    dragOptions?: DragScrollBehaviourOptions;
     direction?: DragDirection;
     itemSelector?: string;
     position?: tyny.Point;
@@ -41,7 +42,7 @@ export declare class Scroller<TItem extends ScrollerItem = ScrollerItem> extends
     setPosition(value: tyny.Point): void;
     toDisplayOffset(value: tyny.Point): tyny.Point;
     toLocalOffset(value: tyny.Point): tyny.Point;
-    tweenTo(position: tyny.Point, options?: Partial<TweenOptions>): void;
+    tweenTo(position: tyny.Point, options?: Partial<TweenOptions>): Tween;
     onMeasure(): void;
     onResize(): void;
 }

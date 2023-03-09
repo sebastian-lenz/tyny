@@ -1,11 +1,10 @@
 import { JSX, RefObject } from 'preact';
 import { Transition, TransitionEffect } from './createTransition';
-export interface Props {
+export interface Props extends JSX.HTMLAttributes<HTMLDivElement> {
     children: JSX.Element | null;
     className?: string;
     effect?: TransitionEffect;
     pageClassName?: string;
-    style?: JSX.CSSProperties;
     uri: string;
 }
 export interface State {
@@ -16,4 +15,4 @@ export interface State {
     transition: Transition | null;
     uri: string;
 }
-export declare function Swap(props: Props): JSX.Element;
+export declare function Swap({ children, effect, pageClassName, uri, ...props }: Props): JSX.Element;

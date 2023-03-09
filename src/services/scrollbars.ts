@@ -13,7 +13,7 @@ export const scrollbarsChangeEvent = 'tyny:scrollbarsChange';
 
 export const scrollbarOptions = {
   classOptions: null as { className: string; target: HTMLElement } | null,
-  scrollbarProp: '',
+  scrollbarProp: '' as string | { (value: number): void },
 };
 
 export interface ScrollbarsEventArgs {
@@ -58,8 +58,11 @@ function setScrollbars(value: boolean) {
       const { offsetWidth } = body;
       disable();
       _scrollBarSize = body.offsetWidth - offsetWidth;
-      if (scrollbarProp) {
-        body.style.setProperty(scrollbarProp, `${_scrollBarSize}px`);
+
+      if (typeof scrollbarProp === 'function') {
+        scrollbarProp(_scrollBarSize);
+      } else if (scrollbarProp) {
+        body.style.setProperty(scrollbarProp, `${value}px`);
       }
     } else {
       disable();

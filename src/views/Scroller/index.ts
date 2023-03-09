@@ -1,10 +1,15 @@
 import { DragDirection } from '../../core/pointers/DragBehaviour';
-import { DragScrollBehaviour, ScrollableView } from './DragScrollBehaviour';
+import { findAll } from '../../utils/dom/node';
 import { stop } from '../../fx/dispatcher';
 import { transform } from '../../utils/env/transformProps';
 import { tween, Tween, TweenOptions } from '../../fx/tween';
 import { View, ViewOptions, update, property } from '../../core';
-import { findAll } from '../../utils/dom/node';
+
+import {
+  DragScrollBehaviour,
+  DragScrollBehaviourOptions,
+  ScrollableView,
+} from './DragScrollBehaviour';
 
 const createBounds = () => ({
   xMin: 0,
@@ -26,6 +31,7 @@ export interface ScrollerItem {
 
 export interface ScrollerOptions extends ViewOptions {
   content?: HTMLElement | string;
+  dragOptions?: DragScrollBehaviourOptions;
   direction?: DragDirection;
   itemSelector?: string;
   position?: tyny.Point;
@@ -73,7 +79,7 @@ export class Scroller<TItem extends ScrollerItem = ScrollerItem>
 
     this.dragBehaviour = this.addBehaviour(DragScrollBehaviour, {
       direction,
-      view: this,
+      ...(options.dragOptions || {}),
     });
   }
 
@@ -135,7 +141,7 @@ export class Scroller<TItem extends ScrollerItem = ScrollerItem>
     return value;
   }
 
-  tweenTo(position: tyny.Point, options: Partial<TweenOptions> = {}): void {
+  tweenTo(position: tyny.Point, options: Partial<TweenOptions> = {}): Tween {
     let { currentTween } = this;
     this.currentTarget = position;
 
@@ -151,6 +157,8 @@ export class Scroller<TItem extends ScrollerItem = ScrollerItem>
       const reset = () => (this.currentTween = this.currentTarget = null);
       currentTween.then(reset, reset);
     }
+
+    return currentTween;
   }
 
   @update({ mode: 'read', events: ['resize', 'update'] })

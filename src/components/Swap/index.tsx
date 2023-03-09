@@ -11,12 +11,11 @@ import {
 
 const defaultEffect = dissolve();
 
-export interface Props {
+export interface Props extends JSX.HTMLAttributes<HTMLDivElement> {
   children: JSX.Element | null;
   className?: string;
   effect?: TransitionEffect;
   pageClassName?: string;
-  style?: JSX.CSSProperties;
   uri: string;
 }
 
@@ -29,48 +28,53 @@ export interface State {
   uri: string;
 }
 
-export function Swap(props: Props) {
-  const [state, setState] = useState<State>({
-    child: props.children || null,
+export function Swap({
+  children,
+  effect,
+  pageClassName,
+  uri,
+  ...props
+}: Props) {
+  const [state, setState] = useState<State>(() => ({
+    child: children || null,
     index: 0,
     lastChild: null,
     rootRef: createRef(),
     transition: null,
-    uri: props.uri,
-  });
+    uri,
+  }));
 
   let useStateChild = false;
-  if (props.uri !== state.uri && !state.transition) {
+  if (uri !== state.uri && !state.transition) {
     useStateChild = true;
-    const children = {
-      child: props.children || null,
+    const childProps = {
+      child: children || null,
       lastChild: state.child,
     };
 
     setState({
       ...state,
-      ...children,
+      ...childProps,
       index: state.index + 1,
       transition: createTransition({
-        ...children,
-        childRef: props.children ? createRef() : null,
-        effect: props.effect || defaultEffect,
+        ...childProps,
+        childRef: children ? createRef() : null,
+        effect: effect || defaultEffect,
         lastChildRef: state.child ? createRef() : null,
         rootRef: state.rootRef,
       }),
-      uri: props.uri,
+      uri,
     });
-  } else if (state.child !== props.children) {
+  } else if (state.child !== children) {
     setState({
       ...state,
-      child: props.children || null,
+      child: children || null,
     });
   }
 
   const { index, lastChild, transition } = state;
-  const { className, pageClassName, style } = props;
   const elements: Array<JSX.Element> = [];
-  const child = transition || useStateChild ? state.child : props.children;
+  const child = transition || useStateChild ? state.child : children;
 
   if (pageClassName) {
     if (lastChild) {
@@ -129,7 +133,7 @@ export function Swap(props: Props) {
   }, [transition]);
 
   return (
-    <div className={className} ref={state.rootRef} style={style}>
+    <div {...props} ref={state.rootRef}>
       {elements}
     </div>
   );

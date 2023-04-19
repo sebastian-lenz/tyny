@@ -13,3 +13,4 @@ export interface ScrollbarsEventArgs {
 export declare function getScrollBarSize(): number;
 export declare function hasScrollbars(): boolean;
 export declare function toggleScrollbars(origin: any, enabled: boolean): void;
+export declare function resetScrollbars(): void;

@@ -104,3 +104,10 @@ export function toggleScrollbars(origin: any, enabled: boolean) {
 
   setScrollbars(origins.length === 0);
 }
+
+export function resetScrollbars() {
+  if (origins.length) {
+    origins.length = 0;
+    setScrollbars(true);
+  }
+}

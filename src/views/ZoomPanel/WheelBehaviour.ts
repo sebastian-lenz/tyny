@@ -55,7 +55,7 @@ export class WheelBehaviour extends Behaviour<ZoomPanel> {
         scale,
       },
       {
-        epsilon: 0.0001,
+        epsilon: 0.00001,
       }
     );
   }

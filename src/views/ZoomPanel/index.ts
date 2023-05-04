@@ -3,15 +3,17 @@ import { stop } from '../../fx/dispatcher';
 import { WheelBehaviour } from './WheelBehaviour';
 import { ZoomBehaviour } from './ZoomBehaviour';
 
+const EPSILON = 0.0001;
+
 export interface ZoomPanelOptions extends ViewOptions {}
 
-export type ResizeMode = 'fit' | 'clamp' | 'none';
+export type ResizeMode = 'auto' | 'fit' | 'clamp' | 'none';
 
 export abstract class ZoomPanel extends View {
   fitPadding: number = 0;
   height: number = 0;
   position: tyny.Point = { x: 0, y: 0 };
-  resizeMode: ResizeMode = 'fit';
+  resizeMode: ResizeMode = 'auto';
   scale: number = 1;
   width: number = 0;
   readonly wheelBehaviour: WheelBehaviour;
@@ -42,7 +44,28 @@ export abstract class ZoomPanel extends View {
     this.draw();
   }
 
+  isFitToView(): boolean {
+    const [x, y, scale] = this.getFitToViewProps();
+
+    return (
+      Math.abs(this.scale - scale) < EPSILON &&
+      Math.abs(this.position.x - x) < EPSILON &&
+      Math.abs(this.position.y - y) < EPSILON
+    );
+  }
+
   fitToView() {
+    stop(this);
+
+    const [x, y, scale] = this.getFitToViewProps();
+    this.scale = scale;
+    this.position.x = x;
+    this.position.y = y;
+
+    this.draw();
+  }
+
+  getFitToViewProps() {
     const { height, fitPadding, width } = this;
     const nativeHeight = this.getNativeHeight();
     const nativeWidth = this.getNativeWidth();
@@ -57,12 +80,7 @@ export abstract class ZoomPanel extends View {
     const x = (width - displayWidth) * 0.5;
     const y = (height - displayHeight) * 0.5;
 
-    stop(this);
-
-    this.scale = scale;
-    this.position.x = x;
-    this.position.y = y;
-    this.draw();
+    return [x, y, scale];
   }
 
   getPositionBounds(scale: number = this.scale): tyny.BoundingBox {
@@ -132,19 +150,19 @@ export abstract class ZoomPanel extends View {
   }
 
   @update({ events: 'resize', mode: 'read' })
-  protected onMeasure() {
+  onMeasure() {
     const { el, resizeMode } = this;
+    const wasFit = resizeMode == 'auto' && this.isFitToView();
     this.height = el.offsetHeight;
     this.width = el.offsetWidth;
 
-    if (resizeMode === 'fit') {
-      return () => {
-        this.fitToView();
-      };
-    } else if (resizeMode === 'clamp') {
-      return () => {
-        this.clampView();
-      };
+    switch (resizeMode) {
+      case 'fit':
+        return this.fitToView;
+      case 'clamp':
+        return this.clampView;
+      case 'auto':
+        return wasFit ? this.fitToView : undefined;
     }
   }
 }

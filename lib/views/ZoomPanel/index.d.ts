@@ -3,7 +3,7 @@ import { WheelBehaviour } from './WheelBehaviour';
 import { ZoomBehaviour } from './ZoomBehaviour';
 export interface ZoomPanelOptions extends ViewOptions {
 }
-export declare type ResizeMode = 'fit' | 'clamp' | 'none';
+export declare type ResizeMode = 'auto' | 'fit' | 'clamp' | 'none';
 export declare abstract class ZoomPanel extends View {
     fitPadding: number;
     height: number;
@@ -18,12 +18,14 @@ export declare abstract class ZoomPanel extends View {
     abstract getNativeHeight(): number;
     abstract getNativeWidth(): number;
     clampView(): void;
+    isFitToView(): boolean;
     fitToView(): void;
+    getFitToViewProps(): number[];
     getPositionBounds(scale?: number): tyny.BoundingBox;
     getScaleBounds(): tyny.Interval;
     limitPosition({ x, y }: tyny.Point, scale?: number): tyny.Point;
     limitScale(scale: number): number;
     setPosition({ x, y }: tyny.Point): void;
     setScale(value: number): void;
-    protected onMeasure(): (() => void) | undefined;
+    onMeasure(): (() => void) | undefined;
 }

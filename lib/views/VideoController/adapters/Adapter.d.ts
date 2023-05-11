@@ -5,6 +5,7 @@ export declare abstract class Adapter<TElement extends HTMLElement = HTMLElement
     readonly el: TElement;
     protected uid: number;
     constructor(el: TElement);
+    destroy(): void;
     enableApi(): Promise<void>;
     getCurrentTime(): number;
     getDuration(): number;

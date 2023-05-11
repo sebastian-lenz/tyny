@@ -13,6 +13,8 @@ export abstract class Adapter<TElement extends HTMLElement = HTMLElement> {
     this.uid = nextUid++;
   }
 
+  destroy(): void {}
+
   enableApi(): Promise<void> {
     return Promise.resolve();
   }

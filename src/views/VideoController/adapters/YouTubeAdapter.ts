@@ -106,7 +106,10 @@ export class YouTubeAdapter extends IFrameAdapter {
     const startPolling = () => {
       pollInterval = setInterval(pollCallback, 100);
       pollCallback();
-      on(window, 'message', this.onMessage, { scope: this });
+
+      this.listeners.push(
+        on(window, 'message', this.onMessage, { scope: this })
+      );
     };
 
     if (!url.getParam('enablejsapi')) {
@@ -115,6 +118,8 @@ export class YouTubeAdapter extends IFrameAdapter {
     } else {
       startPolling();
     }
+
+    this.listeners.push(() => clearInterval(pollInterval));
 
     return new Promise((resolve) => {
       this.awaitMessage(

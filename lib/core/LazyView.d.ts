@@ -4,5 +4,5 @@ export declare type LazyViewPromise = Promise<{
 }>;
 export declare abstract class LazyView extends View {
     onConnected(): void;
-    abstract load(): LazyViewPromise;
+    abstract loadView(): LazyViewPromise;
 }

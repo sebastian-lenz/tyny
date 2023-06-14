@@ -7,10 +7,10 @@ export type LazyViewPromise = Promise<{
 
 export abstract class LazyView extends View {
   onConnected() {
-    this.load().then((result) => {
+    this.loadView().then((result) => {
       registerView(this.component.name, result.default, { upgrade: true });
     });
   }
 
-  abstract load(): LazyViewPromise;
+  abstract loadView(): LazyViewPromise;
 }

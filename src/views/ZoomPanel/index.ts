@@ -13,6 +13,7 @@ export type ResizeMode = 'auto' | 'cover' | 'fit' | 'clamp' | 'none';
 export type ViewProps = [number, number, number];
 
 export abstract class ZoomPanel extends View {
+  coverPadding: number = 0;
   fitPadding: number = 0;
   height: number = 0;
   position: tyny.Point = { x: 0, y: 0 };
@@ -87,22 +88,21 @@ export abstract class ZoomPanel extends View {
     return [x, y, scale];
   }
 
-  getCoverViewProps(): ViewProps {
+  getCoverViewProps(padding: number = this.coverPadding): ViewProps {
     return this.getCenteredViewProps(
       Math.max(
-        this.height / this.getNativeHeight(),
-        this.width / this.getNativeWidth()
+        (this.height - padding * 2) / this.getNativeHeight(),
+        (this.width - padding * 2) / this.getNativeWidth()
       )
     );
   }
 
-  getFitToViewProps(): ViewProps {
-    const { fitPadding } = this;
+  getFitToViewProps(padding: number = this.fitPadding): ViewProps {
     return this.getCenteredViewProps(
       Math.min(
         1,
-        (this.height - fitPadding * 2) / this.getNativeHeight(),
-        (this.width - fitPadding * 2) / this.getNativeWidth()
+        (this.height - padding * 2) / this.getNativeHeight(),
+        (this.width - padding * 2) / this.getNativeWidth()
       )
     );
   }

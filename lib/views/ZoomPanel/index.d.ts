@@ -7,6 +7,7 @@ export interface ZoomPanelOptions extends ViewOptions {
 export declare type ResizeMode = 'auto' | 'cover' | 'fit' | 'clamp' | 'none';
 export declare type ViewProps = [number, number, number];
 export declare abstract class ZoomPanel extends View {
+    coverPadding: number;
     fitPadding: number;
     height: number;
     position: tyny.Point;
@@ -27,8 +28,8 @@ export declare abstract class ZoomPanel extends View {
     fitToView(): void;
     matchesViewProps([x, y, scale]: ViewProps): boolean;
     getCenteredViewProps(scale: number): ViewProps;
-    getCoverViewProps(): ViewProps;
-    getFitToViewProps(): ViewProps;
+    getCoverViewProps(padding?: number): ViewProps;
+    getFitToViewProps(padding?: number): ViewProps;
     getPositionBounds(scale?: number): tyny.BoundingBox;
     getScaleBounds(): tyny.Interval;
     limitPosition({ x, y }: tyny.Point, scale?: number): tyny.Point;

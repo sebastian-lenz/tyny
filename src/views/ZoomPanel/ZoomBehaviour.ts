@@ -10,15 +10,28 @@ import { ZoomPanel } from './index';
 import type {
   MaybeNativeEvent,
   NativeEvent,
+  PointerBehaviourOptions,
 } from '../../core/pointers/PointerBehaviour';
+
+export interface ZoomBehaviourOptions extends PointerBehaviourOptions {
+  enabled?: boolean;
+}
 
 export class ZoomBehaviour extends TransformBehaviour<ZoomPanel> {
   allowMoveX: boolean = true;
   allowMoveY: boolean = true;
   allowScale: boolean = true;
+  enabled: boolean;
   initialPosition: tyny.Point = { x: 0, y: 0 };
   initialScale: number = 0;
   isActive: boolean = false;
+
+  constructor(view: ZoomPanel, options: ZoomBehaviourOptions = {}) {
+    super(view, options);
+
+    const { enabled = true } = options;
+    this.enabled = enabled;
+  }
 
   didTransformChange(positionEpsilon = 2, scaleEpsilon = 0.001) {
     const { initialPosition, initialScale, view } = this;
@@ -36,6 +49,10 @@ export class ZoomBehaviour extends TransformBehaviour<ZoomPanel> {
       position: { x, y },
       scale,
     } = view;
+
+    if (!this.enabled) {
+      return false;
+    }
 
     this.initialPosition = { x, y };
     this.initialScale = scale;

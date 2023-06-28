@@ -1,14 +1,25 @@
-import { Behaviour } from '../../core/Behaviour';
+import { Behaviour, BehaviourOptions } from '../../core/Behaviour';
 import { event } from '../../core';
 import { normalizeWheel } from '../../utils/env/normalizeWheel';
 import { onWheel } from '../../utils/env';
 import { spring } from '../../fx/spring';
 import { ZoomPanel } from './index';
 
+export interface WheelBehaviourOptions extends BehaviourOptions {
+  enabled?: boolean;
+}
+
 export class WheelBehaviour extends Behaviour<ZoomPanel> {
-  enabled: boolean = true;
+  enabled: boolean;
   power: number = 1;
   requireCtrlKey: boolean = false;
+
+  constructor(view: ZoomPanel, options: WheelBehaviourOptions = {}) {
+    super(view, options);
+
+    const { enabled = true } = options;
+    this.enabled = enabled;
+  }
 
   @event({ name: onWheel })
   handleWheel(event: WheelEvent) {

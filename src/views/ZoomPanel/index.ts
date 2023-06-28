@@ -5,9 +5,12 @@ import { ZoomBehaviour } from './ZoomBehaviour';
 
 const EPSILON = 0.0001;
 
-export interface ZoomPanelOptions extends ViewOptions {}
+export interface ZoomPanelOptions extends ViewOptions {
+  enabled?: boolean;
+}
 
-export type ResizeMode = 'auto' | 'fit' | 'clamp' | 'none';
+export type ResizeMode = 'auto' | 'cover' | 'fit' | 'clamp' | 'none';
+export type ViewProps = [number, number, number];
 
 export abstract class ZoomPanel extends View {
   fitPadding: number = 0;
@@ -22,8 +25,9 @@ export abstract class ZoomPanel extends View {
   constructor(options: ZoomPanelOptions) {
     super(options);
 
-    this.zoomBehaviour = this.addBehaviour(ZoomBehaviour);
-    this.wheelBehaviour = this.addBehaviour(WheelBehaviour);
+    const { enabled = true } = options;
+    this.zoomBehaviour = this.addBehaviour(ZoomBehaviour, { enabled });
+    this.wheelBehaviour = this.addBehaviour(WheelBehaviour, { enabled });
   }
 
   abstract draw(): void;
@@ -32,21 +36,39 @@ export abstract class ZoomPanel extends View {
 
   abstract getNativeWidth(): number;
 
+  applyViewProps([x, y, scale]: ViewProps) {
+    this.scale = scale;
+    this.position.x = x;
+    this.position.y = y;
+
+    stop(this);
+    this.draw();
+  }
+
   clampView() {
     const scale = this.limitScale(this.scale);
     const { x, y } = this.limitPosition(this.position, scale);
 
-    stop(this);
+    this.applyViewProps([x, y, scale]);
+  }
 
-    this.scale = scale;
-    this.position.x = x;
-    this.position.y = y;
-    this.draw();
+  coverView() {
+    this.applyViewProps(this.getCoverViewProps());
+  }
+
+  isCoverView(): boolean {
+    return this.matchesViewProps(this.getCoverViewProps());
   }
 
   isFitToView(): boolean {
-    const [x, y, scale] = this.getFitToViewProps();
+    return this.matchesViewProps(this.getFitToViewProps());
+  }
 
+  fitToView() {
+    this.applyViewProps(this.getFitToViewProps());
+  }
+
+  matchesViewProps([x, y, scale]: ViewProps) {
     return (
       Math.abs(this.scale - scale) < EPSILON &&
       Math.abs(this.position.x - x) < EPSILON &&
@@ -54,33 +76,35 @@ export abstract class ZoomPanel extends View {
     );
   }
 
-  fitToView() {
-    stop(this);
+  getCenteredViewProps(scale: number): ViewProps {
+    const { height, width } = this;
+    const displayWidth = this.getNativeWidth() * scale;
+    const displayHeight = this.getNativeHeight() * scale;
 
-    const [x, y, scale] = this.getFitToViewProps();
-    this.scale = scale;
-    this.position.x = x;
-    this.position.y = y;
-
-    this.draw();
-  }
-
-  getFitToViewProps() {
-    const { height, fitPadding, width } = this;
-    const nativeHeight = this.getNativeHeight();
-    const nativeWidth = this.getNativeWidth();
-    const scale = Math.min(
-      1,
-      (height - fitPadding * 2) / nativeHeight,
-      (width - fitPadding * 2) / nativeWidth
-    );
-
-    const displayWidth = nativeWidth * scale;
-    const displayHeight = nativeHeight * scale;
     const x = (width - displayWidth) * 0.5;
     const y = (height - displayHeight) * 0.5;
 
     return [x, y, scale];
+  }
+
+  getCoverViewProps(): ViewProps {
+    return this.getCenteredViewProps(
+      Math.max(
+        this.height / this.getNativeHeight(),
+        this.width / this.getNativeWidth()
+      )
+    );
+  }
+
+  getFitToViewProps(): ViewProps {
+    const { fitPadding } = this;
+    return this.getCenteredViewProps(
+      Math.min(
+        1,
+        (this.height - fitPadding * 2) / this.getNativeHeight(),
+        (this.width - fitPadding * 2) / this.getNativeWidth()
+      )
+    );
   }
 
   getPositionBounds(scale: number = this.scale): tyny.BoundingBox {
@@ -157,6 +181,8 @@ export abstract class ZoomPanel extends View {
     this.width = el.offsetWidth;
 
     switch (resizeMode) {
+      case 'cover':
+        return this.coverView;
       case 'fit':
         return this.fitToView;
       case 'clamp':

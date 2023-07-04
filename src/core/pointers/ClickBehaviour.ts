@@ -17,9 +17,10 @@ export class ClickBehaviour<
     super(view, options);
 
     this.onClick = options.onClick || null;
-    const listeners = (this.listeners = [
+
+    this.listeners = [
       on(view.el, 'click', this.onViewClick, { capture: true, scope: this }),
-    ]);
+    ];
   }
 
   onDestroyed() {

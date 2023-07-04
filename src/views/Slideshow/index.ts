@@ -1,5 +1,6 @@
 import { AutoPlay, AutoPlayOptions } from '../CycleableView/AutoPlay';
 import { BrowseBehaviour, BrowseBehaviourOptions } from './BrowseBehaviour';
+import { ClickBehaviour } from '../../core/pointers/ClickBehaviour';
 import { CycleableView, CycleableViewOptions } from '../CycleableView';
 import { dissolve } from '../../fx/transitions/dissolve';
 import { LoadMode, setChildLoadMode } from '../../utils/views/loadMode';
@@ -49,6 +50,7 @@ export class Slideshow extends CycleableView<SlideshowTransitionOptions> {
 
     this.autoPlay = this.addBehaviour(AutoPlay, options.autoPlay);
     this.browseBehaviour = this.addBehaviour(BrowseBehaviour, options.browse);
+    this.addBehaviour(ClickBehaviour);
     this.defaultTransition = options.transition || dissolve();
 
     this.sequencer = new Sequencer<SequenceOptions>({

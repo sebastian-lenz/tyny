@@ -1,7 +1,7 @@
+import { ClickBehaviour } from '../../core/pointers/ClickBehaviour';
 import { easeInOutQuad } from '../../fx/easings/easeInOutQuad';
 import { easeOutExpo } from '../../fx/easings/easeOutExpo';
 import { Effect } from './effects/Effect';
-import { on } from '../../utils/dom/event/on';
 import { stop } from '../../fx/dispatcher';
 import { SlideEffect } from './effects/SlideEffect';
 import { tween, TweenOptions } from '../../fx/tween';
@@ -31,13 +31,10 @@ export interface BrowseBehaviourOptions extends DragBehaviourOptions {
 export class BrowseBehaviour<
   TView extends BrowsableView = BrowsableView
 > extends DragBehaviour<TView> {
-  //
   effect: Effect;
   enabled: boolean;
   initialOffset: number = 0;
-  listeners: Array<Function> | null;
   offset: number | null = null;
-  preventNextClick: boolean = false;
 
   constructor(
     view: TView,
@@ -54,9 +51,6 @@ export class BrowseBehaviour<
 
     this.enabled = enabled;
     this.effect = effect;
-    this.listeners = [
-      on(view.el, 'click', this.onViewClick, { capture: true, scope: this }),
-    ];
   }
 
   setOffset(value: number | null) {
@@ -121,13 +115,13 @@ export class BrowseBehaviour<
 
   onDragEnd(event: MaybeNativeEvent, pointer: Pointer) {
     const { view } = this;
-    this.preventNextClick = true;
-
     const force = this.getForce(pointer);
     const offset = this.getOffsetTarget(force);
     const options: Partial<TweenOptions> = {
       easing: Math.abs(force) < 2 ? easeInOutQuad : easeOutExpo,
     };
+
+    ClickBehaviour.tryPreventNextClick(view);
 
     tween(this, { offset }, options).then(() => {
       this.setOffset(null);
@@ -154,22 +148,5 @@ export class BrowseBehaviour<
     }
 
     return Math.round(offset);
-  }
-
-  onDestroyed() {
-    super.onDestroyed();
-
-    if (this.listeners) {
-      this.listeners.forEach((off) => off());
-      this.listeners = null;
-    }
-  }
-
-  onViewClick(event: Event) {
-    if (this.preventNextClick) {
-      this.preventNextClick = false;
-      event.preventDefault();
-      event.stopPropagation();
-    }
   }
 }

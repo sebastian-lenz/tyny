@@ -16,9 +16,7 @@ export declare class BrowseBehaviour<TView extends BrowsableView = BrowsableView
     effect: Effect;
     enabled: boolean;
     initialOffset: number;
-    listeners: Array<Function> | null;
     offset: number | null;
-    preventNextClick: boolean;
     constructor(view: TView, { enabled, effect, ...options }: BrowseBehaviourOptions);
     setOffset(value: number | null): void;
     onDragBegin(event: NativeEvent, pointer: Pointer): boolean;
@@ -26,6 +24,4 @@ export declare class BrowseBehaviour<TView extends BrowsableView = BrowsableView
     onDragEnd(event: MaybeNativeEvent, pointer: Pointer): void;
     getForce(pointer: Pointer): number;
     getOffsetTarget(force: number): number;
-    onDestroyed(): void;
-    onViewClick(event: Event): void;
 }

@@ -4,8 +4,8 @@ import type { CycleableView } from '../CycleableView';
 import type { Pointer } from '../../core/pointers/Pointer';
 import type { MaybeNativeEvent, NativeEvent } from '../../core/pointers/PointerBehaviour';
 export interface BrowsableView extends CycleableView {
-    onBrowseBegin(): boolean;
-    onBrowseEnd(): void;
+    onBrowseBegin(event: NativeEvent, pointer: Pointer): boolean;
+    onBrowseEnd(event: MaybeNativeEvent, pointer: Pointer): void;
     viewport?: HTMLElement;
 }
 export interface BrowseBehaviourOptions extends DragBehaviourOptions {

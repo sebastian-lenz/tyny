@@ -6,6 +6,12 @@ import { LoadMode, setChildLoadMode } from '../../utils/views/loadMode';
 import { Sequencer, SequenceOptions } from './Sequencer';
 import { Transition } from '../../fx/transitions';
 
+import type { Pointer } from '../../core/pointers/Pointer';
+import type {
+  MaybeNativeEvent,
+  NativeEvent,
+} from '../../core/pointers/PointerBehaviour';
+
 export const slideshowDismissEvent = 'tyny:slideshowDismiss';
 export const slideshowEndEvent = 'tyny:slideshowEnd';
 export const slideshowStartEvent = 'tyny:slideshowStart';
@@ -61,7 +67,7 @@ export class Slideshow extends CycleableView<SlideshowTransitionOptions> {
     this.transist(value, { transition: () => Promise.resolve() });
   }
 
-  onBrowseBegin(): boolean {
+  onBrowseBegin(event: NativeEvent, pointer: Pointer): boolean {
     if (this.inTransition) {
       return false;
     }
@@ -75,7 +81,7 @@ export class Slideshow extends CycleableView<SlideshowTransitionOptions> {
     return true;
   }
 
-  onBrowseEnd(): void {
+  onBrowseEnd(event: MaybeNativeEvent, pointer: Pointer): void {
     this.isBrowsing = false;
     if (this.wasAutoPlaying) {
       this.autoPlay.start();

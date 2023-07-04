@@ -18,8 +18,8 @@ import type {
 } from '../../core/pointers/PointerBehaviour';
 
 export interface BrowsableView extends CycleableView {
-  onBrowseBegin(): boolean;
-  onBrowseEnd(): void;
+  onBrowseBegin(event: NativeEvent, pointer: Pointer): boolean;
+  onBrowseEnd(event: MaybeNativeEvent, pointer: Pointer): void;
   viewport?: HTMLElement;
 }
 
@@ -82,7 +82,11 @@ export class BrowseBehaviour<
 
   onDragBegin(event: NativeEvent, pointer: Pointer): boolean {
     const { offset, view } = this;
-    if (view.length < 2 || !view.onBrowseBegin() || !this.enabled) {
+    if (
+      view.length < 2 ||
+      !view.onBrowseBegin(event, pointer) ||
+      !this.enabled
+    ) {
       return false;
     }
 
@@ -127,7 +131,7 @@ export class BrowseBehaviour<
 
     tween(this, { offset }, options).then(() => {
       this.setOffset(null);
-      view.onBrowseEnd();
+      view.onBrowseEnd(event, pointer);
       view.immediate(view.at(view.normalizeIndex(offset)));
     });
   }

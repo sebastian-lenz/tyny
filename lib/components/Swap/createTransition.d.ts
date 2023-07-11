@@ -1,12 +1,12 @@
-import { JSX, RefObject } from 'preact';
-export declare type TransitionElement = HTMLElement;
+import { JSX, RefObject, VNode } from 'preact';
+export declare type TransitionElement = HTMLElement | VNode;
 export interface Transition {
     begin: (callback: Function) => void;
     childRef: RefObject<TransitionElement> | null;
     lastChildRef: RefObject<TransitionElement> | null;
 }
 export interface TransitionEffect {
-    (from: TransitionElement | null, to: TransitionElement | null, options: TransitionOptions): Promise<any>;
+    (from: HTMLElement | null, to: HTMLElement | null, options: TransitionOptions): Promise<any>;
 }
 export interface TransitionOptions {
     child: JSX.Element | null;
@@ -16,4 +16,5 @@ export interface TransitionOptions {
     effect: TransitionEffect;
     rootRef: RefObject<HTMLElement>;
 }
+export declare function toElement(value: TransitionElement | null): HTMLElement | null;
 export declare function createTransition(options: TransitionOptions): Transition;

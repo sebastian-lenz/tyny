@@ -1,6 +1,6 @@
-import { JSX, RefObject } from 'preact';
+import { JSX, RefObject, VNode } from 'preact';
 
-export type TransitionElement = HTMLElement;
+export type TransitionElement = HTMLElement | VNode;
 
 export interface Transition {
   begin: (callback: Function) => void;
@@ -10,8 +10,8 @@ export interface Transition {
 
 export interface TransitionEffect {
   (
-    from: TransitionElement | null,
-    to: TransitionElement | null,
+    from: HTMLElement | null,
+    to: HTMLElement | null,
     options: TransitionOptions
   ): Promise<any>;
 }
@@ -23,6 +23,14 @@ export interface TransitionOptions {
   lastChildRef: RefObject<HTMLElement> | null;
   effect: TransitionEffect;
   rootRef: RefObject<HTMLElement>;
+}
+
+export function toElement(value: TransitionElement | null): HTMLElement | null {
+  if (!value || value instanceof HTMLElement) {
+    return value;
+  }
+
+  return (value as any).base;
 }
 
 export function createTransition(options: TransitionOptions): Transition {
@@ -44,8 +52,8 @@ export function createTransition(options: TransitionOptions): Transition {
           window.requestAnimationFrame(checkRefs);
         } else {
           effect(
-            lastChildRef ? lastChildRef.current : null,
-            childRef ? childRef.current : null,
+            lastChildRef ? toElement(lastChildRef.current) : null,
+            childRef ? toElement(childRef.current) : null,
             options
           ).then(() => callback());
         }

@@ -27,7 +27,7 @@ export declare abstract class ZoomPanel extends View {
     isFitToView(): boolean;
     fitToView(): void;
     matchesViewProps([x, y, scale]: ViewProps): boolean;
-    getCenteredViewProps(scale: number): ViewProps;
+    getCenteredViewProps(scale: number, [focusX, focusY]?: [number, number]): ViewProps;
     getCoverViewProps(padding?: number): ViewProps;
     getFitToViewProps(padding?: number): ViewProps;
     getPositionBounds(scale?: number): tyny.BoundingBox;

@@ -77,13 +77,16 @@ export abstract class ZoomPanel extends View {
     );
   }
 
-  getCenteredViewProps(scale: number): ViewProps {
+  getCenteredViewProps(
+    scale: number,
+    [focusX, focusY]: [number, number] = [0.5, 0.5]
+  ): ViewProps {
     const { height, width } = this;
     const displayWidth = this.getNativeWidth() * scale;
     const displayHeight = this.getNativeHeight() * scale;
 
-    const x = (width - displayWidth) * 0.5;
-    const y = (height - displayHeight) * 0.5;
+    const x = (width - displayWidth) * focusX;
+    const y = (height - displayHeight) * focusY;
 
     return [x, y, scale];
   }

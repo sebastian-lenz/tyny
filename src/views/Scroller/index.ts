@@ -125,7 +125,7 @@ export class Scroller<TItem extends ScrollerItem = ScrollerItem>
 
     if (content) {
       const { x, y } = this.toDisplayOffset(_position);
-      if (use3DTranslation) {
+      if (use3DTransform) {
         content.style[transform] = `translate3d(${-x}px, ${-y}px, 0)`;
       } else {
         content.style[transform] = `translate(${-x}px, ${-y}px)`;

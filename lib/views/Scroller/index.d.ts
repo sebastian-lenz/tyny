@@ -22,6 +22,7 @@ export interface ScrollerOptions extends ViewOptions {
 export declare class Scroller<TItem extends ScrollerItem = ScrollerItem> extends View implements ScrollableView {
     currentTarget: tyny.Point | null;
     currentTween: Tween | null;
+    use3DTransform: boolean;
     readonly direction: DragDirection;
     readonly dragBehaviour: DragScrollBehaviour;
     readonly positionBounds: tyny.BoundingBox;

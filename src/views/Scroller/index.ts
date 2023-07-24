@@ -45,6 +45,7 @@ export class Scroller<TItem extends ScrollerItem = ScrollerItem>
 {
   currentTarget: tyny.Point | null = null;
   currentTween: Tween | null = null;
+  use3DTransform: boolean = false;
   readonly direction: DragDirection;
   readonly dragBehaviour: DragScrollBehaviour;
   readonly positionBounds: tyny.BoundingBox = createBounds();
@@ -118,13 +119,17 @@ export class Scroller<TItem extends ScrollerItem = ScrollerItem>
   }
 
   setPosition(value: tyny.Point) {
-    const { _position, content, direction } = this;
+    const { _position, content, direction, use3DTransform } = this;
     if (direction !== 'vertical') _position.x = value.x;
     if (direction !== 'horizontal') _position.y = value.y;
 
     if (content) {
       const { x, y } = this.toDisplayOffset(_position);
-      (<any>content.style)[transform] = `translate(${-x}px, ${-y}px)`;
+      if (use3DTranslation) {
+        content.style[transform] = `translate3d(${-x}px, ${-y}px, 0)`;
+      } else {
+        content.style[transform] = `translate(${-x}px, ${-y}px)`;
+      }
     }
 
     this.trigger(scrollerScrollEvent, <ScrollerEventArgs>{

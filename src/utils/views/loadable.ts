@@ -10,7 +10,7 @@ export function isLoadable(value: any): value is LoadableView {
 
 export function whenLoaded(element: HTMLElement | null | undefined) {
   return Promise.all(
-    getChildViews(element)
+    getChildViews(element, true)
       .filter(isLoadable)
       .map((view) => view.load())
   );

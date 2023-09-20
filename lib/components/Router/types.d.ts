@@ -27,7 +27,7 @@ export interface RouterProps<RouteParams extends RouterPropsBase = RouterPropsBa
 export interface RouterState {
     url: string;
 }
-export interface RouterOnChangeArgs<RouteParams extends Record<string, string | undefined> | null = Record<string, string | undefined> | null> {
+export interface RouterOnChangeArgs<RouteParams extends RouterPropsBase = RouterPropsBase> {
     router: Router;
     url: string;
     previous?: string;

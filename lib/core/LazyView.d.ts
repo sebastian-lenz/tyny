@@ -6,3 +6,4 @@ export declare abstract class LazyView extends View {
     onConnected(): void;
     abstract loadView(): LazyViewPromise;
 }
+export declare function registerLazyView(name: string, loadView: () => LazyViewPromise): void;

@@ -1,6 +1,5 @@
 import type { VNode } from 'preact';
 
-import type { Route } from './Route';
 import type { Router } from './index';
 
 export interface CustomHistory {
@@ -37,10 +36,7 @@ export interface RouterState {
 }
 
 export interface RouterOnChangeArgs<
-  RouteParams extends Record<string, string | undefined> | null = Record<
-    string,
-    string | undefined
-  > | null
+  RouteParams extends RouterPropsBase = RouterPropsBase
 > {
   router: Router;
   url: string;

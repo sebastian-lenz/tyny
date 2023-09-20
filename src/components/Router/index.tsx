@@ -92,7 +92,7 @@ export function route(url: string | UrlInfo, replace?: string | boolean) {
   return routeTo(url);
 }
 
-export function useRouter() {
+export function useRouter(): [Partial<RouterOnChangeArgs>, typeof route] {
   return [useContext(RouterContext), route];
 }
 

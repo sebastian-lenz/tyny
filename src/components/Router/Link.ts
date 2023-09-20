@@ -1,18 +1,24 @@
-import { createElement } from 'preact';
+import cx from 'classnames';
+import { createElement, JSX } from 'preact';
 
-import { route } from './index';
+import { route, useRouter } from './index';
+import { exec } from './utils';
 
-export interface Props extends preact.JSX.HTMLAttributes {
-  activeClassName?: string;
+export interface Props extends preact.JSX.HTMLAttributes<HTMLAnchorElement> {
+  activeClass?: string;
 }
 
-function handleLinkClick(this: HTMLLinkElement, e: MouseEvent) {
+function handleLinkClick(
+  this: HTMLAnchorElement,
+  e: JSX.TargetedMouseEvent<HTMLAnchorElement>
+) {
   if (e.ctrlKey || e.metaKey || e.altKey || e.shiftKey || e.button !== 0) {
     return;
   }
 
-  routeFromLink(e.currentTarget || e.target || this);
-  return prevent(e);
+  if (routeFromLink(e.currentTarget || e.target || this)) {
+    prevent(e);
+  }
 }
 
 function prevent(e?: Event) {
@@ -61,6 +67,34 @@ export function delegateLinkHandler(e: MouseEvent) {
   }
 }
 
-export function Link(props: Props) {
-  return createElement('a', { ...props, onClick: handleLinkClick } as any);
+export function Link({
+  activeClass,
+  class: className,
+  onClick: onClickCustom,
+  ...props
+}: Props) {
+  if (activeClass) {
+    const { href } = props;
+    const { active = [] } = useRouter()[0];
+
+    if (href && active.some(({ props }) => exec(href, props.path || '', {}))) {
+      className = cx(className, activeClass);
+    }
+  }
+
+  const onClick = onClickCustom
+    ? function (
+        this: HTMLAnchorElement,
+        event: JSX.TargetedMouseEvent<HTMLAnchorElement>
+      ) {
+        onClickCustom.call(this as never, event);
+        event.defaultPrevented ? null : handleLinkClick.call(this, event);
+      }
+    : handleLinkClick;
+
+  return createElement('a', {
+    ...props,
+    class: className,
+    onClick,
+  } as any);
 }

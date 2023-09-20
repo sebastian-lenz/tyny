@@ -14,3 +14,15 @@ export abstract class LazyView extends View {
 
   abstract loadView(): LazyViewPromise;
 }
+
+export function registerLazyView(
+  name: string,
+  loadView: () => LazyViewPromise
+) {
+  registerView(
+    name,
+    class extends LazyView {
+      loadView = loadView;
+    }
+  );
+}

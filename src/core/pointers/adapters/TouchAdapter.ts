@@ -19,7 +19,8 @@ export class TouchAdapter extends AbstractAdapter {
   constructor(element: HTMLElement, pointerList: PointerBehaviour) {
     super(element, pointerList);
 
-    this.usePassiveEvents = false;
+    // this.usePassiveEvents = false;
+
     this.mouseAdapter = new MouseAdapter(element, pointerList);
   }
 

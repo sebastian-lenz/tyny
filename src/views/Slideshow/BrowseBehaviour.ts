@@ -26,6 +26,7 @@ export interface BrowsableView extends CycleableView {
 export interface BrowseBehaviourOptions extends DragBehaviourOptions {
   enabled?: boolean;
   effect?: Effect;
+  onBrowseTarget?: (index: number) => number;
 }
 
 export class BrowseBehaviour<
@@ -35,6 +36,7 @@ export class BrowseBehaviour<
   enabled: boolean;
   initialOffset: number = 0;
   offset: number | null = null;
+  onBrowseTarget?: (index: number) => number;
 
   constructor(
     view: TView,
@@ -51,6 +53,7 @@ export class BrowseBehaviour<
 
     this.enabled = enabled;
     this.effect = effect;
+    this.onBrowseTarget = options.onBrowseTarget;
   }
 
   setOffset(value: number | null) {
@@ -67,7 +70,15 @@ export class BrowseBehaviour<
       const index = value !== null ? Math.floor(value) : Number.NaN;
       const from = view.at(view.normalizeIndex(index));
       const to = view.at(view.normalizeIndex(index + 1));
-      effect.apply(from, to, value - index);
+
+      let strength = value - index;
+      if (!from) {
+        strength = 1 + (strength - 1) * 0.5;
+      } else if (!to) {
+        strength *= 0.5;
+      }
+
+      effect.apply(from, to, strength);
     }
   }
 
@@ -116,10 +127,14 @@ export class BrowseBehaviour<
   onDragEnd(event: MaybeNativeEvent, pointer: Pointer) {
     const { view } = this;
     const force = this.getForce(pointer);
-    const offset = this.getOffsetTarget(force);
     const options: Partial<TweenOptions> = {
       easing: Math.abs(force) < 2 ? easeInOutQuad : easeOutExpo,
     };
+
+    let offset = this.getOffsetTarget(force);
+    if (this.onBrowseTarget) {
+      offset = this.onBrowseTarget(offset);
+    }
 
     ClickBehaviour.tryPreventNextClick(view);
 
@@ -140,13 +155,22 @@ export class BrowseBehaviour<
 
   getOffsetTarget(force: number): number {
     const offset = this.offset || 0;
+    let target;
 
     if (force < -5) {
-      return Math.ceil(offset);
+      target = Math.ceil(offset);
     } else if (force > 5) {
-      return Math.floor(offset);
+      target = Math.floor(offset);
+    } else {
+      target = Math.round(offset);
     }
 
-    return Math.round(offset);
+    if (!this.view.isLooped) {
+      const max = this.view.items.length - 1;
+      if (target < 0) target = 0;
+      if (target > max) target = max;
+    }
+
+    return target;
   }
 }

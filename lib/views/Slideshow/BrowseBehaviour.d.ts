@@ -11,12 +11,14 @@ export interface BrowsableView extends CycleableView {
 export interface BrowseBehaviourOptions extends DragBehaviourOptions {
     enabled?: boolean;
     effect?: Effect;
+    onBrowseTarget?: (index: number) => number;
 }
 export declare class BrowseBehaviour<TView extends BrowsableView = BrowsableView> extends DragBehaviour<TView> {
     effect: Effect;
     enabled: boolean;
     initialOffset: number;
     offset: number | null;
+    onBrowseTarget?: (index: number) => number;
     constructor(view: TView, { enabled, effect, ...options }: BrowseBehaviourOptions);
     setOffset(value: number | null): void;
     onDragBegin(event: NativeEvent, pointer: Pointer): boolean;

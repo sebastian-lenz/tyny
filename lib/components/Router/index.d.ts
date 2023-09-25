@@ -22,5 +22,6 @@ export declare class Router<Props extends RouterProps = RouterProps> extends Com
     componentDidUpdate(): void;
     getCurrent(): import("preact").VNode<import("./types").RoutableProps>;
     getMatchingChildren(children: Array<any>, url: string, invoke?: boolean): RouteMatch[];
+    onChange(newContext: RouterOnChangeArgs): void;
     render(): import("preact").JSX.Element;
 }

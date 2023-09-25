@@ -178,7 +178,7 @@ export class Router<Props extends RouterProps = RouterProps> extends Component<
   }
 
   getCurrent() {
-    const { children, onChange } = this.props;
+    const { children } = this.props;
     const { url } = this.state;
     const previous = this.previousUrl;
 
@@ -200,9 +200,7 @@ export class Router<Props extends RouterProps = RouterProps> extends Component<
         matches,
       });
 
-      if (typeof onChange === 'function') {
-        onChange(newContext);
-      }
+      this.onChange(newContext);
     }
 
     return current;
@@ -227,6 +225,14 @@ export class Router<Props extends RouterProps = RouterProps> extends Component<
 
         return result;
       }, [] as Array<RouteMatch>);
+  }
+
+  onChange(newContext: RouterOnChangeArgs) {
+    const { onChange } = this.props;
+
+    if (typeof onChange === 'function') {
+      onChange(newContext);
+    }
   }
 
   render() {

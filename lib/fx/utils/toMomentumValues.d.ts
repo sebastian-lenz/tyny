@@ -7,21 +7,9 @@ export interface MomentumValues {
     minValue?: ValueTypeSource;
 }
 export interface FromVelocityValues {
-    /**
-     * The current position on this axis.
-     */
     from?: ValueTypeSource;
-    /**
-     * The maximum allowed position on this axis.
-     */
     max?: ValueTypeSource;
-    /**
-     * The minimum allowed position on this axis.
-     */
     min?: ValueTypeSource;
-    /**
-     * The current velocity on this axis.
-     */
     velocity: ValueTypeSource;
 }
 export declare type FromVelocityValuesMap = PropertyMap<ValueTypeSource | FromVelocityValues>;

@@ -11,9 +11,7 @@ export declare class Router<Props extends RouterProps = RouterProps> extends Com
     updating: boolean;
     constructor(props: Props);
     shouldComponentUpdate(props: RouterProps): boolean;
-    /** Check if the given URL can be matched against any children */
     canRoute(url: string): boolean;
-    /** Re-render children with a new URL to match against. */
     routeTo(url: string): boolean;
     componentWillMount(): void;
     componentDidMount(): void;
@@ -22,6 +20,6 @@ export declare class Router<Props extends RouterProps = RouterProps> extends Com
     componentDidUpdate(): void;
     getCurrent(): import("preact").VNode<import("./types").RoutableProps>;
     getMatchingChildren(children: Array<any>, url: string, invoke?: boolean): RouteMatch[];
-    onChange(newContext: RouterOnChangeArgs): void;
+    onChange(context: RouterOnChangeArgs): RouterOnChangeArgs | null;
     render(): import("preact").JSX.Element;
 }

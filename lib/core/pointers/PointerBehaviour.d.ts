@@ -32,10 +32,6 @@ export declare class PointerBehaviour<TView extends View = View> extends Behavio
     removePointer(event: NativeEvent | undefined, id: string): void;
     removeAllPointers(): void;
     movePointer(event: NativeEvent, id: string, options: PointerMoveOptions): void;
-    /**
-     * Prevent all drag events from heppaning inside elements that
-     * we control mouse events on. Fixes drag behviour in firefox.
-     */
     onNativeDragStart(event: Event): void;
     onAdd(event: NativeEvent, pointer: Pointer): boolean;
     onChanged(event: MaybeNativeEvent, pointer: Pointer): void;

@@ -14,9 +14,6 @@ export interface MomentumValue {
     currentValue(): number;
     update(delta: number): boolean;
 }
-/**
- * Calculates the momentum of a single axis.
- */
 export declare class MomentumAxis {
     protected bounceDelta: number;
     protected bounceDuration: number;

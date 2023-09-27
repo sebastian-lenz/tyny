@@ -41,10 +41,6 @@ export interface YouTubeStateInfo {
     videoUrl: string;
     volume: number;
 }
-/**
- * Potential calls are listed in `info.apiInterface`:
- * onInitialDelivery() { console.log(info.apiInterface); }
- */
 export declare class YouTubeAdapter extends IFrameAdapter {
     info: YouTubeStateInfo | null;
     getCurrentTime(): number;

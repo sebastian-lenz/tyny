@@ -189,8 +189,7 @@ export class Router<Props extends RouterProps = RouterProps> extends Component<
     };
 
     if (url !== previous) {
-      this.previousUrl = url;
-      const newContext = (this.contextValue = {
+      const newContext = this.onChange({
         router: this,
         url,
         previous,
@@ -200,7 +199,10 @@ export class Router<Props extends RouterProps = RouterProps> extends Component<
         matches,
       });
 
-      this.onChange(newContext);
+      if (newContext) {
+        this.previousUrl = url;
+        this.contextValue = newContext;
+      }
     }
 
     return current;
@@ -227,12 +229,13 @@ export class Router<Props extends RouterProps = RouterProps> extends Component<
       }, [] as Array<RouteMatch>);
   }
 
-  onChange(newContext: RouterOnChangeArgs) {
+  onChange(context: RouterOnChangeArgs): RouterOnChangeArgs | null {
     const { onChange } = this.props;
-
     if (typeof onChange === 'function') {
-      onChange(newContext);
+      onChange(context);
     }
+
+    return context;
   }
 
   render() {

@@ -199,10 +199,8 @@ export class Router<Props extends RouterProps = RouterProps> extends Component<
         matches,
       });
 
-      if (newContext) {
-        this.previousUrl = url;
-        this.contextValue = newContext;
-      }
+      this.previousUrl = url;
+      this.contextValue = newContext;
     }
 
     return current;
@@ -229,7 +227,7 @@ export class Router<Props extends RouterProps = RouterProps> extends Component<
       }, [] as Array<RouteMatch>);
   }
 
-  onChange(context: RouterOnChangeArgs): RouterOnChangeArgs | null {
+  onChange(context: RouterOnChangeArgs): RouterOnChangeArgs {
     const { onChange } = this.props;
     if (typeof onChange === 'function') {
       onChange(context);

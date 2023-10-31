@@ -407,6 +407,6 @@ if (typeof window !== 'undefined' && window.MutationObserver) {
   if (document.readyState == 'loading') {
     once(document, 'DOMContentLoaded', () => fastDom.read(createObserver));
   } else {
-    fastDom.read(createObserver);
+    setTimeout(() => fastDom.read(createObserver), 0);
   }
 }

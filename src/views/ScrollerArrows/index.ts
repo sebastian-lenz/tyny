@@ -50,6 +50,11 @@ export class ScrollerArrows extends View {
     }
   }
 
+  setTarget(value: Scroller | null) {
+    this.params.options.target = value;
+    this.onTargetChanged(value);
+  }
+
   protected onScrollerChanged() {
     const { backward, forward, target } = this;
     const axis = toAxis(this.direction);

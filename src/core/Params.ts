@@ -57,7 +57,7 @@ export class ParamsAttributeReader implements ParamsReader {
 }
 
 export class ParamsObjectReader implements ParamsReader {
-  object: any;
+  readonly object: any;
 
   constructor(object: any) {
     this.object = object;
@@ -75,11 +75,13 @@ export class ParamsObjectReader implements ParamsReader {
 }
 
 export class Params {
+  readonly options: any;
   readonly readers: Array<ParamsReader>;
   readonly view: View;
 
   constructor(view: View, options: ViewOptions) {
     this.view = view;
+    this.options = options;
     this.readers = [
       new ParamsObjectReader(options),
       new ParamsAttributeReader(view.el),

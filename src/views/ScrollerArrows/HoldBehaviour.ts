@@ -26,7 +26,9 @@ export class HoldBehaviour extends HoldBehaviourBase<ScrollerArrows> {
       stages: [{ delay: 250 }, { delay: 1000 }, { delay: 1000 }],
     });
 
-    if (options.onClick) this.onClick = options.onClick;
+    if (options.onClick) {
+      this.onClick = options.onClick;
+    }
   }
 
   onBeginHold(event: NativeEvent, _pointer: Pointer): boolean {

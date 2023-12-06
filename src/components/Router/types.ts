@@ -28,6 +28,7 @@ export interface RouterProps<
   history?: CustomHistory;
   static?: boolean;
   url?: string;
+  onBeforeChange?: (url: string) => void;
   onChange?: (args: RouterOnChangeArgs<RouteParams>) => void;
 }
 

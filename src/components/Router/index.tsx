@@ -55,6 +55,10 @@ function initEventListeners() {
 }
 
 function setUrl(url: string, type: 'replace' | 'push' = 'push') {
+  for (let i = 0; i < routers.length; i++) {
+    routers[i].routeWillChange(url);
+  }
+
   if (customHistory && customHistory[type]) {
     customHistory[type](url);
   } else if (typeof history !== 'undefined' && history[`${type}State`]) {
@@ -242,5 +246,12 @@ export class Router<Props extends RouterProps = RouterProps> extends Component<
         {this.getCurrent()}
       </RouterContext.Provider>
     );
+  }
+
+  routeWillChange(url: string) {
+    const { onBeforeChange } = this.props;
+    if (onBeforeChange) {
+      onBeforeChange(url);
+    }
   }
 }

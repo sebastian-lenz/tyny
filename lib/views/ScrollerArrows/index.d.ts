@@ -16,6 +16,7 @@ export declare class ScrollerArrows extends View {
     forward: HTMLButtonElement;
     constructor(options: ScrollerArrowsOptions);
     get target(): Scroller | null;
+    setTarget(value: Scroller | null): void;
     protected onScrollerChanged(): void;
     protected onTargetChanged(target: Scroller | null): void;
 }

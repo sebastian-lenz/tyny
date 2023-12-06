@@ -22,6 +22,7 @@ export interface RouterProps<RouteParams extends RouterPropsBase = RouterPropsBa
     history?: CustomHistory;
     static?: boolean;
     url?: string;
+    onBeforeChange?: (url: string) => void;
     onChange?: (args: RouterOnChangeArgs<RouteParams>) => void;
 }
 export interface RouterState {

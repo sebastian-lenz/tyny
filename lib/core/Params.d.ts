@@ -32,12 +32,13 @@ export declare class ParamsAttributeReader implements ParamsReader {
     hasValue(name: string, options: Param): boolean;
 }
 export declare class ParamsObjectReader implements ParamsReader {
-    object: any;
+    readonly object: any;
     constructor(object: any);
     getValue(name: string, options: Param): any;
     hasValue(name: string, options: Param): boolean;
 }
 export declare class Params {
+    readonly options: any;
     readonly readers: Array<ParamsReader>;
     readonly view: View;
     constructor(view: View, options: ViewOptions);

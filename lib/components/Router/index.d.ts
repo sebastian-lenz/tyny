@@ -22,4 +22,5 @@ export declare class Router<Props extends RouterProps = RouterProps> extends Com
     getMatchingChildren(children: Array<any>, url: string, invoke?: boolean): RouteMatch[];
     onChange(context: RouterOnChangeArgs): RouterOnChangeArgs;
     render(): import("preact").JSX.Element;
+    routeWillChange(url: string): void;
 }

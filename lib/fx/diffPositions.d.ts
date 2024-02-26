@@ -1,8 +1,12 @@
 import { DiffCallback, DiffResult } from './diff';
-export interface DiffPositionsOptions {
+import { TransistOptions } from './transist';
+export interface Options {
     ignoreX?: boolean;
     ignoreY?: boolean;
+    positionTransition?: TransistOptions;
     useTransform3D?: boolean;
-    finished?: Function;
 }
-export declare function diffPositions(initialElements: HTMLElement[], callback: DiffCallback, options?: DiffPositionsOptions): DiffResult;
+export declare function transistPositions({ changed }: DiffResult, { ignoreX, ignoreY, positionTransition, useTransform3D }?: Options): Promise<void>;
+export declare function diffPositions(initialElements: HTMLElement[], callback: DiffCallback, options?: Options & {
+    finished?: VoidFunction;
+}): DiffResult;

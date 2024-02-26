@@ -1,75 +1,75 @@
-import { diffPositions, DiffPositionsOptions } from './diffPositions';
-import { DiffCallback, DiffResult } from './diff';
-import { onAnimationEnd } from '../utils/env/animationProps';
+import { animate, AnimateOptions } from './animate';
+import { diff, DiffCallback, DiffResult, DiffState } from './diff';
+import { noop } from '../utils/lang/function';
+import { transistPositions, Options as PositionOptions } from './diffPositions';
 
-/**
- * Available options for [[diffAnimate]].
- */
-export interface DiffAnimateOptions extends DiffPositionsOptions {
-  /**
-   * Should deleted elements be detached?
-   */
+function onlyVisible(items: Array<DiffState>): Array<DiffState> {
+  return items.filter((item) => item.inViewport);
+}
+
+export interface Options extends PositionOptions {
+  animateOptions?: AnimateOptions;
+  fadeIn?: string;
+  fadeOut?: string;
   detach?: boolean;
-
   origin?: HTMLElement;
 }
 
-/**
- * Animate the changed positions of the given elements, fade in new elements and fade out deleted elements.
- *
- * @param initialElements  A list of all persistent elements.
- * @param callback  A callback that changes the visible elements and returns the new list.
- * @param options   The advanced options used to animate the elements.
- */
+export function transistChanges(
+  diff: DiffResult,
+  options: Options = {}
+): Promise<void> {
+  const {
+    animateOptions,
+    detach,
+    fadeIn = 'fadeIn',
+    fadeOut = 'fadeOut',
+    origin,
+  } = options;
+
+  const created = onlyVisible(diff.created);
+  const deleted = onlyVisible(diff.deleted);
+  const originRect = origin ? origin.getBoundingClientRect() : null;
+  const shiftTop = originRect ? -originRect.top : 0;
+  const shiftLeft = originRect ? -originRect.left : 0;
+
+  const animations = [
+    ...created.map(({ element }) => animate(element, fadeIn, animateOptions)),
+    ...deleted.map(({ element, position }) => {
+      const { style } = element;
+      style.position = 'absolute';
+      style.top = `${position.top + shiftTop}px`;
+      style.left = `${position.left + shiftLeft}px`;
+
+      return animate(element, fadeOut, animateOptions).then(() => {
+        if (detach) {
+          element.remove();
+        } else {
+          style.position = '';
+          style.top = '';
+          style.left = '';
+        }
+      });
+    }),
+  ];
+
+  return Promise.all(animations).then(noop);
+}
+
 export function diffAnimate(
   initialElements: HTMLElement[],
   callback: DiffCallback,
-  options: DiffAnimateOptions = {}
+  options: Options & { finished?: VoidFunction } = {}
 ): DiffResult {
-  const result = diffPositions(initialElements, callback, options);
-  const { created, deleted } = result;
-  const { detach = false, origin } = options;
-  let shiftTop = 0;
-  let shiftLeft = 0;
+  const result = diff(initialElements, callback);
+  const promise = Promise.all([
+    transistPositions(result, options),
+    transistChanges(result, options),
+  ]);
 
-  if (origin) {
-    const originRect = origin.getBoundingClientRect();
-    shiftTop = -originRect.top;
-    shiftLeft = -originRect.left;
+  if (options.finished) {
+    promise.then(options.finished);
   }
-
-  created.forEach(({ element, inViewport }) => {
-    if (!inViewport) return;
-    const handleEnd = () => {
-      element.classList.remove('fadeIn');
-      element.removeEventListener(onAnimationEnd, handleEnd);
-    };
-
-    element.addEventListener(onAnimationEnd, handleEnd);
-    element.classList.add('fadeIn');
-  });
-
-  deleted.forEach(({ element, inViewport, position }) => {
-    if (!inViewport) return;
-    const { style } = element;
-    const handleEnd = () => {
-      element.classList.remove('fadeOut');
-      style.position = '';
-      style.top = '';
-      style.left = '';
-      element.removeEventListener(onAnimationEnd, handleEnd);
-
-      if (detach && element.parentNode) {
-        element.parentNode.removeChild(element);
-      }
-    };
-
-    element.addEventListener(onAnimationEnd, handleEnd);
-    element.classList.add('fadeOut');
-    style.position = 'absolute';
-    style.top = `${position.top + shiftTop}px`;
-    style.left = `${position.left + shiftLeft}px`;
-  });
 
   return result;
 }

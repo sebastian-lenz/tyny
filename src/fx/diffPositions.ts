@@ -1,73 +1,57 @@
 import { diff, DiffCallback, DiffResult } from './diff';
-import { onTransitionEnd } from '../utils/env/transitionProps';
+import { noop } from '../utils/lang/function';
 import { transform } from '../utils/env/transformProps';
-import { withoutTransition } from './withoutTransition';
+import { transist, TransistOptions } from './transist';
 
-/**
- * Available options for [[diffPositions]].
- */
-export interface DiffPositionsOptions {
-  /**
-   * Should changes along the x axis be ignored?
-   */
+export interface Options {
   ignoreX?: boolean;
-
-  /**
-   * Should changes along the y axis be ignored?
-   */
   ignoreY?: boolean;
-
-  /**
-   * Should a 3d transform be used to animated the elements?
-   */
+  positionTransition?: TransistOptions;
   useTransform3D?: boolean;
-
-  finished?: Function;
 }
 
-/**
- * Animate the changed positions of the given elements.
- *
- * @param initialElements  A list of all persistent elements.
- * @param callback  A callback that changes the visible elements and returns the new list.
- * @param options   The advanced options used to animate the elements.
- */
+export function transistPositions(
+  { changed }: DiffResult,
+  { ignoreX, ignoreY, positionTransition, useTransform3D }: Options = {}
+): Promise<void> {
+  const transitions = [];
+  const translate = (x: number = 0, y: number = 0) =>
+    useTransform3D
+      ? `translate3d(${x}px, ${y}px, 0)`
+      : `translate(${x}px, ${y}px)`;
+
+  for (const { element, from, inViewport, to } of changed) {
+    const x = ignoreX ? 0 : from.left - to.left;
+    const y = ignoreY ? 0 : from.top - to.top;
+    if (!inViewport || (x == 0 && y == 0)) {
+      continue;
+    }
+
+    transitions.push(
+      transist(
+        element,
+        {
+          [transform]: { clear: true, from: translate(x, y), to: translate() },
+        },
+        positionTransition
+      )
+    );
+  }
+
+  return Promise.all(transitions).then(noop);
+}
+
 export function diffPositions(
   initialElements: HTMLElement[],
   callback: DiffCallback,
-  options: DiffPositionsOptions = {}
+  options: Options & { finished?: VoidFunction } = {}
 ): DiffResult {
   const result = diff(initialElements, callback);
-  const { finished, useTransform3D } = options;
+  const promise = transistPositions(result, options);
 
-  let active = 0;
-  result.changed.forEach(({ element, from, inViewport, to }) => {
-    if (!inViewport) return;
-
-    const style = <any>element.style;
-    const left = options.ignoreX ? 0 : from.left - to.left;
-    const top = options.ignoreY ? 0 : from.top - to.top;
-    if (left == 0 && top == 0) return;
-
-    const handleEnd = () => {
-      style[transform] = '';
-      element.removeEventListener(onTransitionEnd, handleEnd);
-      active -= 1;
-      if (active == 0 && finished) finished();
-    };
-
-    active += 1;
-    withoutTransition(element, () => {
-      style[transform] = useTransform3D
-        ? `translate3d(${left}px, ${top}px, 0)`
-        : `translate(${left}px, ${top}px)`;
-    });
-
-    element.addEventListener(onTransitionEnd, handleEnd);
-    style[transform] = useTransform3D
-      ? `translate3d(0, 0, 0)`
-      : `translate(0, 0)`;
-  });
+  if (options.finished) {
+    promise.then(options.finished);
+  }
 
   return result;
 }

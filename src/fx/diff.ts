@@ -1,134 +1,94 @@
 import { getWindowWidth } from '../utils/dom/window/getWindowWidth';
 
-/**
- * Describes the result of the [[diff]] function.
- */
 export interface DiffResult {
-  /**
-   * A list of all elements that have been created.
-   */
-  created: DiffState[];
-
-  /**
-   * A list of all elements that have been deleted.
-   */
-  deleted: DiffState[];
-
-  /**
-   * A list of all elements that have changed.
-   */
   changed: DiffChangedState[];
+  created: DiffState[];
+  deleted: DiffState[];
 }
 
-/**
- * Describes the state of a created or deleted element returned by [[diff]].
- */
 export interface DiffState {
-  /**
-   * The related element.
-   */
   element: HTMLElement;
-
-  /**
-   * The position of the element.
-   */
-  position: ClientRect;
-
-  /**
-   * Is the element within the visible viewport?
-   */
   inViewport: boolean;
+  position: DOMRect;
 }
 
-/**
- * Describes the state of a changed element returned by [[diff]].
- */
 export interface DiffChangedState {
-  /**
-   * The related element.
-   */
   element: HTMLElement;
-
-  /**
-   * The original position of the element.
-   */
-  from: ClientRect;
-
-  /**
-   * The new position of the element.
-   */
-  to: ClientRect;
-
-  /**
-   * Is or was the element within the visible viewport?
-   */
+  from: DOMRect;
   inViewport: boolean;
+  to: DOMRect;
 }
 
-export interface DiffCallback {
-  (): HTMLElement[];
+export type DiffInitialState = Array<{
+  element: HTMLElement;
+  position: DOMRect;
+}>;
+
+export type DiffCallback = () => Array<HTMLElement>;
+
+function createDiff(): DiffResult {
+  return {
+    changed: [],
+    created: [],
+    deleted: [],
+  };
 }
 
-/**
- * Calculate the difference between two lists of elements.
- *
- * @param initialElements  A list of all persistent elements.
- * @param callback  A callback that changes the visible elements and returns the new list.
- */
-export function diff(
-  initialElements: HTMLElement[],
-  callback: DiffCallback
-): DiffResult {
-  const deleted: DiffState[] = [];
-  const created: DiffState[] = [];
-  const changed: DiffChangedState[] = [];
-  const positions: Array<ClientRect | null> = initialElements.map((el) =>
-    el.getBoundingClientRect()
-  );
+export function createDiffState(
+  elements: Array<HTMLElement>
+): DiffInitialState {
+  return elements.map((element) => ({
+    element,
+    position: element.getBoundingClientRect(),
+  }));
+}
 
+function inViewportFactory() {
   const min = 0;
   const max = getWindowWidth();
-  const isInViewport = (top: number, bottom: number): boolean =>
-    bottom > min && top < max;
+  return (rect: DOMRect): boolean => rect.bottom > min && rect.top < max;
+}
 
-  callback().forEach((element) => {
+export function diff(
+  elements: Array<HTMLElement>,
+  callback: DiffCallback
+): DiffResult {
+  return diffFromState(createDiffState(elements), callback());
+}
+
+export function diffFromState(
+  state: DiffInitialState,
+  elements: Array<HTMLElement>
+) {
+  const isInViewport = inViewportFactory();
+  const result = createDiff();
+
+  for (const element of elements) {
     const position = element.getBoundingClientRect();
-    const index = initialElements.indexOf(element);
-    const inViewport = isInViewport(position.top, position.bottom);
+    const index = state.findIndex((state) => state.element === element);
+    const inViewport = isInViewport(position);
 
-    if (index == -1) {
-      created.push({ element, position, inViewport });
+    if (index === -1) {
+      result.created.push({ element, position, inViewport });
     } else {
-      const oldPosition = positions[index];
-      positions[index] = null;
-      if (!oldPosition) {
-        return;
-      }
+      const from = state[index].position;
+      state.splice(index, 1);
 
-      changed.push({
+      result.changed.push({
         element,
-        from: oldPosition,
+        from: from,
         to: position,
-        inViewport:
-          inViewport || isInViewport(oldPosition.top, oldPosition.bottom),
+        inViewport: inViewport || isInViewport(from),
       });
     }
-  });
+  }
 
-  initialElements.forEach((element, index) => {
-    const position = positions[index];
-    if (position) {
-      deleted.push({
-        element,
-        position,
-        inViewport: isInViewport(position.top, position.bottom),
-      });
-    }
-  });
+  for (const deleted of state) {
+    result.deleted.push({
+      ...deleted,
+      inViewport: isInViewport(deleted.position),
+    });
+  }
 
-  return {
-    changed,
-    created,
-    deleted,
-  };
+  return result;
 }

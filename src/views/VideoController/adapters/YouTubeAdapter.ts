@@ -1,7 +1,7 @@
 import { on, once, trigger } from '../../../utils/dom/event';
 import { IFrameAdapter } from './IFrameAdapter';
-import { videoTimeEvent, VideoTimerEventArgs } from '../index';
-import { AdapterSetCurrentTimeOptions } from './Adapter';
+import { videoTimeEvent, VideoTimerEventArgs } from '../events';
+import type { AdapterSetCurrentTimeOptions } from './Adapter';
 
 export enum YoutTubePlayerState {
   Unknown = -1, // (nicht gestartet)
@@ -52,6 +52,7 @@ export interface YouTubeStateInfo {
  */
 export class YouTubeAdapter extends IFrameAdapter {
   info: YouTubeStateInfo | null = null;
+  messageHandler: { (message: any): void } | null = null;
 
   getCurrentTime() {
     const { info } = this;
@@ -164,6 +165,10 @@ export class YouTubeAdapter extends IFrameAdapter {
         this.onInitialDelivery(data.info);
       } else if (type === 'infoDelivery') {
         this.onInfoDelivery(data.info);
+      }
+
+      if (this.messageHandler) {
+        this.messageHandler(data);
       }
     } catch (error) {
       // Unreadable message

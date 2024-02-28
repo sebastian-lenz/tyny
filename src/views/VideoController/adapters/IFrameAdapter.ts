@@ -1,6 +1,6 @@
-import { once } from '../../../utils/dom/event';
-import { Url } from '../../../utils/types/Url';
 import { Adapter } from './Adapter';
+import { Url } from '../../../utils/types/Url';
+import { once } from '../../../utils/dom/event';
 
 export abstract class IFrameAdapter extends Adapter<HTMLIFrameElement> {
   protected apiPromise: Promise<void> | null = null;

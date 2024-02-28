@@ -1,6 +1,6 @@
 import { SyncOptions } from '../Modifier';
-import { UrlParamValue } from '../../../utils/types/Url';
 import { ViewModifier, ViewModifierOptions } from '../ViewModifier';
+import { FilterableViewParams } from '../index';
 export interface SelectModifierOptions extends ViewModifierOptions {
     defaultValue?: string;
     paramName?: string;
@@ -14,7 +14,7 @@ export declare class SelectModifier extends ViewModifier {
     get paramName(): string;
     constructor(options?: SelectModifierOptions);
     getValue(): string | null;
-    getParams(): tyny.Map<UrlParamValue>;
+    getParams(): FilterableViewParams;
     setValue(value: string | null, silent?: boolean): void;
     sync({ url }: SyncOptions): boolean;
     onChange(): void;

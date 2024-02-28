@@ -1,26 +1,27 @@
-export declare type UrlParamValue = string | UrlParamSafeValue | null | undefined;
-export interface UrlParamSafeValue {
-    __param: string;
+export declare type Param = ParamValue | SafeParam;
+export declare type ParamValue = string | number | boolean;
+export interface SafeParam {
+    __param: ParamValue;
 }
 export interface UrlParts {
     fragment?: string;
     path: string;
-    query: tyny.Map<UrlParamValue>;
+    query: tyny.Map<Param | null | undefined>;
 }
 export declare class Url {
     fragment: string;
     path: string;
-    query: tyny.Map<string>;
+    query: tyny.Map<Param>;
     constructor(url: string);
     clearParam(name: string): this;
     clearParams(): this;
-    getParam(name: string, defaultValue: string): string;
-    getParam(name: string, defaultValue?: string | null): string | null;
+    getParam(name: string, defaultValue: ParamValue): ParamValue;
+    getParam(name: string, defaultValue?: ParamValue | null): ParamValue | null;
     parse(url: string): this;
-    setParam(name: string, value?: string | null): this;
-    setParams(value: tyny.Map<string>): this;
+    setParam(name: string, value?: Param | null | undefined): this;
+    setParams(params: tyny.Map<Param | null | undefined>): this;
     toString(): string;
     static compose({ fragment, path, query }: UrlParts): string;
     static create(value: string): Url;
-    static safeParam(value: string): UrlParamSafeValue;
+    static safeParam(value: ParamValue): SafeParam;
 }

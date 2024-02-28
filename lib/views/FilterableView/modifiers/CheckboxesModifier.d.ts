@@ -1,6 +1,6 @@
 import { SyncOptions } from '../Modifier';
-import { UrlParamValue } from '../../../utils/types/Url';
 import { ViewModifier, ViewModifierOptions } from '../ViewModifier';
+import { FilterableViewParams } from '..';
 export interface CheckboxesModifierOptions extends ViewModifierOptions {
     checkboxSelector?: string;
     glue?: string;
@@ -14,7 +14,7 @@ export declare class CheckboxesModifier extends ViewModifier {
     triggerSoftReset: boolean;
     constructor(options?: CheckboxesModifierOptions);
     getCheckboxes(): HTMLInputElement[];
-    getParams(): tyny.Map<UrlParamValue>;
+    getParams(): FilterableViewParams;
     getValues(): Array<string>;
     setValues(values: Array<string>, silent?: boolean): void;
     sync({ url }: SyncOptions): boolean;

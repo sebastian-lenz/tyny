@@ -1,5 +1,5 @@
-import { Url } from '../../../utils/types/Url';
 import { Adapter } from './Adapter';
+import { Url } from '../../../utils/types/Url';
 export declare abstract class IFrameAdapter extends Adapter<HTMLIFrameElement> {
     protected apiPromise: Promise<void> | null;
     protected listeners: Array<Function>;

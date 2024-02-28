@@ -1,10 +1,5 @@
 import { Adapter } from './adapters/Adapter';
 import { View, ViewDestroyOptions, ViewOptions } from '../../core';
-export declare const videoTimeEvent = "tyny:videoTime";
-export interface VideoTimerEventArgs {
-    currentTime: number;
-    duration: number;
-}
 export interface VideoControllerOptions extends ViewOptions {
 }
 export declare class VideoController extends View {

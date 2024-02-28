@@ -1,5 +1,5 @@
 import { IFrameAdapter } from './IFrameAdapter';
-import { AdapterSetCurrentTimeOptions } from './Adapter';
+import type { AdapterSetCurrentTimeOptions } from './Adapter';
 export declare enum YoutTubePlayerState {
     Unknown = -1,
     Ended = 0,
@@ -43,6 +43,9 @@ export interface YouTubeStateInfo {
 }
 export declare class YouTubeAdapter extends IFrameAdapter {
     info: YouTubeStateInfo | null;
+    messageHandler: {
+        (message: any): void;
+    } | null;
     getCurrentTime(): number;
     getDuration(): number;
     getVolume(): number;

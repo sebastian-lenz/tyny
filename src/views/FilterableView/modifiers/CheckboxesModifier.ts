@@ -1,7 +1,8 @@
 import { event, property } from '../../../core';
 import { SyncOptions } from '../Modifier';
-import { Url, UrlParamValue } from '../../../utils/types/Url';
+import { Url } from '../../../utils/types/Url';
 import { ViewModifier, ViewModifierOptions } from '../ViewModifier';
+import { FilterableViewParams } from '..';
 
 const selector = 'input[type=checkbox],input[type=radio]';
 
@@ -33,7 +34,7 @@ export class CheckboxesModifier extends ViewModifier {
     return this.findAll<HTMLInputElement>(this.checkboxSelector);
   }
 
-  getParams(): tyny.Map<UrlParamValue> {
+  getParams(): FilterableViewParams {
     const paramValue = this.getValues().map(encodeURIComponent).join(this.glue);
 
     return {
@@ -64,8 +65,7 @@ export class CheckboxesModifier extends ViewModifier {
 
   sync({ url }: SyncOptions): boolean {
     const current = this.getValues();
-    const values = url
-      .getParam(this.paramName, '')
+    const values = `${url.getParam(this.paramName, '')}`
       .split(this.glue)
       .filter((value) => !!value)
       .sort();

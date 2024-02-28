@@ -1,7 +1,6 @@
 import { Behaviour, BehaviourOptions } from '../../core/Behaviour';
-import { UrlParamValue } from '../../utils/types/Url';
 
-import type { FilterableView } from './index';
+import type { FilterableView, FilterableViewParams } from './index';
 import type { Modifier, SyncOptions } from './Modifier';
 
 export interface BehaviourModifierOptions extends BehaviourOptions {}
@@ -18,7 +17,7 @@ export abstract class BehaviourModifier<
 
   softReset() {}
 
-  abstract getParams(): tyny.Map<UrlParamValue>;
+  abstract getParams(): FilterableViewParams;
 
   abstract sync(options: SyncOptions): boolean;
 }

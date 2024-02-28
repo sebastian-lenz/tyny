@@ -1,28 +1,38 @@
-function isSafe(value: any): value is UrlParamSafeValue {
+function isSafe(value: any): value is SafeParam {
   return (
     value &&
     typeof value === 'object' &&
     '__param' in value &&
-    typeof value.__param === 'string'
+    isParamValue(value.__param)
   );
 }
 
-export type UrlParamValue = string | UrlParamSafeValue | null | undefined;
+function isParamValue(value: any): value is ParamValue {
+  return (
+    typeof value === 'boolean' ||
+    typeof value === 'number' ||
+    typeof value === 'string'
+  );
+}
 
-export interface UrlParamSafeValue {
-  __param: string;
+export type Param = ParamValue | SafeParam;
+
+export type ParamValue = string | number | boolean;
+
+export interface SafeParam {
+  __param: ParamValue;
 }
 
 export interface UrlParts {
   fragment?: string;
   path: string;
-  query: tyny.Map<UrlParamValue>;
+  query: tyny.Map<Param | null | undefined>;
 }
 
 export class Url {
   fragment!: string;
   path!: string;
-  query!: tyny.Map<string>;
+  query!: tyny.Map<Param>;
 
   constructor(url: string) {
     this.parse(url);
@@ -38,10 +48,14 @@ export class Url {
     return this;
   }
 
-  getParam(name: string, defaultValue: string): string;
-  getParam(name: string, defaultValue?: string | null): string | null;
-  getParam(name: string, defaultValue: string | null = null): string | null {
-    return name in this.query ? this.query[name] : defaultValue;
+  getParam(name: string, defaultValue: ParamValue): ParamValue;
+  getParam(name: string, defaultValue?: ParamValue | null): ParamValue | null;
+  getParam(
+    name: string,
+    defaultValue: ParamValue | null = null
+  ): ParamValue | null {
+    const result = name in this.query ? this.query[name] : defaultValue;
+    return result && isSafe(result) ? result.__param : result;
   }
 
   parse(url: string): this {
@@ -63,8 +77,8 @@ export class Url {
     return this;
   }
 
-  setParam(name: string, value: string | null = null): this {
-    if (value === null) {
+  setParam(name: string, value: Param | null | undefined = null): this {
+    if (value === null || value === undefined) {
       this.clearParam(name);
     } else {
       this.query[name] = value;
@@ -73,8 +87,11 @@ export class Url {
     return this;
   }
 
-  setParams(value: tyny.Map<string>): this {
-    Object.keys(value).forEach((key) => this.setParam(key, value[key]));
+  setParams(params: tyny.Map<Param | null | undefined>): this {
+    for (const name in params) {
+      this.setParam(name, params[name]);
+    }
+
     return this;
   }
 
@@ -88,7 +105,7 @@ export class Url {
 
     for (const name in query) {
       const value = query[name];
-      if (typeof value === 'string' && value) {
+      if (isParamValue(value)) {
         search.push(`${name}=${encodeURIComponent(value)}`);
       } else if (isSafe(value) && value.__param) {
         search.push(`${name}=${value.__param}`);
@@ -108,7 +125,7 @@ export class Url {
     return new Url(value);
   }
 
-  static safeParam(value: string): UrlParamSafeValue {
+  static safeParam(value: ParamValue): SafeParam {
     return { __param: value };
   }
 }

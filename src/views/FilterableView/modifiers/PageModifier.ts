@@ -1,9 +1,9 @@
 import { attr } from '../../../utils/dom/attr';
 import { event } from '../../../core/decorators/event';
-import { FilterableView } from '../index';
+import { FilterableView, FilterableViewParams } from '../index';
 import { SyncOptions } from '../Modifier';
 import { toInt } from '../../../utils/lang/number/toInt';
-import { Url, UrlParamValue } from '../../../utils/types/Url';
+import { Url } from '../../../utils/types/Url';
 
 import {
   BehaviourModifier,
@@ -25,7 +25,7 @@ export class PageModifier extends BehaviourModifier {
     this.paramName = paramName;
   }
 
-  getParams(): tyny.Map<UrlParamValue> {
+  getParams(): FilterableViewParams {
     const { paramName, value } = this;
     return {
       [paramName]: value > 1 ? `${value}` : null,
@@ -51,8 +51,9 @@ export class PageModifier extends BehaviourModifier {
   }
 
   sync({ url }: SyncOptions): boolean {
-    const page = url.getParam(this.paramName, '1');
-    const value = parseInt(page);
+    const page = url.getParam(this.paramName, 1);
+    const value = typeof page === 'number' ? page : parseInt(`${page}`);
+
     if (this.value === value) {
       return false;
     }

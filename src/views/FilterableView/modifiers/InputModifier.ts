@@ -1,8 +1,8 @@
 import { event, property } from '../../../core';
 import { debounce } from '../../../utils/lang/function';
 import { SyncOptions } from '../Modifier';
-import { UrlParamValue } from '../../../utils/types/Url';
 import { ViewModifier, ViewModifierOptions } from '../ViewModifier';
+import { FilterableViewParams } from '..';
 
 export interface InputModifierOptions extends ViewModifierOptions {
   defaultValue?: string;
@@ -37,7 +37,7 @@ export class InputModifier extends ViewModifier {
     return this.el.value;
   }
 
-  getParams(): tyny.Map<UrlParamValue> {
+  getParams(): FilterableViewParams {
     return {
       [this.paramName]: this.getValue(),
     };
@@ -57,7 +57,7 @@ export class InputModifier extends ViewModifier {
       return false;
     }
 
-    this.setValue(value, true);
+    this.setValue(typeof value === 'string' ? value : `${value}`, true);
     return true;
   }
 

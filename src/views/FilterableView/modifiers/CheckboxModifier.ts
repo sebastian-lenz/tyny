@@ -1,7 +1,7 @@
 import { event, property } from '../../../core';
 import { SyncOptions } from '../Modifier';
-import { UrlParamValue } from '../../../utils/types/Url';
 import { ViewModifier, ViewModifierOptions } from '../ViewModifier';
+import { FilterableViewParams } from '..';
 
 export interface CheckboxModifierOptions extends ViewModifierOptions {
   defaultValue?: boolean;
@@ -32,7 +32,7 @@ export class CheckboxModifier extends ViewModifier {
     return this.el.checked;
   }
 
-  getParams(): tyny.Map<UrlParamValue> {
+  getParams(): FilterableViewParams {
     const paramValue = this.getParamValue();
     if (!this.getValue() || !paramValue) {
       return {};

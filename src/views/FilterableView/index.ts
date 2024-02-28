@@ -3,10 +3,10 @@ import { event, getChildViews, property } from '../../core';
 import { fetch } from '../../utils/env/fetch';
 import { Modifier } from './Modifier';
 import { Swap, SwapOptions } from '../Swap';
-import { Url, UrlParamValue } from '../../utils/types/Url';
+import { Url, Param } from '../../utils/types/Url';
 import { ViewModifier } from './ViewModifier';
 
-export type FilterableViewParam = UrlParamValue;
+export type FilterableViewParam = Param | null;
 export type FilterableViewParams = tyny.Map<FilterableViewParam>;
 
 export interface FilterableViewOptions extends SwapOptions {}

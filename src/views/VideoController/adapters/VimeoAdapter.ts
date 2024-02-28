@@ -5,7 +5,7 @@ export class VimeoAdapter extends IFrameAdapter {
     super(el);
 
     const uid = this.url.getParam('player_id');
-    if (uid) {
+    if (uid && typeof uid === 'string') {
       this.uid = parseInt(uid);
     }
   }

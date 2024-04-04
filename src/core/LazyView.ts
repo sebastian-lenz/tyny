@@ -7,8 +7,13 @@ export type LazyViewPromise = Promise<{
 
 export abstract class LazyView extends View {
   onConnected() {
-    this.loadView().then((result) => {
+    this.loadAndRegisterView();
+  }
+
+  loadAndRegisterView(): LazyViewPromise {
+    return this.loadView().then((result) => {
       registerView(this.component.name, result.default, { upgrade: true });
+      return result;
     });
   }
 

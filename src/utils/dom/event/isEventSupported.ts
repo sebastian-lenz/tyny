@@ -10,6 +10,7 @@
  */
 
 const useHasFeature =
+  typeof document !== 'undefined' &&
   document.implementation &&
   document.implementation.hasFeature &&
   // always returns true in newer browsers as per the standard.
@@ -34,6 +35,10 @@ export function isEventSupported(
   eventNameSuffix: string,
   capture?: boolean
 ): boolean {
+  if (typeof document === 'undefined') {
+    return false;
+  }
+
   if (capture && !('addEventListener' in document)) {
     return false;
   }

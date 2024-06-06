@@ -191,7 +191,7 @@ export abstract class ZoomPanel extends View {
       case 'clamp':
         return this.clampView;
       case 'auto':
-        return wasFit ? this.fitToView : undefined;
+        return wasFit ? this.fitToView : this.clampView;
     }
   }
 }

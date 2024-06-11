@@ -1,19 +1,21 @@
 import { animate } from '../../../fx/animate';
 import { TransitionEffect } from '../createTransition';
 
-export interface DissolveOptions {
+export interface CreateTransitionOptions {
   fadeIn?: number;
+  fadeInDelay?: number;
   fadeInKeyFrames?: string;
   fadeOut?: number;
   fadeOutKeyFrames?: string;
 }
 
-export function dissolve({
+export function createTransition({
   fadeIn = 300,
+  fadeInDelay = -1,
   fadeInKeyFrames = 'fadeIn',
   fadeOut = 300,
   fadeOutKeyFrames = 'fadeOut',
-}: DissolveOptions = {}): TransitionEffect {
+}: CreateTransitionOptions = {}): TransitionEffect {
   return (from, to) => {
     const animations: Array<Promise<void>> = [];
     if (from instanceof HTMLElement) {
@@ -26,7 +28,7 @@ export function dissolve({
     if (to instanceof HTMLElement) {
       animations.push(
         animate(to, fadeInKeyFrames, {
-          delay: from ? fadeOut : 0,
+          delay: fadeInDelay < 0 ? (from ? fadeOut : 0) : fadeInDelay,
           duration: fadeIn,
           fillMode: 'both',
         })
@@ -36,3 +38,5 @@ export function dissolve({
     return Promise.all(animations);
   };
 }
+
+export const dissolve = createTransition;

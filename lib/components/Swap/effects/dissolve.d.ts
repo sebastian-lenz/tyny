@@ -1,10 +1,2 @@
-import { TransitionEffect } from '../createTransition';
-export interface CreateTransitionOptions {
-    fadeIn?: number;
-    fadeInDelay?: number;
-    fadeInKeyFrames?: string;
-    fadeOut?: number;
-    fadeOutKeyFrames?: string;
-}
-export declare function createEffect({ fadeIn, fadeInDelay, fadeInKeyFrames, fadeOut, fadeOutKeyFrames, }?: CreateTransitionOptions): TransitionEffect;
+import { createEffect } from '.';
 export declare const dissolve: typeof createEffect;

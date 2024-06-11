@@ -9,7 +9,7 @@ export interface CreateTransitionOptions {
   fadeOutKeyFrames?: string;
 }
 
-export function createTransitionEffect({
+export function createEffect({
   fadeIn = 300,
   fadeInDelay = -1,
   fadeInKeyFrames = 'fadeIn',
@@ -39,4 +39,4 @@ export function createTransitionEffect({
   };
 }
 
-export const dissolve = createTransitionEffect;
+export const dissolve = createEffect;

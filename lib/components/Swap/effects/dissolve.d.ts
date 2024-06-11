@@ -6,5 +6,5 @@ export interface CreateTransitionOptions {
     fadeOut?: number;
     fadeOutKeyFrames?: string;
 }
-export declare function createTransition({ fadeIn, fadeInDelay, fadeInKeyFrames, fadeOut, fadeOutKeyFrames, }?: CreateTransitionOptions): TransitionEffect;
-export declare const dissolve: typeof createTransition;
+export declare function createTransitionEffect({ fadeIn, fadeInDelay, fadeInKeyFrames, fadeOut, fadeOutKeyFrames, }?: CreateTransitionOptions): TransitionEffect;
+export declare const dissolve: typeof createTransitionEffect;

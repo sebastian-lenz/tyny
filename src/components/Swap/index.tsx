@@ -51,31 +51,33 @@ export function Swap({
   }));
 
   let useStateChild = false;
-  if (uri !== state.uri && !state.transition) {
-    useStateChild = true;
-    const childProps = {
-      child: children || null,
-      lastChild: state.child,
-    };
+  if (!state.transition) {
+    if (uri !== state.uri) {
+      useStateChild = true;
+      const childProps = {
+        child: children || null,
+        lastChild: state.child,
+      };
 
-    setState({
-      ...state,
-      ...childProps,
-      index: state.index + 1,
-      transition: createTransition({
+      setState({
+        ...state,
         ...childProps,
-        childRef: children ? createRef() : null,
-        effect: effect || defaultEffect,
-        lastChildRef: state.child ? createRef() : null,
-        rootRef: state.rootRef,
-      }),
-      uri,
-    });
-  } else if (state.child !== children) {
-    setState({
-      ...state,
-      child: children || null,
-    });
+        index: state.index + 1,
+        transition: createTransition({
+          ...childProps,
+          childRef: children ? createRef() : null,
+          effect: effect || defaultEffect,
+          lastChildRef: state.child ? createRef() : null,
+          rootRef: state.rootRef,
+        }),
+        uri,
+      });
+    } else if (state.child !== children) {
+      setState({
+        ...state,
+        child: children || null,
+      });
+    }
   }
 
   const { index, lastChild, transition } = state;

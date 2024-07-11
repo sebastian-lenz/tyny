@@ -1,5 +1,5 @@
 import cx from 'classnames';
-import { cloneElement, createRef, JSX, RefObject, VNode } from 'preact';
+import { cloneElement, createRef, JSX, RefObject } from 'preact';
 import { useLayoutEffect, useState } from 'preact/hooks';
 
 import { dissolve } from './effects/dissolve';
@@ -11,16 +11,16 @@ import {
 
 const defaultEffect = dissolve();
 
-function passThrough<T>(value: T): T {
-  return value;
+export interface ChildPropsOptions {
+  current: boolean;
 }
 
 export interface Props extends JSX.HTMLAttributes<HTMLDivElement> {
+  childProps?: (options: ChildPropsOptions) => any;
   children: JSX.Element | null;
   className?: string;
   effect?: TransitionEffect;
   pageClassName?: string;
-  pageDecorator?: (node: VNode, current: boolean) => VNode;
   uri: string;
 }
 
@@ -34,10 +34,10 @@ export interface State {
 }
 
 export function Swap({
+  childProps,
   children,
   effect,
   pageClassName,
-  pageDecorator = passThrough,
   uri,
   ...props
 }: Props) {
@@ -111,25 +111,21 @@ export function Swap({
   } else {
     if (lastChild) {
       elements.push(
-        pageDecorator(
-          cloneElement(lastChild, {
-            key: index - 1,
-            ref: transition ? transition.lastChildRef : undefined,
-          }),
-          false
-        )
+        cloneElement(lastChild, {
+          ...(childProps ? childProps({ current: false }) : {}),
+          key: index - 1,
+          ref: transition ? transition.lastChildRef : undefined,
+        })
       );
     }
 
     if (child) {
       elements.push(
-        pageDecorator(
-          cloneElement(child, {
-            key: index,
-            ref: transition ? transition.childRef : undefined,
-          }),
-          true
-        )
+        cloneElement(child, {
+          ...(childProps ? childProps({ current: true }) : {}),
+          key: index,
+          ref: transition ? transition.childRef : undefined,
+        })
       );
     }
   }

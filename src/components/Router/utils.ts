@@ -43,6 +43,17 @@ export function exec(rawUrl: string, rawRoute: string, opts: RouteOptions) {
         break;
       }
 
+      const regExpAt = param.indexOf('<');
+      if (regExpAt !== -1) {
+        const regExp = param.substring(regExpAt + 1, param.indexOf('>'));
+        param = param.substring(0, regExpAt);
+
+        if (!new RegExp(`^${regExp}$`).test(val)) {
+          ret = false;
+          break;
+        }
+      }
+
       matches[param] = decodeURIComponent(val);
       if (plus || star) {
         matches[param] = url.slice(i).map(decodeURIComponent).join('/');

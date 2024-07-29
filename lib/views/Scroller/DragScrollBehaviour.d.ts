@@ -1,4 +1,5 @@
 import { DragBehaviour } from '../../core/pointers/DragBehaviour';
+import { type Spring } from '../../fx/spring';
 import type { DragBehaviourOptions } from '../../core/pointers/DragBehaviour';
 import type { Pointer } from '../../core/pointers/Pointer';
 import type { TweenOptions } from '../../fx/tween';
@@ -15,16 +16,22 @@ export interface ScrollableView extends View {
 export interface DragScrollBehaviourOptions extends DragBehaviourOptions {
     disableWheel?: boolean;
     ignoreWheelAxis?: boolean;
+    smoothWheel?: boolean;
 }
 export declare class DragScrollBehaviour<TView extends ScrollableView = ScrollableView> extends DragBehaviour<TView> {
     ignoreWheelAxis: boolean;
     initialPosition: tyny.Point;
     isDraging: boolean;
     listeners: Array<Function> | null;
+    useWheelSmoothing: boolean;
+    wheelSping: {
+        position: tyny.Point;
+        spring: Spring;
+    } | null;
     constructor(view: TView, options: DragScrollBehaviourOptions);
-    onDragBegin(event: NativeEvent, pointer: Pointer): boolean;
+    onDragBegin(event: NativeEvent, _: Pointer): boolean;
     onDrag(event: NativeEvent, pointer: Pointer): boolean;
-    onDragEnd(event: MaybeNativeEvent, pointer: Pointer): void;
+    onDragEnd(_: MaybeNativeEvent, pointer: Pointer): void;
     getVelocity(pointer: Pointer): tyny.Point;
     onDestroyed(): void;
     onWheel(event: WheelEvent): void;

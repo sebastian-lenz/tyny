@@ -1,9 +1,11 @@
 import { ClickBehaviour } from '../../core/pointers/ClickBehaviour';
+import { DragBehaviour } from '../../core/pointers/DragBehaviour';
 import { easeOutExpo } from '../../fx/easings/easeOutExpo';
+import { isTrackpad } from '../../utils/env/isTrackpad';
 import { momentum } from '../../fx/momentum';
 import { on } from '../../utils/dom/event/on';
+import { spring, type Spring } from '../../fx/spring';
 import { stop } from '../../fx/dispatcher';
-import { DragBehaviour } from '../../core/pointers/DragBehaviour';
 
 import type { DragBehaviourOptions } from '../../core/pointers/DragBehaviour';
 import type { Pointer } from '../../core/pointers/Pointer';
@@ -26,6 +28,7 @@ export interface ScrollableView extends View {
 export interface DragScrollBehaviourOptions extends DragBehaviourOptions {
   disableWheel?: boolean;
   ignoreWheelAxis?: boolean;
+  smoothWheel?: boolean;
 }
 
 export class DragScrollBehaviour<
@@ -35,12 +38,15 @@ export class DragScrollBehaviour<
   initialPosition: tyny.Point;
   isDraging: boolean = false;
   listeners: Array<Function> | null = null;
+  useWheelSmoothing: boolean;
+  wheelSping: { position: tyny.Point; spring: Spring } | null = null;
 
   constructor(view: TView, options: DragScrollBehaviourOptions) {
     super(view, options);
 
     this.initialPosition = view.position;
     this.ignoreWheelAxis = !!options.ignoreWheelAxis;
+    this.useWheelSmoothing = !!options.smoothWheel;
 
     if (!options.disableWheel) {
       this.listeners = [on(view.el, 'wheel', this.onWheel, { scope: this })];
@@ -50,7 +56,7 @@ export class DragScrollBehaviour<
   // Drag API
   // --------
 
-  onDragBegin(event: NativeEvent, pointer: Pointer): boolean {
+  onDragBegin(event: NativeEvent, _: Pointer): boolean {
     const { direction, view } = this;
     stop(view);
 
@@ -100,7 +106,7 @@ export class DragScrollBehaviour<
     return true;
   }
 
-  onDragEnd(event: MaybeNativeEvent, pointer: Pointer) {
+  onDragEnd(_: MaybeNativeEvent, pointer: Pointer) {
     const { view } = this;
     const velocity = this.getVelocity(pointer);
     this.isDraging = false;
@@ -157,8 +163,8 @@ export class DragScrollBehaviour<
       return;
     }
 
-    const { direction, view } = this;
-    const position = view.position;
+    const { direction, view, wheelSping } = this;
+    let position = wheelSping ? wheelSping.position : view.position;
     let didUpdate: boolean = false;
 
     const delta = view.toLocalOffset({
@@ -188,7 +194,19 @@ export class DragScrollBehaviour<
       event.preventDefault();
     }
 
-    stop(view);
-    view.position = view.clampPosition(position);
+    position = view.clampPosition(position);
+
+    if (this.useWheelSmoothing && !isTrackpad(event)) {
+      if (wheelSping && wheelSping.spring.advance({ position })) {
+        wheelSping.position = position;
+      } else {
+        this.wheelSping = { position, spring: spring(view, { position }) };
+        this.wheelSping.spring.then(() => (this.wheelSping = null));
+      }
+    } else {
+      stop(view);
+      this.wheelSping = null;
+      view.position = view.clampPosition(position);
+    }
   }
 }

@@ -25,11 +25,13 @@ export interface ScrollableView extends View {
 
 export interface DragScrollBehaviourOptions extends DragBehaviourOptions {
   disableWheel?: boolean;
+  ignoreWheelAxis?: boolean;
 }
 
 export class DragScrollBehaviour<
   TView extends ScrollableView = ScrollableView
 > extends DragBehaviour<TView> {
+  ignoreWheelAxis: boolean = false;
   initialPosition: tyny.Point;
   isDraging: boolean = false;
   listeners: Array<Function> | null = null;
@@ -38,6 +40,7 @@ export class DragScrollBehaviour<
     super(view, options);
 
     this.initialPosition = view.position;
+    this.ignoreWheelAxis = !!options.ignoreWheelAxis;
 
     if (!options.disableWheel) {
       this.listeners = [on(view.el, 'wheel', this.onWheel, { scope: this })];
@@ -163,14 +166,22 @@ export class DragScrollBehaviour<
       y: event.deltaY,
     });
 
+    if (this.ignoreWheelAxis) {
+      if (Math.abs(delta.x) > Math.abs(delta.y)) {
+        delta.y = delta.x;
+      } else {
+        delta.x = delta.y;
+      }
+    }
+
     if (direction !== 'vertical') {
       position.x += delta.x;
-      didUpdate = didUpdate || Math.abs(event.deltaX) > 0;
+      didUpdate = didUpdate || Math.abs(delta.x) > 0;
     }
 
     if (direction !== 'horizontal') {
       position.y += delta.y;
-      didUpdate = didUpdate || Math.abs(event.deltaY) > 0;
+      didUpdate = didUpdate || Math.abs(delta.y) > 0;
     }
 
     if (didUpdate) {

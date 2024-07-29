@@ -14,8 +14,10 @@ export interface ScrollableView extends View {
 }
 export interface DragScrollBehaviourOptions extends DragBehaviourOptions {
     disableWheel?: boolean;
+    ignoreWheelAxis?: boolean;
 }
 export declare class DragScrollBehaviour<TView extends ScrollableView = ScrollableView> extends DragBehaviour<TView> {
+    ignoreWheelAxis: boolean;
     initialPosition: tyny.Point;
     isDraging: boolean;
     listeners: Array<Function> | null;

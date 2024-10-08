@@ -1,3 +1,7 @@
 $tyny-view-prefix: 'tyny' !default;
 
 $tyny-image-wrapper: () !default;
+
+$tyny-grid-columns: 12 !default;
+$tyny-grid-gutter: 32px !default;
+$tyny-grid-steps: (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12) !default;

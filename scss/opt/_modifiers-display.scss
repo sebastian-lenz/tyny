@@ -1,0 +1,9 @@
+@mixin modifiers-display($suffix: '') {
+  .d-block#{$suffix} {
+    display: block;
+  }
+
+  .d-none#{$suffix} {
+    display: none;
+  }
+}

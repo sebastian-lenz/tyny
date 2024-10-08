@@ -3,3 +3,11 @@
     #{$key}: $value;
   }
 }
+
+@mixin tynyGridRow($gutter: $tyny-grid-gutter) {
+  display: flex;
+  flex-flow: row wrap;
+  gap: $tyny-grid-gutter;
+
+  --gap: #{$tyny-grid-gutter};
+}

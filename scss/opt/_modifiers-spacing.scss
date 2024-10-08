@@ -1,0 +1,61 @@
+$spacings: (
+  'auto': auto,
+  'none': 0,
+) !default;
+
+@mixin modifiers-spacing-horizontal($suffix: '', $spacings: $spacings) {
+  @each $name, $size in $spacings {
+    .mh-#{$name}#{$suffix},
+    .ml-#{$name}#{$suffix} {
+      margin-left: $size;
+    }
+
+    .mh-#{$name}#{$suffix},
+    .mr-#{$name}#{$suffix} {
+      margin-right: $size;
+    }
+
+    .ph-#{$name}#{$suffix},
+    .pl-#{$name}#{$suffix} {
+      padding-left: $size;
+    }
+
+    .ph-#{$name}#{$suffix},
+    .pr-#{$name}#{$suffix} {
+      padding-right: $size;
+    }
+  }
+}
+
+@mixin modifiers-spacing-vertical($suffix: '', $spacings: $spacings) {
+  @each $name, $size in $spacings {
+    .mv-#{$name}#{$suffix},
+    .mt-#{$name}#{$suffix} {
+      margin-top: $size;
+    }
+
+    .mv-#{$name}#{$suffix},
+    .mb-#{$name}#{$suffix} {
+      margin-bottom: $size;
+    }
+
+    .pv-#{$name}#{$suffix},
+    .pt-#{$name}#{$suffix} {
+      padding-top: $size;
+    }
+
+    .pv-#{$name}#{$suffix},
+    .pb-#{$name}#{$suffix} {
+      padding-bottom: $size;
+    }
+  }
+}
+
+@mixin modifiers-spacing-gap($suffix: '', $spacings: $spacings) {
+  @each $name, $size in $spacings {
+    .gap-#{$name}#{$suffix} {
+      --gap: #{$size};
+      gap: $size;
+    }
+  }
+}

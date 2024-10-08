@@ -1,0 +1,10 @@
+@mixin modifiers-position($suffix: '') {
+  .p-absolute-cover#{$suffix} {
+    position: absolute;
+    inset: 0 0 0 0;
+  }
+
+  .p-relative#{$suffix} {
+    position: relative;
+  }
+}

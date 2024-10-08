@@ -1,3 +1,4 @@
+export * from './boolify';
 export * from './camelize';
 export * from './dasherize';
 export * from './endsWith';

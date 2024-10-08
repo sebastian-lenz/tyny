@@ -9,12 +9,13 @@ export interface ZoomPanelOptions extends ViewOptions {
   enabled?: boolean;
 }
 
+export type Padding = number | [number, number, number, number];
 export type ResizeMode = 'auto' | 'cover' | 'fit' | 'clamp' | 'none';
 export type ViewProps = [number, number, number];
 
 export abstract class ZoomPanel extends View {
   coverPadding: number = 0;
-  fitPadding: number = 0;
+  fitPadding: Padding = 0;
   height: number = 0;
   position: tyny.Point = { x: 0, y: 0 };
   resizeMode: ResizeMode = 'auto';
@@ -62,6 +63,10 @@ export abstract class ZoomPanel extends View {
   }
 
   isFitToView(): boolean {
+    if (this.resizeMode === 'auto' && this.width == 0 && this.height == 0) {
+      return true;
+    }
+
     return this.matchesViewProps(this.getFitToViewProps());
   }
 
@@ -79,14 +84,15 @@ export abstract class ZoomPanel extends View {
 
   getCenteredViewProps(
     scale: number,
-    [focusX, focusY]: [number, number] = [0.5, 0.5]
+    [focusX, focusY]: [number, number] = [0.5, 0.5],
+    [offsetX, offsetY]: [number, number] = [0, 0]
   ): ViewProps {
     const { height, width } = this;
     const displayWidth = this.getNativeWidth() * scale;
     const displayHeight = this.getNativeHeight() * scale;
 
-    const x = (width - displayWidth) * focusX;
-    const y = (height - displayHeight) * focusY;
+    const x = offsetX + (width - displayWidth) * focusX;
+    const y = offsetY + (height - displayHeight) * focusY;
 
     return [x, y, scale];
   }
@@ -100,47 +106,80 @@ export abstract class ZoomPanel extends View {
     );
   }
 
-  getFitToViewProps(padding: number = this.fitPadding): ViewProps {
+  getFitToViewProps(padding: Padding = this.fitPadding): ViewProps {
+    const [width, height, offset] = this.getViewportProps(padding);
+
     return this.getCenteredViewProps(
       Math.min(
         1,
-        (this.height - padding * 2) / this.getNativeHeight(),
-        (this.width - padding * 2) / this.getNativeWidth()
-      )
+        height / this.getNativeHeight(),
+        width / this.getNativeWidth()
+      ),
+      [0.5, 0.5],
+      offset
     );
   }
 
   getPositionBounds(scale: number = this.scale): tyny.BoundingBox {
-    const { height, width } = this;
+    const [viewWidth, viewHeight] = this.getViewportProps();
+    const { fitPadding, height, width } = this;
     const nativeHeight = this.getNativeHeight();
     const nativeWidth = this.getNativeWidth();
+
     const displayWidth = nativeWidth * scale;
     const displayHeight = nativeHeight * scale;
-    const x = (width - displayWidth) * 0.5;
-    const y = (height - displayHeight) * 0.5;
+    const x = (viewWidth - displayWidth) * 0.5;
+    const y = (viewHeight - displayHeight) * 0.5;
 
-    return {
-      xMax: Math.max(x, 0),
-      xMin: Math.min(x, width - displayWidth),
-      yMax: Math.max(y, 0),
-      yMin: Math.min(y, height - displayHeight),
+    let shiftX = 0;
+    if (displayWidth < width) {
+      shiftX = typeof fitPadding === 'number' ? fitPadding : fitPadding[3];
+    }
+
+    let shiftY = 0;
+    if (displayHeight < height) {
+      shiftY = typeof fitPadding === 'number' ? fitPadding : fitPadding[0];
+    }
+
+    const result = {
+      xMax: Math.max(x + shiftX, shiftX),
+      xMin: Math.min(x + shiftX, width - displayWidth + shiftX),
+      yMax: Math.max(y + shiftY, shiftY),
+      yMin: Math.min(y + shiftY, height - displayHeight + shiftY),
     };
+
+    return result;
   }
 
   getScaleBounds(): tyny.Interval {
-    const { height, fitPadding: padding, width } = this;
+    const [width, height] = this.getViewportProps();
     const nativeHeight = this.getNativeHeight();
     const nativeWidth = this.getNativeWidth();
-    const scale = Math.min(
-      1,
-      (height - padding * 2) / nativeHeight,
-      (width - padding * 2) / nativeWidth
-    );
+    const scale = Math.min(1, height / nativeHeight, width / nativeWidth);
 
     return {
       min: scale,
       max: 1,
     };
+  }
+
+  getViewportProps(
+    padding: Padding = this.fitPadding
+  ): [number, number, [number, number]] {
+    let { height, width } = this;
+
+    if (typeof padding === 'number') {
+      return [width - 2 * padding, height - 2 * padding, [0, 0]];
+    } else {
+      const paddingHeight = padding[0] + padding[2];
+      const paddingWidth = padding[1] + padding[3];
+
+      return [
+        width - paddingWidth,
+        height - paddingHeight,
+        [padding[3] - paddingWidth * 0.5, padding[0] - paddingHeight * 0.5],
+      ];
+    }
   }
 
   limitPosition({ x, y }: tyny.Point, scale: number = this.scale): tyny.Point {

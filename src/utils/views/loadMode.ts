@@ -1,6 +1,6 @@
 import { getChildViews, View } from '../../core';
 
-export const enum LoadMode {
+export enum LoadMode {
   Always,
   Explicit,
   Visibility,

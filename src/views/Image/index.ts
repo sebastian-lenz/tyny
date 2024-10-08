@@ -54,6 +54,11 @@ export class Image extends View implements LoadModeView, VisibilityTarget {
 
     this.naturalHeight = toInt(attr(this.el, 'height'));
     this.naturalWidth = toInt(attr(this.el, 'width'));
+    this.loadMode = this.params.enum({
+      defaultValue: LoadMode.Visibility,
+      enum: LoadMode,
+      name: 'loadMode',
+    });
   }
 
   load(): Promise<void> {
@@ -92,7 +97,7 @@ export class Image extends View implements LoadModeView, VisibilityTarget {
     }
   }
 
-  protected allowLoad() {
+  allowLoad() {
     if (this.loadMode === LoadMode.Visibility) {
       return this.isVisible;
     }
@@ -111,7 +116,7 @@ export class Image extends View implements LoadModeView, VisibilityTarget {
   }
 
   @update({ events: ['resize', 'update'], mode: 'read' })
-  protected onResize() {
+  onResize() {
     const { displayHeight, displayWidth, el } = this;
     const height = (this.displayHeight = el.clientHeight);
     const width = (this.displayWidth = el.clientWidth);

@@ -170,7 +170,6 @@ export class Scroller<TItem extends ScrollerItem = ScrollerItem>
   onMeasure() {
     const { content, useContentMargins, viewport, viewportSize } = this;
     const bounds = this.positionBounds;
-
     if (!content || !viewport) {
       return;
     }

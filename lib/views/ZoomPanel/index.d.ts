@@ -4,11 +4,12 @@ import { ZoomBehaviour } from './ZoomBehaviour';
 export interface ZoomPanelOptions extends ViewOptions {
     enabled?: boolean;
 }
+export declare type Padding = number | [number, number, number, number];
 export declare type ResizeMode = 'auto' | 'cover' | 'fit' | 'clamp' | 'none';
 export declare type ViewProps = [number, number, number];
 export declare abstract class ZoomPanel extends View {
     coverPadding: number;
-    fitPadding: number;
+    fitPadding: Padding;
     height: number;
     position: tyny.Point;
     resizeMode: ResizeMode;
@@ -27,11 +28,12 @@ export declare abstract class ZoomPanel extends View {
     isFitToView(): boolean;
     fitToView(): void;
     matchesViewProps([x, y, scale]: ViewProps): boolean;
-    getCenteredViewProps(scale: number, [focusX, focusY]?: [number, number]): ViewProps;
+    getCenteredViewProps(scale: number, [focusX, focusY]?: [number, number], [offsetX, offsetY]?: [number, number]): ViewProps;
     getCoverViewProps(padding?: number): ViewProps;
-    getFitToViewProps(padding?: number): ViewProps;
+    getFitToViewProps(padding?: Padding): ViewProps;
     getPositionBounds(scale?: number): tyny.BoundingBox;
     getScaleBounds(): tyny.Interval;
+    getViewportProps(padding?: Padding): [number, number, [number, number]];
     limitPosition({ x, y }: tyny.Point, scale?: number): tyny.Point;
     limitScale(scale: number): number;
     setPosition({ x, y }: tyny.Point): void;

@@ -23,8 +23,8 @@ export declare class Image extends View implements LoadModeView, VisibilityTarge
     setSource(value: string): void;
     setVisible(value: boolean): void;
     update(): void;
-    protected allowLoad(): boolean;
+    allowLoad(): boolean;
     onConnected(): void;
     onDisconnected(): void;
-    protected onResize(): (() => void) | undefined;
+    onResize(): (() => void) | undefined;
 }

@@ -1,4 +1,4 @@
-export declare const enum LoadMode {
+export declare enum LoadMode {
     Always = 0,
     Explicit = 1,
     Visibility = 2

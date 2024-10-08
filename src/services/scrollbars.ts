@@ -62,7 +62,7 @@ function setScrollbars(value: boolean) {
       if (typeof scrollbarProp === 'function') {
         scrollbarProp(_scrollBarSize);
       } else if (scrollbarProp) {
-        body.style.setProperty(scrollbarProp, `${value}px`);
+        body.style.setProperty(scrollbarProp, `${_scrollBarSize}px`);
       }
     } else {
       disable();

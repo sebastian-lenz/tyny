@@ -1,7 +1,7 @@
 import { isString } from '../../utils/lang/string';
 import { HoldBehaviour, HoldBehaviourOptions } from './HoldBehaviour';
 import { on } from '../../utils/dom/event';
-import { property, View, ViewOptions } from '../../core';
+import { property, update, View, ViewOptions } from '../../core';
 import { Scroller, scrollerScrollEvent } from '../Scroller';
 import { DragDirection, toAxis } from '../../core/pointers/DragBehaviour';
 
@@ -21,7 +21,9 @@ export interface ScrollerArrowsOptions extends ViewOptions {
 }
 
 export class ScrollerArrows extends View {
-  protected _targetListeners: Function[] | null = null;
+  epsilon: number = 1;
+  isStalled: boolean = false;
+  targetListeners: Function[] | null = null;
 
   @property({ param: { defaultValue: 'horizontal', type: 'string' } })
   direction!: DragDirection;
@@ -55,31 +57,43 @@ export class ScrollerArrows extends View {
     this.onTargetChanged(value);
   }
 
-  protected onScrollerChanged() {
-    const { backward, forward, target } = this;
+  @update({ events: ['resize', 'update'] })
+  onMeasure() {
+    return this.onScrollerChanged;
+  }
+
+  onScrollerChanged() {
+    const { backward, epsilon, forward, target } = this;
     const axis = toAxis(this.direction);
 
     if (target) {
-      const { position, positionBounds } = target;
-      backward.disabled =
-        position[axis] <= positionBounds[`${axis}Min` as 'xMin' | 'yMin'];
-      forward.disabled =
-        position[axis] >= positionBounds[`${axis}Max` as 'xMax' | 'yMax'];
+      const { position: pos, positionBounds: bounds } = target;
+      backward.disabled = pos[axis] - epsilon <= bounds[`${axis}Min`];
+      forward.disabled = pos[axis] + epsilon >= bounds[`${axis}Max`];
+
+      this.setStalled(backward.disabled && forward.disabled);
     }
   }
 
-  protected onTargetChanged(target: Scroller | null) {
-    const { _targetListeners } = this;
+  onTargetChanged(target: Scroller | null) {
+    const { targetListeners: _targetListeners } = this;
     if (_targetListeners) {
       _targetListeners.forEach((off) => off());
     }
 
     if (target) {
-      this._targetListeners = [
+      this.targetListeners = [
         on(target.el, scrollerScrollEvent, this.onScrollerChanged, {
           scope: this,
         }),
       ];
     }
+  }
+
+  setStalled(value: boolean) {
+    if (this.isStalled === value) return;
+
+    this.isStalled = value;
+    this.toggleClass('stalled', value);
   }
 }

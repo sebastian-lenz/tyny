@@ -1,0 +1,42 @@
+@use 'sass:math';
+
+@mixin modifiers-width(
+  $suffix: '',
+  $columns: $tyny-grid-columns,
+  $steps: $tyny-grid-steps
+) {
+  @each $step in $steps {
+    .width-#{$step}#{$suffix} {
+      @if $step == $columns {
+        width: 100%;
+      } @else if $step == 1 {
+        // prettier-ignore
+        width: calc(
+          ((100% - var(--gap, 0px) * #{$columns - 1}) * #{math.div($step, $columns)}) 
+        );
+      } @else {
+        // prettier-ignore
+        width: calc(
+          ((100% - var(--gap, 0px) * #{$columns - 1}) * #{math.div($step, $columns)}) +
+          (var(--gap, 0px) * #{$step - 1})
+        );
+      }
+    }
+  }
+}
+
+@mixin modifiers-width-offset(
+  $suffix: '',
+  $columns: $tyny-grid-columns,
+  $steps: $tyny-grid-steps
+) {
+  @each $step in $steps {
+    .offset-#{$step}#{$suffix} {
+      // prettier-ignore
+      margin-left: calc(
+          ((100% - var(--gap, 0px) * #{$columns - 1}) * #{math.div($step, $columns)}) +
+          (var(--gap, 0px) * #{$step})
+        );
+    }
+  }
+}

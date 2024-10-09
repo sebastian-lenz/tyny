@@ -1,0 +1,11 @@
+@mixin imageCrop($baseClass: '.' + $tyny-view-prefix + 'ImageCrop') {
+  #{$baseClass} {
+    @include relative();
+    @include writeRules($tyny-image-wrapper);
+    overflow: hidden;
+  }
+
+  #{$baseClass} > img {
+    @include absolute();
+  }
+}

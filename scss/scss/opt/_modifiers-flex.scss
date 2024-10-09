@@ -1,0 +1,73 @@
+@mixin modifiers-flex($suffix: '') {
+  .flex#{$suffix} {
+    flex: 1;
+  }
+
+  .d-flex#{$suffix} {
+    display: flex;
+  }
+
+  .flex-column#{$suffix} {
+    @extend .d-flex#{$suffix};
+    flex-flow: column nowrap;
+  }
+
+  .flex-column-reverse#{$suffix} {
+    @extend .d-flex#{$suffix};
+    flex-flow: column-reverse nowrap;
+  }
+
+  .flex-row#{$suffix} {
+    @extend .d-flex#{$suffix};
+    flex-flow: row nowrap;
+  }
+
+  .flex-row-reverse#{$suffix} {
+    @extend .d-flex#{$suffix};
+    flex-flow: row-reverse nowrap;
+  }
+
+  .flex-wrap#{$suffix} {
+    flex-wrap: wrap;
+  }
+
+  .flex-center#{$suffix} {
+    @extend .flex-row#{$suffix};
+    @extend .align-center#{$suffix};
+    @extend .justify-center#{$suffix};
+  }
+
+  // Align
+  // -----
+
+  .align-center#{$suffix} {
+    align-items: center;
+  }
+
+  .align-end#{$suffix} {
+    align-items: flex-end;
+  }
+
+  .align-start#{$suffix} {
+    align-items: flex-start;
+  }
+
+  // Justify
+  // -------
+
+  .justify-center#{$suffix} {
+    justify-content: center;
+  }
+
+  .justify-end#{$suffix} {
+    justify-content: flex-end;
+  }
+
+  .justify-space-between#{$suffix} {
+    justify-content: space-between;
+  }
+
+  .justify-start#{$suffix} {
+    justify-content: flex-start;
+  }
+}

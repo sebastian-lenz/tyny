@@ -1,4 +1,4 @@
-@mixin modifiers-display($suffix: '') {
+@mixin display($suffix: '') {
   .d-block#{$suffix} {
     display: block;
   }

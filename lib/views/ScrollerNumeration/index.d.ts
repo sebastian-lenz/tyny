@@ -7,14 +7,15 @@ export interface ItemRect {
     yMin: number;
 }
 export declare class ScrollerNumeration extends AbstractNumeration {
-    private _height;
-    private _rects;
-    private _targetListeners;
-    private _width;
+    epsilon: number;
+    height: number;
+    rects: Array<ItemRect>;
+    targetListeners: Function[] | null;
+    width: number;
     get target(): Scroller | null;
-    protected onMeasure(): (() => void) | undefined;
-    protected onScrollChanged(event: CustomEvent<ScrollerEventArgs>): void;
-    protected onTargetChanged(target: Scroller | null): void;
-    protected selectIndex(index: number): void;
-    protected updateSelected(position: tyny.Point): void;
+    onMeasure(): (() => void) | undefined;
+    onScrollChanged(event: CustomEvent<ScrollerEventArgs>): void;
+    onTargetChanged(target: Scroller | null): void;
+    selectIndex(index: number): void;
+    updateSelected(position: tyny.Point): void;
 }

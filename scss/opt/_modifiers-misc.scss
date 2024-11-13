@@ -1,4 +1,4 @@
-@mixin modifiers-misc-screen-reader($suffix: '') {
+@mixin misc-screen-reader($suffix: '') {
   .sr-only#{$suffix} {
     position: absolute;
     overflow: hidden;

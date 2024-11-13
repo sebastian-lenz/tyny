@@ -1,13 +1,18 @@
+$gutter: 32px !default;
+
 @mixin writeRules($rules: ()) {
   @each $key, $value in $rules {
     #{$key}: $value;
   }
 }
 
-@mixin tynyGridRow($gutter: $tyny-grid-gutter) {
+@mixin gap($gap) {
+  gap: $gap;
+  --gap: #{$gap};
+}
+
+@mixin gridRow($gutter: $gutter) {
+  @include gap($gutter);
   display: flex;
   flex-flow: row wrap;
-  gap: $tyny-grid-gutter;
-
-  --gap: #{$tyny-grid-gutter};
 }

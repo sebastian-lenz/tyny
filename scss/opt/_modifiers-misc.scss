@@ -14,7 +14,7 @@
   }
 }
 
-@mixin modifiers-misc-card-link($suffix: '') {
+@mixin misc-card-link($suffix: '') {
   .card-link#{$suffix}::after {
     display: block;
     position: absolute;

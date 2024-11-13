@@ -14,10 +14,11 @@ export interface ItemRect {
 }
 
 export class ScrollerNumeration extends AbstractNumeration {
-  private _height: number = 0;
-  private _rects: Array<ItemRect> = [];
-  private _targetListeners: Function[] | null = null;
-  private _width: number = 0;
+  epsilon: number = 0;
+  height: number = 0;
+  rects: Array<ItemRect> = [];
+  targetListeners: Function[] | null = null;
+  width: number = 0;
 
   @property({ immediate: true, watch: 'onTargetChanged' })
   get target(): Scroller | null {
@@ -32,7 +33,7 @@ export class ScrollerNumeration extends AbstractNumeration {
   }
 
   @update({ events: ['resize'], mode: 'read' })
-  protected onMeasure() {
+  onMeasure() {
     const { target } = this;
     if (!target) return;
 
@@ -56,26 +57,26 @@ export class ScrollerNumeration extends AbstractNumeration {
       };
     });
 
-    this._height = bounds.height;
-    this._rects = rects;
-    this._width = bounds.width;
+    this.height = bounds.height;
+    this.rects = rects;
+    this.width = bounds.width;
     this.setLength(rects.length);
     return () => this.updateSelected(position);
   }
 
-  protected onScrollChanged(event: CustomEvent<ScrollerEventArgs>) {
+  onScrollChanged(event: CustomEvent<ScrollerEventArgs>) {
     this.updateSelected(event.detail.position);
   }
 
-  protected onTargetChanged(target: Scroller | null) {
-    const { _targetListeners } = this;
-    if (_targetListeners) {
-      _targetListeners.forEach((off) => off());
+  onTargetChanged(target: Scroller | null) {
+    const { targetListeners } = this;
+    if (targetListeners) {
+      targetListeners.forEach((off) => off());
     }
 
     if (target) {
       const { el } = target;
-      this._targetListeners = [
+      this.targetListeners = [
         on(el, scrollerScrollEvent, this.onScrollChanged, { scope: this }),
       ];
 
@@ -83,9 +84,9 @@ export class ScrollerNumeration extends AbstractNumeration {
     }
   }
 
-  protected selectIndex(index: number): void {
-    const { target, _rects } = this;
-    const { xMin: x, yMin: y } = _rects[index];
+  selectIndex(index: number): void {
+    const { target, rects } = this;
+    const { xMin: x, yMin: y } = rects[index];
 
     if (target) {
       const duration = clamp(Math.sqrt(x * x + y * y) * 100, 250, 600);
@@ -96,16 +97,17 @@ export class ScrollerNumeration extends AbstractNumeration {
     }
   }
 
-  protected updateSelected(position: tyny.Point) {
-    const { _height, _rects, _width } = this;
+  updateSelected(position: tyny.Point) {
+    const { epsilon, height, rects, width } = this;
     const { x, y } = position;
     let max = -1;
     let min = -1;
 
-    for (let index = 0; index < _rects.length; index++) {
-      const rect = _rects[index];
-      if (rect.xMax - x < 0 || rect.yMax - y < 0) continue;
-      if (rect.xMin - x > _width || rect.yMin - y > _height) break;
+    for (let index = 0; index < rects.length; index++) {
+      const rect = rects[index];
+      if (rect.xMax - x < -epsilon || rect.yMax - y < -epsilon) continue;
+      if (rect.xMin - x > width + epsilon || rect.yMin - y > height + epsilon)
+        break;
       if (min === -1) min = index;
       max = index;
     }

@@ -1,4 +1,4 @@
-@mixin modifiers-flex($suffix: '') {
+@mixin flex($suffix: '') {
   .flex#{$suffix} {
     flex: 1;
   }

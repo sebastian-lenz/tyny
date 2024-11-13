@@ -1,4 +1,4 @@
-@mixin modifiers-position($suffix: '') {
+@mixin position($suffix: '') {
   .p-absolute-cover#{$suffix} {
     position: absolute;
     inset: 0 0 0 0;

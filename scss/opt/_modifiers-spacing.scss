@@ -3,7 +3,7 @@ $spacings: (
   'none': 0,
 ) !default;
 
-@mixin modifiers-spacing-horizontal($suffix: '', $spacings: $spacings) {
+@mixin spacing-horizontal($suffix: '', $spacings: $spacings) {
   @each $name, $size in $spacings {
     .mh-#{$name}#{$suffix},
     .ml-#{$name}#{$suffix} {
@@ -27,7 +27,7 @@ $spacings: (
   }
 }
 
-@mixin modifiers-spacing-vertical($suffix: '', $spacings: $spacings) {
+@mixin spacing-vertical($suffix: '', $spacings: $spacings) {
   @each $name, $size in $spacings {
     .mv-#{$name}#{$suffix},
     .mt-#{$name}#{$suffix} {
@@ -51,7 +51,7 @@ $spacings: (
   }
 }
 
-@mixin modifiers-spacing-gap($suffix: '', $spacings: $spacings) {
+@mixin spacing-gap($suffix: '', $spacings: $spacings) {
   @each $name, $size in $spacings {
     .gap-#{$name}#{$suffix} {
       --gap: #{$size};

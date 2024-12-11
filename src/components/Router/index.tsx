@@ -242,6 +242,7 @@ export class Router<Props extends RouterProps = RouterProps> extends Component<
 
   render() {
     return (
+      // @ts-ignore
       <RouterContext.Provider value={this.contextValue}>
         {this.getCurrent()}
       </RouterContext.Provider>

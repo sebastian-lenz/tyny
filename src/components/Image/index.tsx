@@ -6,7 +6,7 @@ import { registerView } from '../../core';
 
 registerView('Image', ImageView);
 
-export interface Props extends JSX.HTMLAttributes<HTMLImageElement> {}
+export interface Props extends JSX.ImgHTMLAttributes<HTMLImageElement> {}
 
 export function Image({ className, srcset, ...props }: Props) {
   return (

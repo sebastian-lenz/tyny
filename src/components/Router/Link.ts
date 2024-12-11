@@ -4,8 +4,10 @@ import { createElement, JSX } from 'preact';
 import { route, useRouter } from './index';
 import { exec } from './utils';
 
-export interface Props extends preact.JSX.HTMLAttributes<HTMLAnchorElement> {
+export interface Props
+  extends Omit<preact.JSX.AnchorHTMLAttributes<HTMLAnchorElement>, 'href'> {
   activeClass?: string;
+  href?: string;
 }
 
 function handleLinkClick(

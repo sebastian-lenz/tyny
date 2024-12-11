@@ -4,8 +4,8 @@ import { Transform2D } from '../../utils/types/Transform2D';
 import { Velocity } from './Velocity';
 import type { AbstractAdapter } from './adapters/AbstractAdapter';
 import type { View } from '../View';
-export declare type NativeEvent = MouseEvent | PointerEvent | TouchEvent;
-export declare type MaybeNativeEvent = NativeEvent | undefined;
+export type NativeEvent = MouseEvent | PointerEvent | TouchEvent;
+export type MaybeNativeEvent = NativeEvent | undefined;
 export interface PointerBehaviourVelocity {
     [name: string]: number;
     x: number;

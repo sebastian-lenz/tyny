@@ -12,6 +12,6 @@ export interface FromVelocityValues {
     min?: ValueTypeSource;
     velocity: ValueTypeSource;
 }
-export declare type FromVelocityValuesMap = PropertyMap<ValueTypeSource | FromVelocityValues>;
-export declare type MomentumValuesMap = PropertyMap<MomentumValues>;
+export type FromVelocityValuesMap = PropertyMap<ValueTypeSource | FromVelocityValues>;
+export type MomentumValuesMap = PropertyMap<MomentumValues>;
 export declare function toMomentumValues(map: FromVelocityValuesMap): MomentumValuesMap;

@@ -14,11 +14,11 @@ export interface DiffChangedState {
     inViewport: boolean;
     to: DOMRect;
 }
-export declare type DiffInitialState = Array<{
+export type DiffInitialState = Array<{
     element: HTMLElement;
     position: DOMRect;
 }>;
-export declare type DiffCallback = () => Array<HTMLElement>;
+export type DiffCallback = () => Array<HTMLElement>;
 export declare function createDiffState(elements: Array<HTMLElement>): DiffInitialState;
 export declare function diff(elements: Array<HTMLElement>, callback: DiffCallback): DiffResult;
 export declare function diffFromState(state: DiffInitialState, elements: Array<HTMLElement>): DiffResult;

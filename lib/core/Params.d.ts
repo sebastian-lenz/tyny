@@ -8,7 +8,7 @@ export interface Param<TValue = any> {
     property?: string;
     name: string;
 }
-export declare type SafeParam<TParam extends Param<TValue> = Param<any>, TValue = any> = TParam & {
+export type SafeParam<TParam extends Param<TValue> = Param<any>, TValue = any> = TParam & {
     defaultValue: TValue | {
         (): TValue;
     };

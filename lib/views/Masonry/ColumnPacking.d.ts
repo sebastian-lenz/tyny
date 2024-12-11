@@ -1,6 +1,6 @@
 import { Column, ColumnRegion } from './Column';
 import type { Masonry, MasonryStrategy } from './index';
-export declare type ColumnCount = number | {
+export type ColumnCount = number | {
     (masonry: Masonry): number;
 };
 export interface ColumnPackingOptions {

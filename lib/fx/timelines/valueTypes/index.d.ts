@@ -1,5 +1,5 @@
-export declare type ValueTypeSource = string | number | object;
-export declare type ValueType<T = any> = {
+export type ValueTypeSource = string | number | object;
+export type ValueType<T = any> = {
     add(a: T, b: T): T;
     clone(value: T): T;
     fromArray(values: number[]): T;
@@ -9,7 +9,7 @@ export declare type ValueType<T = any> = {
     subtract(a: T, b: T): T;
     toArray(value: T): number[];
 };
-export declare type MaybeValueType<T = any> = ValueType<T> | undefined;
-export declare type ValueTypeFactory<T = any> = (value: T) => MaybeValueType<T>;
+export type MaybeValueType<T = any> = ValueType<T> | undefined;
+export type ValueTypeFactory<T = any> = (value: T) => MaybeValueType<T>;
 export declare const valueTypeFactories: ValueTypeFactory[];
 export declare function createValueType<T>(value: T): MaybeValueType<T>;

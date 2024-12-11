@@ -1,5 +1,5 @@
-export declare type Param = ParamValue | SafeParam;
-export declare type ParamValue = string | number | boolean;
+export type Param = ParamValue | SafeParam;
+export type ParamValue = string | number | boolean;
 export interface SafeParam {
     __param: ParamValue;
 }

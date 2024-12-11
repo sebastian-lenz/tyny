@@ -1,6 +1,6 @@
 import { AbstractAdapter } from './adapters/AbstractAdapter';
 import { Velocity } from './Velocity';
-export declare type PointerType = 'mouse' | 'touch' | 'pen';
+export type PointerType = 'mouse' | 'touch' | 'pen';
 export interface PointerOptions {
     adapter: AbstractAdapter;
     clientX: number;

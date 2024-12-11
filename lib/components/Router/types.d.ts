@@ -17,7 +17,7 @@ export interface RoutableProps {
     path?: string;
     default?: boolean;
 }
-export declare type RouterPropsBase = Record<string, string | undefined> | null;
+export type RouterPropsBase = Record<string, string | undefined> | null;
 export interface RouterProps<RouteParams extends RouterPropsBase = RouterPropsBase> extends RoutableProps {
     history?: CustomHistory;
     static?: boolean;

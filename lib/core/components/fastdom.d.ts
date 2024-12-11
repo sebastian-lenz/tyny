@@ -1,5 +1,5 @@
 declare function flush(recursion?: number): void;
-export declare type FastDomTask = {
+export type FastDomTask = {
     (): FastDomTask | void;
 };
 export declare const fastDom: {

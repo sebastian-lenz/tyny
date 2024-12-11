@@ -1,4 +1,4 @@
-export declare type AnimationPlayState = 'playing' | 'stopped' | 'finished';
+export type AnimationPlayState = 'playing' | 'stopped' | 'finished';
 export interface Animation<T> extends Promise<T> {
     stop(): void;
 }

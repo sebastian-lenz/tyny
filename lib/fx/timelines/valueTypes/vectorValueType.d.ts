@@ -1,5 +1,5 @@
 import { MaybeValueType } from './index';
-export declare type Vector = {
+export type Vector = {
     [field: string]: number;
 };
 export declare const knownVectors: string[][];

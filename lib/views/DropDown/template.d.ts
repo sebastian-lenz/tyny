@@ -1,4 +1,4 @@
-export declare type Label<T> = (el: T) => string;
+export type Label<T> = (el: T) => string;
 export interface Options<T extends HTMLElement = HTMLElement> {
     className: string;
     element: T;

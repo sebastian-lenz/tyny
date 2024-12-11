@@ -1,8 +1,8 @@
 import { Modifier } from './Modifier';
 import { Swap, SwapOptions } from '../Swap';
 import { Param } from '../../utils/types/Url';
-export declare type FilterableViewParam = Param | null;
-export declare type FilterableViewParams = tyny.Map<FilterableViewParam>;
+export type FilterableViewParam = Param | null;
+export type FilterableViewParams = tyny.Map<FilterableViewParam>;
 export interface FilterableViewOptions extends SwapOptions {
 }
 export declare const filterChangedEvent = "tyny:filterChanged";

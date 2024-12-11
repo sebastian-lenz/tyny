@@ -1,6 +1,6 @@
 import type { CreateElementOptions } from '../../utils/dom/node/createElement';
 import type { EnumParam, InstanceParam, Param } from '../Params';
-export declare type PropertyParam = ({
+export type PropertyParam = ({
     type: 'bool';
 } & Omit<Param<boolean>, 'name'>) | ({
     type: 'element';
@@ -26,5 +26,5 @@ export interface PropertyOptions {
 export interface PropertyHandler extends PropertyOptions {
     name: string;
 }
-export declare type PropertyHandlerMap = tyny.Map<PropertyHandler>;
+export type PropertyHandlerMap = tyny.Map<PropertyHandler>;
 export declare function property(options?: PropertyOptions): PropertyDecorator;

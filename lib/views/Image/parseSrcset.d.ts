@@ -1,4 +1,4 @@
-export declare type Candidate = {
+export type Candidate = {
     url: string;
     w?: number;
     d?: number;

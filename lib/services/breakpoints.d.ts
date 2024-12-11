@@ -3,7 +3,7 @@ export interface BreakpointEventArgs {
     breakpoint: Breakpoint;
     index: number;
 }
-export declare type BreakpointName = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
+export type BreakpointName = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
 export interface Breakpoint {
     index: number;
     name: BreakpointName;

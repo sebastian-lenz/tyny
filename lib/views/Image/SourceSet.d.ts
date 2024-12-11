@@ -1,4 +1,4 @@
-export declare type SourceSetSource = string | Source[] | SourceSetMode;
+export type SourceSetSource = string | Source[] | SourceSetMode;
 export declare enum SourceSetMode {
     Width = 0,
     Density = 1

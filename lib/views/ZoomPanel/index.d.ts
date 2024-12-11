@@ -4,9 +4,9 @@ import { ZoomBehaviour } from './ZoomBehaviour';
 export interface ZoomPanelOptions extends ViewOptions {
     enabled?: boolean;
 }
-export declare type Padding = number | [number, number, number, number];
-export declare type ResizeMode = 'auto' | 'cover' | 'fit' | 'clamp' | 'none';
-export declare type ViewProps = [number, number, number];
+export type Padding = number | [number, number, number, number];
+export type ResizeMode = 'auto' | 'cover' | 'fit' | 'clamp' | 'none';
+export type ViewProps = [number, number, number];
 export declare abstract class ZoomPanel extends View {
     coverPadding: number;
     fitPadding: Padding;

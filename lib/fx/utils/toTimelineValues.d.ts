@@ -8,6 +8,6 @@ export interface FromToValues {
     from?: ValueTypeSource;
     to: ValueTypeSource;
 }
-export declare type FromToValuesMap = PropertyMap<ValueTypeSource | FromToValues>;
-export declare type TimelineValuesMap = PropertyMap<TimelineValues>;
+export type FromToValuesMap = PropertyMap<ValueTypeSource | FromToValues>;
+export type TimelineValuesMap = PropertyMap<TimelineValues>;
 export declare function toTimelineValues(map: FromToValuesMap): TimelineValuesMap;

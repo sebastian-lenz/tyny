@@ -1,4 +1,4 @@
-declare type Feature = keyof typeof testImages;
+type Feature = keyof typeof testImages;
 declare const testImages: {
     lossy: string;
     lossless: string;

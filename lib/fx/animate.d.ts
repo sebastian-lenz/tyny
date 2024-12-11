@@ -1,5 +1,5 @@
-export declare type FillMode = 'none' | 'forwards' | 'backwards' | 'both';
-export declare type Direction = 'inherit' | 'normal' | 'reverse' | 'alternate' | 'alternate-reverse';
+export type FillMode = 'none' | 'forwards' | 'backwards' | 'both';
+export type Direction = 'inherit' | 'normal' | 'reverse' | 'alternate' | 'alternate-reverse';
 export interface AnimateOptions {
     delay: number;
     direction: Direction;

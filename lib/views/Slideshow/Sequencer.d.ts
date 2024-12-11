@@ -4,7 +4,7 @@ export interface SequenceOptions {
     to: HTMLElement | null;
     transition: Transition;
 }
-export declare type SequencerCallback<TOptions extends SequenceOptions = SequenceOptions> = (options: TOptions) => void;
+export type SequencerCallback<TOptions extends SequenceOptions = SequenceOptions> = (options: TOptions) => void;
 export interface SequencerOptions<TOptions extends SequenceOptions = SequenceOptions> {
     callbackContext?: any;
     dismissCallback?: SequencerCallback<TOptions> | null;

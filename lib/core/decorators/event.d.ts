@@ -1,5 +1,5 @@
 import type { View } from '../View';
-export declare type EventHandlerTarget = EventTarget | EventTarget[] | null | undefined;
+export type EventHandlerTarget = EventTarget | EventTarget[] | null | undefined;
 export interface EventHandlerOptions<T extends View = View> {
     capture?: boolean;
     filter?: {

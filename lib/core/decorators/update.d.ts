@@ -1,4 +1,4 @@
-export declare type UpdateMode = 'read' | 'write';
+export type UpdateMode = 'read' | 'write';
 export interface UpdateOptions {
     events?: string[] | string;
     mode?: UpdateMode;

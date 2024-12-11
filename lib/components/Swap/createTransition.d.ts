@@ -1,5 +1,5 @@
 import { JSX, RefObject, VNode } from 'preact';
-export declare type TransitionElement = HTMLElement | VNode;
+export type TransitionElement = HTMLElement | VNode;
 export interface Transition {
     begin: (callback: Function) => void;
     childRef: RefObject<TransitionElement> | null;

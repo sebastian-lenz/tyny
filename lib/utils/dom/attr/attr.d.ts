@@ -1,9 +1,9 @@
-export declare type AttrMap = {
+export type AttrMap = {
     [name: string]: AttrValue;
 };
-export declare type AttrValue = AttrPrimitive | AttrCallback;
-export declare type AttrPrimitive = string | number | null;
-export declare type AttrCallback = {
+export type AttrValue = AttrPrimitive | AttrCallback;
+export type AttrPrimitive = string | number | null;
+export type AttrCallback = {
     (value: string | null, element: Element): AttrPrimitive;
 };
 export declare function attr(target: tyny.ElementLike, name: AttrMap): void;

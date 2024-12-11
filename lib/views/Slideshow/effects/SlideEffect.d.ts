@@ -1,5 +1,5 @@
 import { Effect } from './Effect';
-export declare type Translation = 'translateX' | 'translateY';
+export type Translation = 'translateX' | 'translateY';
 export interface SlideEffectOptions {
     translation?: Translation;
     useOpacity?: boolean;

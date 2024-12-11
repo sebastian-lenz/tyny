@@ -1,10 +1,10 @@
 import { MaybeNativeEvent, NativeEvent, PointerBehaviour, PointerBehaviourOptions } from './PointerBehaviour';
 import type { Pointer } from './Pointer';
 import type { View } from '../View';
-export declare type DragDirection = 'horizontal' | 'vertical' | 'both';
-export declare type DragAxis = 'x' | 'y';
-export declare type DragDimension = 'width' | 'height';
-export declare type DragWatchMode = 'idle' | 'listening' | 'draging';
+export type DragDirection = 'horizontal' | 'vertical' | 'both';
+export type DragAxis = 'x' | 'y';
+export type DragDimension = 'width' | 'height';
+export type DragWatchMode = 'idle' | 'listening' | 'draging';
 export interface DragBehaviourOptions extends PointerBehaviourOptions {
     direction?: DragDirection;
     isDisabled?: boolean;

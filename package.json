@@ -10,7 +10,7 @@
   ],
   "scripts": {
     "build": "rm -r ./lib && tsc",
-    "watch": "tsc -w"
+    "watch": "tsc -w --outDir ./lib"
   },
   "dependencies": {
     "tslib": "^2.0.0"

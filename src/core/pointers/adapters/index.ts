@@ -9,10 +9,10 @@ export function createAdapter(
   element: HTMLElement,
   pointerList: PointerBehaviour
 ): AbstractAdapter {
-  if (TouchAdapter.isSupported()) {
-    return new TouchAdapter(element, pointerList);
-  } else if (PointerAdapter.isSupported()) {
+  if (PointerAdapter.isSupported()) {
     return new PointerAdapter(element, pointerList);
+  } else if (TouchAdapter.isSupported()) {
+    return new TouchAdapter(element, pointerList);
   }
 
   return new MouseAdapter(element, pointerList);

@@ -4,37 +4,83 @@ export type HasAttribute<Key extends string, Type> = {
   [K in Key]: Type;
 };
 
-function has<Type>(target: string) {
-  function has<Key extends string>(
-    obj: Object,
-    key: Key,
-    optional?: boolean,
-    validate?: (value: Type) => boolean
-  ): obj is HasAttribute<Key, Type>;
+export interface HasOptions {
+  nullable?: boolean;
+  optional?: boolean;
+}
+type Validator<Type> = (value: Type) => boolean;
 
-  function has<Key extends string>(
+interface HasFunction<Type> {
+  <Key extends string>(
     obj: Object,
     key: Key,
-    optional: true,
-    validate?: (value: Type) => boolean
+    options: { optional: true },
+    validate?: Validator<Type>
   ): obj is HasAttribute<Key, Type | undefined>;
 
-  function has<Key extends string>(
+  <Key extends string>(
     obj: Object,
     key: Key,
-    optional?: boolean,
+    options: { nullable: true },
+    validate?: Validator<Type>
+  ): obj is HasAttribute<Key, Type | null>;
+
+  <Key extends string>(
+    obj: Object,
+    key: Key,
+    options: { nullable: true; optional: true },
+    validate?: Validator<Type>
+  ): obj is HasAttribute<Key, Type | undefined | null>;
+
+  <Key extends string>(
+    obj: Object,
+    key: Key,
+    options?: HasOptions,
+    validate?: Validator<Type>
+  ): obj is HasAttribute<Key, Type>;
+}
+
+function has<Type>(target: string): HasFunction<Type> {
+  return function has<Type, Key extends string>(
+    obj: Object,
+    key: Key,
+    { nullable = false, optional = false }: HasOptions = {},
     validate?: (value: Type) => boolean
   ): obj is HasAttribute<Key, Type> {
     const value = (obj as any)[key];
-    const type = Array.isArray(value) ? 'array' : typeof value;
+    const type = typeOf(value);
 
     return (
       (type === target && (validate ? validate(value) : true)) ||
-      (optional === true && type === 'undefined')
+      (optional === true && type === 'undefined') ||
+      (nullable === true && value === null)
     );
+  };
+}
+
+export type Type =
+  | 'array'
+  | 'bigint'
+  | 'boolean'
+  | 'function'
+  | 'number'
+  | 'null'
+  | 'object'
+  | 'string'
+  | 'symbol'
+  | 'undefined';
+
+export function typeOf(value: any): Type {
+  const result = typeof value;
+  if (result === 'object') {
+    if (value === null) {
+      return 'null';
+    } else if (Array.isArray(value)) {
+      return 'array';
+    }
   }
 
-  return has;
+  return result;
 }
 
 export const hasArray = has<Array<any>>('array');
@@ -63,26 +109,26 @@ export class Shape {
 
   array(
     key: string,
-    optional?: boolean,
+    options?: HasOptions,
     validate?: (value: Array<any>) => boolean
   ): Shape {
-    this.$result &&= hasArray(this.value, key, optional, validate);
+    this.$result &&= hasArray(this.value, key, options, validate);
     return this;
   }
 
   boolean(
     key: string,
-    optional?: boolean,
+    options?: HasOptions,
     validate?: (value: boolean) => boolean
   ): Shape {
-    this.$result &&= hasBoolean(this.value, key, optional, validate);
+    this.$result &&= hasBoolean(this.value, key, options, validate);
     return this;
   }
 
   enum<T>(
     key: string,
     values: Array<T>,
-    optional?: boolean,
+    { optional = false, nullable = false }: HasOptions = {},
     validate?: (value: T) => boolean
   ) {
     const value = (this.value as any)[key];
@@ -90,37 +136,38 @@ export class Shape {
 
     this.$result &&=
       (matches && (validate ? validate(value) : true)) ||
-      (optional === true && typeof value === 'undefined');
+      (optional === true && typeof value === 'undefined') ||
+      (nullable === true && value === null);
 
     return this;
   }
 
   number(
     key: string,
-    optional?: boolean,
+    options?: HasOptions,
     validate?: (value: number) => boolean
   ): Shape {
-    this.$result &&= hasNumber(this.value, key, optional, validate);
+    this.$result &&= hasNumber(this.value, key, options, validate);
     return this;
   }
 
   object(
     key: string,
-    optional?: boolean,
+    options?: HasOptions,
     validate?: (value: object) => boolean
   ): Shape {
-    this.$result &&= hasObject(this.value, key, optional, validate);
+    this.$result &&= hasObject(this.value, key, options, validate);
     return this;
   }
 
   shape(
     key: string,
     validate: (value: Shape) => Shape,
-    optional?: boolean
+    options?: HasOptions
   ): Shape {
     return this.object(
       key,
-      optional,
+      options,
       (value) => validate(Shape.for(value)).isValid
     );
   }
@@ -128,19 +175,19 @@ export class Shape {
   shapes(
     key: string,
     validate: (value: Shape) => Shape,
-    optional?: boolean
+    options?: HasOptions
   ): Shape {
-    return this.array(key, optional, (value) =>
+    return this.array(key, options, (value) =>
       value.every((value) => validate(Shape.for(value)).isValid)
     );
   }
 
   string(
     key: string,
-    optional?: boolean,
+    options?: HasOptions,
     validate?: (value: string) => boolean
   ): Shape {
-    this.$result &&= hasString(this.value, key, optional, validate);
+    this.$result &&= hasString(this.value, key, options, validate);
     return this;
   }
 

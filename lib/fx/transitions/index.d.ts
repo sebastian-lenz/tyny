@@ -1,3 +1,3 @@
 export interface Transition {
-    (from?: HTMLElement | null, to?: HTMLElement | null): Promise<void>;
+    (from?: HTMLElement | null, to?: HTMLElement | null): Promise<any>;
 }

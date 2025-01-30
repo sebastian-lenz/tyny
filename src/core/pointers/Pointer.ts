@@ -60,10 +60,25 @@ export class Pointer {
     this.adapter = options.adapter;
     this.type = options.type;
 
-    this.clientX = this.initialClientX = this.initialTransformClientX = this.lastClientX = clientX;
-    this.clientY = this.initialClientY = this.initialTransformClientY = this.lastClientY = clientY;
+    this.clientX =
+      this.initialClientX =
+      this.initialTransformClientX =
+      this.lastClientX =
+        clientX;
+
+    this.clientY =
+      this.initialClientY =
+      this.initialTransformClientY =
+      this.lastClientY =
+        clientY;
+
     this.velocity = new Velocity(createVelocity);
     this.velocity.push({ clientX, clientY });
+  }
+
+  getVelocity(): tyny.Point {
+    const { clientX, clientY } = this.velocity.get();
+    return { x: clientX, y: clientY };
   }
 
   move({ clientX, clientY }: PointerMoveOptions) {

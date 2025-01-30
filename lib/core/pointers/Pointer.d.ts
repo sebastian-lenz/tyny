@@ -33,6 +33,7 @@ export declare class Pointer {
     get delta(): tyny.Point;
     get deltaLength(): number;
     constructor(options: PointerOptions);
+    getVelocity(): tyny.Point;
     move({ clientX, clientY }: PointerMoveOptions): void;
     resetInitialPosition(): void;
 }

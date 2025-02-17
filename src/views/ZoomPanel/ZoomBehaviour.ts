@@ -25,6 +25,7 @@ export class ZoomBehaviour extends TransformBehaviour<ZoomPanel> {
   initialPosition: tyny.Point = { x: 0, y: 0 };
   initialScale: number = 0;
   isActive: boolean = false;
+  onClick?: VoidFunction;
 
   constructor(view: ZoomPanel, options: ZoomBehaviourOptions = {}) {
     super(view, options);
@@ -96,6 +97,7 @@ export class ZoomBehaviour extends TransformBehaviour<ZoomPanel> {
     const scale = view.limitScale(initialScale);
 
     if (!this.didTransformChange()) {
+      this.onClick ? this.onClick() : null;
       return;
     } else {
       ClickBehaviour.tryPreventNextClick(view);

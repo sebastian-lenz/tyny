@@ -109,7 +109,7 @@ export class Scroller<TItem extends ScrollerItem = ScrollerItem>
     return { x, y };
   }
 
-  createItem(el: HTMLElement): TItem {
+  createItem(el: HTMLElement, index: number): TItem {
     return { el } as any;
   }
 

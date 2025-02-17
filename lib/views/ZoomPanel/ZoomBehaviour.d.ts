@@ -13,6 +13,7 @@ export declare class ZoomBehaviour extends TransformBehaviour<ZoomPanel> {
     initialPosition: tyny.Point;
     initialScale: number;
     isActive: boolean;
+    onClick?: VoidFunction;
     constructor(view: ZoomPanel, options?: ZoomBehaviourOptions);
     didTransformChange(positionEpsilon?: number, scaleEpsilon?: number): boolean;
     onTransformBegin(event: NativeEvent, pointer: Pointer): boolean;

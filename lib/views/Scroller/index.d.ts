@@ -38,7 +38,7 @@ export declare class Scroller<TItem extends ScrollerItem = ScrollerItem> extends
     get position(): tyny.Point;
     set position(value: tyny.Point);
     clampPosition(value: tyny.Point): tyny.Point;
-    createItem(el: HTMLElement): TItem;
+    createItem(el: HTMLElement, index: number): TItem;
     gotoPosition(value: tyny.Point): void;
     setPosition(value: tyny.Point): void;
     toDisplayOffset(value: tyny.Point): tyny.Point;

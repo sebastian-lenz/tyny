@@ -5,6 +5,7 @@ import { CreateElementOptions } from '../utils/dom/node/createElement';
 import type { Behaviour, BehaviourClass, BehaviourOptions } from './Behaviour';
 export interface ViewOptions extends Omit<CreateElementOptions, 'extraClassName'> {
     el?: HTMLElement;
+    isUpgrade?: boolean;
 }
 export interface ViewDestroyOptions {
     remove?: boolean;

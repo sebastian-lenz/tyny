@@ -378,7 +378,7 @@ export function registerView(
   if (isInitialized) {
     rootCache = null;
     findAll(`.${className}`).forEach((element) =>
-      createView(component, element)
+      createView(component, element, { isUpgrade: upgrade })
     );
   }
 }

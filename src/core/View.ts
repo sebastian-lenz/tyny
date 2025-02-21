@@ -20,6 +20,7 @@ let uid: number = 0;
 export interface ViewOptions
   extends Omit<CreateElementOptions, 'extraClassName'> {
   el?: HTMLElement;
+  isUpgrade?: boolean;
 }
 
 export interface ViewDestroyOptions {

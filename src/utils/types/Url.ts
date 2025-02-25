@@ -54,8 +54,18 @@ export class Url {
     name: string,
     defaultValue: ParamValue | null = null
   ): ParamValue | null {
-    const result = name in this.query ? this.query[name] : defaultValue;
-    return result && isSafe(result) ? result.__param : result;
+    const value = name in this.query ? this.query[name] : defaultValue;
+    return value && isSafe(value) ? value.__param : value;
+  }
+
+  getStringParam(name: string, defaultValue: string): string;
+  getStringParam(name: string, defaultValue?: null): string | null;
+  getStringParam(
+    name: string,
+    defaultValue: string | null = null
+  ): string | null {
+    const value = this.getParam(name, defaultValue);
+    return typeof value === 'string' ? value : defaultValue;
   }
 
   parse(url: string): this {

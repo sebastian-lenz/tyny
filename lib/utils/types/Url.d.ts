@@ -17,6 +17,8 @@ export declare class Url {
     clearParams(): this;
     getParam(name: string, defaultValue: ParamValue): ParamValue;
     getParam(name: string, defaultValue?: ParamValue | null): ParamValue | null;
+    getStringParam(name: string, defaultValue: string): string;
+    getStringParam(name: string, defaultValue?: null): string | null;
     parse(url: string): this;
     setParam(name: string, value?: Param | null | undefined): this;
     setParams(params: tyny.Map<Param | null | undefined>): this;

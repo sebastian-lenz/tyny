@@ -58,6 +58,19 @@ export class Url {
     return value && isSafe(value) ? value.__param : value;
   }
 
+  getIntParam(name: string, defaultValue: number): number;
+  getIntParam(name: string, defaultValue?: null): number | null;
+  getIntParam(name: string, defaultValue: number | null = null): number | null {
+    const value = this.getParam(name, defaultValue);
+    if (typeof value === 'number') {
+      return value;
+    } else if (typeof value === 'string') {
+      return parseInt(value);
+    } else {
+      return defaultValue;
+    }
+  }
+
   getStringParam(name: string, defaultValue: string): string;
   getStringParam(name: string, defaultValue?: null): string | null;
   getStringParam(

@@ -37,7 +37,10 @@ export class AriaExpander extends View {
 
     if (target) {
       target.setAttribute('aria-hidden', boolify(!value));
-      transistHeight(target, () => target.classList.toggle('expanded', value));
+      transistHeight(target, () => {
+        target.classList.add('animated');
+        target.classList.toggle('expanded', value);
+      }).then(() => target.classList.remove('animated'));
     }
   }
 }

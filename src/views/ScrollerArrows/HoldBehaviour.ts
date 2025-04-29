@@ -1,4 +1,5 @@
 import { addFrameHook, removeFrameHook } from '../../fx/dispatcher';
+import { get } from '../../utils/lang/object/get';
 import { NativeEvent } from '../../core/pointers/PointerBehaviour';
 import { Pointer } from '../../core/pointers/Pointer';
 import { parentsAndSelf } from '../../utils/dom/node';
@@ -12,6 +13,7 @@ import {
 
 export interface HoldBehaviourOptions {
   onClick?: (forward: number) => void;
+  speed?: number;
 }
 
 export class HoldBehaviour extends HoldBehaviourBase<ScrollerArrows> {
@@ -25,6 +27,8 @@ export class HoldBehaviour extends HoldBehaviourBase<ScrollerArrows> {
     super(view, {
       stages: [{ delay: 250 }, { delay: 1000 }, { delay: 1000 }],
     });
+
+    this.speed = get<number>(options, 'speed', 10);
 
     if (options.onClick) {
       this.onClick = options.onClick;
@@ -66,7 +70,7 @@ export class HoldBehaviour extends HoldBehaviourBase<ScrollerArrows> {
     const { animation, forward, multiplier, speed, view } = this;
     const { direction, target } = view;
     let { position } = this;
-    if (!target) {
+    if (!target || !speed) {
       return;
     }
 

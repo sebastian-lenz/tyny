@@ -5,6 +5,7 @@ import { Spring } from '../../fx/spring';
 import { HoldBehaviour as HoldBehaviourBase, HoldStage } from '../../core/pointers/HoldBehaviour';
 export interface HoldBehaviourOptions {
     onClick?: (forward: number) => void;
+    speed?: number;
 }
 export declare class HoldBehaviour extends HoldBehaviourBase<ScrollerArrows> {
     animation: Spring | null;

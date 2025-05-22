@@ -5,12 +5,17 @@ import { toBoolean } from '../../utils/lang/misc';
 import { transistHeight } from '../../fx/transistHeight';
 import type { ViewOptions } from '../../core';
 
+export interface AriaExpanderOptions extends ViewOptions {
+  mask?: HTMLElement | string;
+}
+
 export class AriaExpander extends View {
   button: HTMLElement | null;
   isExpanded: boolean;
+  mask: HTMLElement | null;
   target: HTMLElement | null;
 
-  constructor(options: ViewOptions) {
+  constructor(options: AriaExpanderOptions) {
     super(options);
 
     const button = this.find('*[aria-controls]');
@@ -19,6 +24,10 @@ export class AriaExpander extends View {
     this.button = button;
     this.target = targetId ? document.getElementById(targetId) : null;
     this.isExpanded = toBoolean(data(button, 'aria-expanded'));
+    this.mask = this.params.element({
+      name: 'mask',
+      defaultValue: this.target || undefined,
+    });
   }
 
   @event({ name: 'click', selector: '*[aria-controls]' })
@@ -30,17 +39,21 @@ export class AriaExpander extends View {
     if (this.isExpanded === value) return;
     this.isExpanded = value;
 
-    const { button, target } = this;
+    const { button, mask, target } = this;
+
     if (button) {
       button.setAttribute('aria-expanded', boolify(value));
     }
 
     if (target) {
       target.setAttribute('aria-hidden', boolify(!value));
-      transistHeight(target, () => {
-        target.classList.add('animated');
-        target.classList.toggle('expanded', value);
-      }).then(() => target.classList.remove('animated'));
+    }
+
+    if (mask) {
+      transistHeight(mask, () => {
+        mask.classList.add('animated');
+        mask.classList.toggle('expanded', value);
+      }).then(() => mask.classList.remove('animated'));
     }
   }
 }

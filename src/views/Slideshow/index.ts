@@ -91,12 +91,12 @@ export class Slideshow extends CycleableView<SlideshowTransitionOptions> {
   }
 
   onConnected() {
+    super.onConnected();
+
     const { current, items } = this;
     items.forEach((item) => {
       if (item !== current) setChildLoadMode(item, LoadMode.Explicit);
     });
-
-    super.onConnected();
   }
 
   protected onTransition(

@@ -16,6 +16,7 @@ import type {
   MaybeNativeEvent,
   NativeEvent,
 } from '../../core/pointers/PointerBehaviour';
+import { LoadMode, setChildLoadMode } from '../../utils/views/loadMode';
 
 export interface BrowsableView extends CycleableView {
   onBrowseBegin(event: NativeEvent, pointer: Pointer): boolean;
@@ -78,6 +79,8 @@ export class BrowseBehaviour<
         strength *= 0.5;
       }
 
+      if (from) setChildLoadMode(from, LoadMode.Visibility);
+      if (to) setChildLoadMode(to, LoadMode.Visibility);
       effect.apply(from, to, strength);
     }
   }

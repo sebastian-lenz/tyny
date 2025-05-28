@@ -8,7 +8,7 @@ export interface AriaComboBoxOptions extends ViewOptions {
   transition?: TransistHeightOptions;
 }
 
-class AriaComboBox extends View {
+export class AriaComboBox extends View {
   activeOption: HTMLElement | null = null;
   isExpanded: boolean = false;
   selectedOption: HTMLElement | null = null;

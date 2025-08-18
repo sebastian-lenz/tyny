@@ -1,4 +1,10 @@
+export type DestructScope = 'destroy' | 'disconnect';
+export type Destructor = {
+    callback: VoidFunction;
+    scope: DestructScope;
+};
 export declare abstract class Lifecycle {
+    private _destructors?;
     private _eventListeners;
     private _isConnected;
     private _updatesTasks;
@@ -9,6 +15,7 @@ export declare abstract class Lifecycle {
     private readonly _properties;
     get isConnected(): boolean;
     callUpdate(type?: string): void;
+    addDestructor(callback: VoidFunction, scope?: DestructScope): void;
     destroy(): void;
     abstract get el(): HTMLElement;
     onConnected(): void;
@@ -16,6 +23,7 @@ export declare abstract class Lifecycle {
     onDisconnected(): void;
     protected _callConnected(): void;
     protected _callDestroyed(): void;
+    protected _callDestructors(scope: DestructScope): void;
     protected _callDisconnected(): void;
     private _bindEvent;
     protected _bindEvents(): void;

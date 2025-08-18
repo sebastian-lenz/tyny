@@ -11,7 +11,14 @@ import type {
   UpdateHandler,
 } from './decorators';
 
+export type DestructScope = 'destroy' | 'disconnect';
+export type Destructor = {
+  callback: VoidFunction;
+  scope: DestructScope;
+};
+
 export abstract class Lifecycle {
+  private _destructors?: Array<Destructor>;
   private _eventListeners: Array<Function> | null = null;
   private _isConnected: boolean = false;
   private _updatesTasks: Array<FastDomTask | null> | null = null;
@@ -55,6 +62,13 @@ export abstract class Lifecycle {
     });
   }
 
+  addDestructor(callback: VoidFunction, scope: DestructScope = 'disconnect') {
+    (this._destructors || (this._destructors = [])).push({
+      callback,
+      scope,
+    });
+  }
+
   destroy() {
     this._callDisconnected();
     this._callDestroyed();
@@ -86,13 +100,26 @@ export abstract class Lifecycle {
   }
 
   protected _callDestroyed() {
+    this._callDestructors('destroy');
     this.onDestroyed();
+  }
+
+  protected _callDestructors(scope: DestructScope) {
+    this._destructors = this._destructors?.filter((destructor) => {
+      if (destructor.scope === scope) {
+        destructor.callback();
+        return false;
+      } else {
+        return true;
+      }
+    });
   }
 
   protected _callDisconnected() {
     if (!this._isConnected) return;
     this._isConnected = false;
 
+    this._callDestructors('disconnect');
     this._unbindEvents();
     this.onDisconnected();
   }

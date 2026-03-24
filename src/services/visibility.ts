@@ -113,15 +113,27 @@ export class VisibilityObserver {
   constructor() {
     const callback = (entries: IntersectionObserverEntry[]) => {
       const { isPrinting, targets } = this;
+      entries.reverse();
 
       for (const target of targets) {
-        for (const entry of entries) {
-          if (target.el === entry.target) {
-            target.setVisible(entry.isIntersecting || isPrinting);
-            target.setVisible.isIntersecting = entry.isIntersecting;
-            break;
-          }
+        const targetEntries = entries.filter(
+          (entry) => target.el === entry.target
+        );
+
+        if (!targetEntries.length) {
+          continue;
         }
+
+        // Chrome produces multiple entries if an element is created and the browser
+        // has scrolled in the same frame. To avoid any fals positives we take any
+        // visible entry as the important one
+
+        const isIntersecting = targetEntries.some(
+          (entry) => entry.isIntersecting
+        );
+
+        target.setVisible(isIntersecting || isPrinting);
+        target.setVisible.isIntersecting = isIntersecting;
       }
     };
 

@@ -1,5 +1,5 @@
 import cx from 'classnames';
-import { cloneElement, createRef, JSX, RefObject } from 'preact';
+import { cloneElement, createElement, createRef, JSX, RefObject } from 'preact';
 import { useLayoutEffect, useState } from 'preact/hooks';
 
 import { dissolve } from './effects/dissolve';
@@ -21,6 +21,7 @@ export interface Props extends JSX.HTMLAttributes<HTMLDivElement> {
   className?: string;
   effect?: TransitionEffect;
   pageClassName?: string;
+  tagName?: string;
   uri: string;
 }
 
@@ -38,6 +39,7 @@ export function Swap({
   children,
   effect,
   pageClassName,
+  tagName = 'div',
   uri,
   ...props
 }: Props) {
@@ -142,9 +144,5 @@ export function Swap({
     }
   }, [transition]);
 
-  return (
-    <div {...props} ref={state.rootRef}>
-      {elements}
-    </div>
-  );
+  return createElement(tagName, { ...props, ref: state.rootRef }, elements);
 }

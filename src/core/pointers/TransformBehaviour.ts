@@ -40,7 +40,7 @@ export class TransformBehaviour<
     const { isActive: _isActive, maxPointers, minPointers } = this;
     const numPointers = this.pointers.length + 1;
 
-    if (isNumber(maxPointers) && numPointers >= maxPointers) {
+    if (isNumber(maxPointers) && numPointers > maxPointers) {
       return false;
     } else if (_isActive || numPointers < minPointers) {
       return true;

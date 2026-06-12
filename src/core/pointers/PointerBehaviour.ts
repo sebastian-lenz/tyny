@@ -44,6 +44,7 @@ export class PointerBehaviour<
   TView extends View = View
 > extends Behaviour<TView> {
   //
+  readonly centerOffset: tyny.Point = { x: 0, y: 0 };
   readonly initialCenter: tyny.Point = { x: 0, y: 0 };
   readonly initialTransform: Transform2D = Transform2D.identity();
   readonly pointers: Pointer[] = [];
@@ -71,6 +72,19 @@ export class PointerBehaviour<
     );
   }
 
+  /**
+   * Like `center`, but stays continuous when pointers are added or
+   * removed: the jump of the raw center is absorbed into `centerOffset`
+   * on each commit. Use this as an anchor point for transforms.
+   */
+  get gestureCenter(): tyny.Point {
+    const { center, centerOffset } = this;
+    return {
+      x: center.x + centerOffset.x,
+      y: center.y + centerOffset.y,
+    };
+  }
+
   get hasPointers(): boolean {
     return !!this.pointers.length;
   }
@@ -90,7 +104,7 @@ export class PointerBehaviour<
     }
 
     const center = this.center;
-    const weight = 1 / pointers.length;
+    let count = 0;
     let scale = 0;
     let rotate = 0;
 
@@ -100,8 +114,14 @@ export class PointerBehaviour<
       const bX = p.clientX - center.x;
       const bY = p.clientY - center.y;
 
-      scale += (length(bX, bY) / length(aX, aY)) * weight;
-      rotate += (Math.atan2(bY, bX) - Math.atan2(aY, aX)) * weight;
+      // Pointers too close to the center (e.g. coinciding touches)
+      // carry no scale or rotation information, skip them.
+      const radius = length(aX, aY);
+      if (radius < 1) return;
+
+      count += 1;
+      scale += length(bX, bY) / radius;
+      rotate += Math.atan2(bY, bX) - Math.atan2(aY, aX);
     });
 
     const result = Transform2D.translation(
@@ -109,8 +129,11 @@ export class PointerBehaviour<
       center.y - initialCenter.y
     ).multiply(initialTransform);
 
-    result.rotation += rotate;
-    result.scale *= scale;
+    if (count) {
+      result.rotation += rotate / count;
+      result.scale *= scale / count;
+    }
+
     return result;
   }
 
@@ -196,6 +219,7 @@ export class PointerBehaviour<
   // ---------------
 
   onDestroyed() {
+    this.removeAllPointers();
     super.onDestroyed();
 
     if (this.adapter) {
@@ -205,7 +229,15 @@ export class PointerBehaviour<
   }
 
   commit(event: NativeEvent | undefined, pointer: Pointer, callback: Function) {
-    const { adapter, initialCenter, initialTransform, pointers } = this;
+    const {
+      adapter,
+      centerOffset,
+      initialCenter,
+      initialTransform,
+      pointers,
+    } = this;
+
+    const previousCenter = pointers.length ? this.center : null;
     initialTransform.copyFrom(this.transform);
 
     callback();
@@ -215,17 +247,30 @@ export class PointerBehaviour<
       initialCenter.x = center.x;
       initialCenter.y = center.y;
 
+      if (previousCenter) {
+        centerOffset.x += previousCenter.x - center.x;
+        centerOffset.y += previousCenter.y - center.y;
+      }
+
       pointers.forEach((pointer) => {
         pointer.initialTransformClientX = pointer.clientX;
         pointer.initialTransformClientY = pointer.clientY;
       });
+
+      this.velocity.push(toVelocity(this.transform));
     } else {
+      centerOffset.x = 0;
+      centerOffset.y = 0;
       initialCenter.x = 0;
       initialCenter.y = 0;
       initialTransform.identity();
+
+      // The transform is reset here, sampling it would create a bogus
+      // velocity spike. Consumers read the velocity in onRemove, which
+      // runs before this, so clearing is safe.
+      this.velocity.clear();
     }
 
-    this.velocity.push(toVelocity(this.transform));
     if (adapter) {
       adapter.updateTracking();
     }

@@ -45,6 +45,10 @@ export class Velocity<T extends VelocityData> {
     return result;
   }
 
+  clear() {
+    this.samples.length = 0;
+  }
+
   push(data: T) {
     this.revise();
     this.samples.push({

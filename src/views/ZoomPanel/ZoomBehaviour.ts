@@ -22,6 +22,7 @@ export class ZoomBehaviour extends TransformBehaviour<ZoomPanel> {
   allowMoveY: boolean = true;
   allowScale: boolean = true;
   enabled: boolean;
+  initialGestureCenter: tyny.Point | null = null;
   initialPosition: tyny.Point = { x: 0, y: 0 };
   initialScale: number = 0;
   isActive: boolean = false;
@@ -55,6 +56,9 @@ export class ZoomBehaviour extends TransformBehaviour<ZoomPanel> {
       return false;
     }
 
+    // The gesture center is not available yet, the first pointer is
+    // committed after this callback. Captured on the first onTransform.
+    this.initialGestureCenter = null;
     this.initialPosition = { x, y };
     this.initialScale = scale;
     stop(view);
@@ -63,7 +67,12 @@ export class ZoomBehaviour extends TransformBehaviour<ZoomPanel> {
   }
 
   onTransform(event: MaybeNativeEvent, pointer: Pointer): boolean {
-    const { center, initialPosition, initialScale, transform, view } = this;
+    const { initialPosition, initialScale, transform, view } = this;
+    const center = this.gestureCenter;
+    const initialCenter =
+      this.initialGestureCenter ||
+      (this.initialGestureCenter = { x: center.x, y: center.y });
+
     const { max, min } = view.getScaleBounds();
     let scale = initialScale;
     if (this.allowScale) scale *= transform.scale;
@@ -74,12 +83,12 @@ export class ZoomBehaviour extends TransformBehaviour<ZoomPanel> {
 
     const { xMax, xMin, yMax, yMin } = view.getPositionBounds(scale);
     const { left, top } = view.el.getBoundingClientRect();
-    let x = center.x - left;
-    let y = center.y - top;
-    x += ((initialPosition.x - x) / initialScale) * scale;
-    y += ((initialPosition.y - y) / initialScale) * scale;
-    if (this.allowMoveX) x += transform.x;
-    if (this.allowMoveY) y += transform.y;
+    const originX = initialCenter.x - left;
+    const originY = initialCenter.y - top;
+    let x = (this.allowMoveX ? center.x : initialCenter.x) - left;
+    let y = (this.allowMoveY ? center.y : initialCenter.y) - top;
+    x += ((initialPosition.x - originX) / initialScale) * scale;
+    y += ((initialPosition.y - originY) / initialScale) * scale;
 
     if (x < xMin) x = xMin + (x - xMin) * 0.5;
     if (x > xMax) x = xMax + (x - xMax) * 0.5;
@@ -105,7 +114,7 @@ export class ZoomBehaviour extends TransformBehaviour<ZoomPanel> {
 
     if (this.pointers.length > 1) {
       const { left, top } = view.el.getBoundingClientRect();
-      const center = this.center;
+      const center = this.gestureCenter;
       let x = center.x - left;
       let y = center.y - top;
       x += ((position.x - x) / initialScale) * scale;

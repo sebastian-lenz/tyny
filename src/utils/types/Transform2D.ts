@@ -14,7 +14,7 @@ export class Transform2D implements Transform2DType {
   constructor(
     x: number = 0,
     y: number = 0,
-    scale: number = 0,
+    scale: number = 1,
     rotation: number = 0
   ) {
     this.x = x;

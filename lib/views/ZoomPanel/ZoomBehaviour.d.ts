@@ -10,6 +10,7 @@ export declare class ZoomBehaviour extends TransformBehaviour<ZoomPanel> {
     allowMoveY: boolean;
     allowScale: boolean;
     enabled: boolean;
+    initialGestureCenter: tyny.Point | null;
     initialPosition: tyny.Point;
     initialScale: number;
     isActive: boolean;

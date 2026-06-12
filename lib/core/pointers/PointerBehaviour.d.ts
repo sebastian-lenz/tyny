@@ -17,6 +17,7 @@ export interface PointerBehaviourOptions extends BehaviourOptions {
     target?: HTMLElement | null;
 }
 export declare class PointerBehaviour<TView extends View = View> extends Behaviour<TView> {
+    readonly centerOffset: tyny.Point;
     readonly initialCenter: tyny.Point;
     readonly initialTransform: Transform2D;
     readonly pointers: Pointer[];
@@ -24,6 +25,7 @@ export declare class PointerBehaviour<TView extends View = View> extends Behavio
     adapter: AbstractAdapter | null;
     constructor(view: TView, options?: PointerBehaviourOptions);
     get center(): tyny.Point;
+    get gestureCenter(): tyny.Point;
     get hasPointers(): boolean;
     get transform(): Transform2D;
     get usePassiveEvents(): boolean;

@@ -14,6 +14,7 @@ export declare class Velocity<T extends VelocityData> {
     protected samples: VelocitySample<T>[];
     constructor(factory: VelocityFactory<T>);
     get(): T;
+    clear(): void;
     push(data: T): void;
     revise(): void;
 }

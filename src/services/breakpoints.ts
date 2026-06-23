@@ -17,7 +17,7 @@ export interface Breakpoint {
   width: number;
 }
 
-export let breakpoints: Breakpoint[] = [
+export const breakpoints: Breakpoint[] = [
   { index: 0, name: 'xs', width: 0 },
   { index: 1, name: 'sm', width: 576 },
   { index: 2, name: 'md', width: 768 },
@@ -26,7 +26,7 @@ export let breakpoints: Breakpoint[] = [
   { index: 5, name: 'xxl', width: 1400 },
 ];
 
-let currentIndex: number = 0;
+let currentIndex: number = -1;
 
 function findCurrentIndex(): number {
   const length = breakpoints.length;
@@ -47,7 +47,8 @@ function findNameIndex(name: BreakpointName): number {
 
 function onResize() {
   const index = findCurrentIndex();
-  if (index === currentIndex) return;
+  if (currentIndex === -1) currentIndex = index;
+  if (currentIndex === index) return;
   currentIndex = index;
 
   trigger(window, breakpointEvent, <BreakpointEventArgs>{
@@ -56,8 +57,16 @@ function onResize() {
   });
 }
 
+function getCurrentIndex() {
+  if (currentIndex === -1) {
+    currentIndex = findCurrentIndex();
+  }
+
+  return currentIndex;
+}
+
 export function getBreakpoint(): Breakpoint {
-  return breakpoints[currentIndex];
+  return breakpoints[getCurrentIndex()];
 }
 
 export function isBreakpoint(name: BreakpointName): boolean {
@@ -65,14 +74,13 @@ export function isBreakpoint(name: BreakpointName): boolean {
 }
 
 export function isAboveBreakpoint(name: BreakpointName): boolean {
-  return findNameIndex(name) < currentIndex;
+  return findNameIndex(name) < getCurrentIndex();
 }
 
 export function isBelowBreakpoint(name: BreakpointName): boolean {
-  return findNameIndex(name) > currentIndex;
+  return findNameIndex(name) > getCurrentIndex();
 }
 
 if (typeof window !== 'undefined') {
-  currentIndex = findCurrentIndex();
   on(window, 'resize', onResize);
 }

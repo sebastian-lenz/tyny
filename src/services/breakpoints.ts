@@ -9,7 +9,7 @@ export interface BreakpointEventArgs {
   index: number;
 }
 
-export type BreakpointName = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
+export type BreakpointName = string | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
 
 export interface Breakpoint {
   index: number;
@@ -17,7 +17,7 @@ export interface Breakpoint {
   width: number;
 }
 
-export const breakpoints: Breakpoint[] = [
+export let breakpoints: Breakpoint[] = [
   { index: 0, name: 'xs', width: 0 },
   { index: 1, name: 'sm', width: 576 },
   { index: 2, name: 'md', width: 768 },

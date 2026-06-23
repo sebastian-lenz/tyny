@@ -9,7 +9,7 @@ export interface Breakpoint {
     name: BreakpointName;
     width: number;
 }
-export declare let breakpoints: Breakpoint[];
+export declare const breakpoints: Breakpoint[];
 export declare function getBreakpoint(): Breakpoint;
 export declare function isBreakpoint(name: BreakpointName): boolean;
 export declare function isAboveBreakpoint(name: BreakpointName): boolean;

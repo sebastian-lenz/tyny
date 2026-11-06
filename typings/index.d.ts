@@ -74,13 +74,6 @@ declare namespace tyny {
   type ViewApiMap = Map<ViewApi>;
 }
 
-declare namespace process {
-  namespace env {
-    const NODE_ENV: string;
-    const TYNY_PREFIX: string;
-  }
-}
-
 interface Element {
   __tynyViews?: tyny.ViewMap;
 }
